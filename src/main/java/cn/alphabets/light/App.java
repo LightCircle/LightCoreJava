@@ -32,7 +32,7 @@ public class App {
           设定使用log4j2
          */
         System.setProperty(LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME
-                , "io.vertx.core.logging.Log4j2LogDelegateFactory");
+                , "io.vertx.core.logging.SLF4JLogDelegateFactory");
 
         /*
           程序设定
