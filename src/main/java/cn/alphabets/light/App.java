@@ -6,11 +6,14 @@ import cn.alphabets.light.http.session.MongoSessionStoreImpl;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.ResponseTimeHandler;
 import io.vertx.ext.web.handler.SessionHandler;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by luohao on 16/10/20.
@@ -24,6 +27,12 @@ public class App {
     private AppOptions options;
 
     public App(AppOptions opts) {
+
+        /*
+          设定使用log4j2
+         */
+        System.setProperty(LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME
+                , "io.vertx.core.logging.Log4j2LogDelegateFactory");
 
         /*
           程序设定
@@ -53,9 +62,9 @@ public class App {
 
 
     public void start() {
-
+        Logger logger = LoggerFactory.getLogger(App.class);
         router.route().handler(CookieHandler.create());
-        router.route().handler(SessionHandler.create(new MongoSessionStoreImpl(mongo,vertx)).setNagHttps(false).setSessionTimeout(1000L * 60 * 60 * 24 * 30));
+        router.route().handler(SessionHandler.create(new MongoSessionStoreImpl(mongo, vertx)).setNagHttps(false).setSessionTimeout(1000L * 60 * 60 * 24 * 30));
         router.route().handler(BodyHandler.create());
         if (options.isDev()) {
             router.route().handler(ResponseTimeHandler.create());
@@ -66,7 +75,14 @@ public class App {
         dispatcher.routeView(mongo, router, options);
 
         server.requestHandler(router::accept).listen(options.getAppPort());
-        router.getRoutes().forEach(r -> System.out.println(r.getPath()));
+        logger.info("========route list========");
+        StringBuilder stringBuilder = new StringBuilder().append(System.lineSeparator());
+        router.getRoutes().forEach(r -> {
+            if (StringUtils.isNotEmpty(r.getPath())) {
+                stringBuilder.append(r.getPath()).append(System.lineSeparator());
+            }
+        });
+        logger.info(stringBuilder.toString());
+        logger.info("==========================");
     }
-
 }

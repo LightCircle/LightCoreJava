@@ -7,6 +7,8 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Session;
 import io.vertx.ext.web.sstore.SessionStore;
 import org.bson.types.ObjectId;
@@ -15,7 +17,7 @@ import org.bson.types.ObjectId;
  * Created by luohao on 16/10/22.
  */
 public class MongoSessionStoreImpl implements SessionStore {
-//    private static final Logger log = LoggerFactory.getLogger(SessionHandlerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MongoSessionStoreImpl.class);
 
     private DBConnection mongo;
     private static final String SESSION_COLLECTION_NAME = "sessiontttt";
