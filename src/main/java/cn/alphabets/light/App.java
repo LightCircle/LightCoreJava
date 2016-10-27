@@ -3,6 +3,7 @@ package cn.alphabets.light;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
+import cn.alphabets.light.http.session.MongoSessionStoreImpl2;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServer;
@@ -64,7 +65,14 @@ public class App {
     public void start() {
         Logger logger = LoggerFactory.getLogger(App.class);
         router.route().handler(CookieHandler.create());
-        router.route().handler(SessionHandler.create(new MongoSessionStoreImpl(mongo, vertx)).setNagHttps(false).setSessionTimeout(1000L * 60 * 60 * 24 * 30));
+
+        router.route().handler(SessionHandler
+                        .create(new MongoSessionStoreImpl2(mongo, vertx))
+                        .setNagHttps(false)
+                        .setSessionTimeout(1000L * 5)
+
+//                .setSessionTimeout(1000L * 60 * 60 * 24 * 30)
+        );
         router.route().handler(BodyHandler.create());
         if (options.isDev()) {
             router.route().handler(ResponseTimeHandler.create());

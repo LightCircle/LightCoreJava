@@ -5,6 +5,8 @@ import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.exception.DispatcheException;
 import cn.alphabets.light.model.ModBoard;
 import cn.alphabets.light.model.ModRoute;
+import com.mongodb.Block;
+import com.sun.tools.javac.util.Assert;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -14,6 +16,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.templ.TemplateEngine;
 import io.vertx.ext.web.templ.ThymeleafTemplateEngine;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -24,10 +27,9 @@ import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static cn.alphabets.light.model.ModBase.fromDoc;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
-import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
-import static io.vertx.core.http.HttpHeaders.TEXT_HTML;
 
 
 /**
@@ -46,22 +48,29 @@ public class Dispatcher {
      */
     public void routeProcessAPI(DBConnection db, Router router, AppOptions options) {
         this.setup(options);
-        db.getCollection("light.boards").find("{kind:1,valid:1}").as(ModBoard.class).forEach(b -> {
-            router.route(b.getApi())
-                    .blockingHandler(ctx -> {
-                        Method method = resolve(b);
-                        Context context = new Context(ctx, db);
-                        if (method == null) {
-                            throw new DispatcheException("can not dispatch");
-                        }
-                        try {
-                            method.invoke(method.getDeclaringClass().newInstance(), context);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }, false)
-                    .failureHandler(getDefaultDispatcherFailureHandler());
-        });
+        db.getCollection("light.boards")
+                .find(Document.parse("{kind:1,valid:1}"))
+                .forEach((Block<? super Document>) document -> {
+
+                    ModBoard board = fromDoc(document, ModBoard.class);
+                    Assert.checkNonNull(board);
+
+                    router.route(board.getApi())
+                            .blockingHandler(ctx -> {
+                                Method method = resolve(board);
+                                Context context = new Context(ctx, db);
+                                if (method == null) {
+                                    throw new DispatcheException("can not dispatch");
+                                }
+                                try {
+                                    method.invoke(method.getDeclaringClass().newInstance(), context);
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }, false)
+                            .failureHandler(getDefaultDispatcherFailureHandler());
+
+                });
     }
 
 
@@ -76,32 +85,32 @@ public class Dispatcher {
      */
     public void routeView(DBConnection db, Router router, AppOptions options) {
         this.setup(options);
-        db.getCollection("light.routes").find("{valid:1}").as(ModRoute.class).forEach(r -> {
-            router.route(r.getUrl())
-                    .blockingHandler(ctx -> {
-                        Context context = new Context(ctx, db);
-
-                        //如果定义了action，先调用action方法
-                        Method method = resolve(r);
-                        if (method != null) {
-                            try {
-                                method.invoke(method.getDeclaringClass().newInstance(), context);
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-
-                        //然后执行渲染
-                        templateEngine.render(ctx, "view/" + r.getTemplate(), ar -> {
-                            if (ar.succeeded()) {
-                                ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(ar.result());
-                            } else {
-                                throw new RuntimeException(ar.cause());
-                            }
-                        });
-                    }, false)
-                    .failureHandler(getDefaultDispatcherFailureHandler());
-        });
+//        db.getCollection("light.routes").find("{valid:1}").as(ModRoute.class).forEach(r -> {
+//            router.route(r.getUrl())
+//                    .blockingHandler(ctx -> {
+//                        Context context = new Context(ctx, db);
+//
+//                        //如果定义了action，先调用action方法
+//                        Method method = resolve(r);
+//                        if (method != null) {
+//                            try {
+//                                method.invoke(method.getDeclaringClass().newInstance(), context);
+//                            } catch (Exception e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                        }
+//
+//                        //然后执行渲染
+//                        templateEngine.render(ctx, "view/" + r.getTemplate(), ar -> {
+//                            if (ar.succeeded()) {
+//                                ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(ar.result());
+//                            } else {
+//                                throw new RuntimeException(ar.cause());
+//                            }
+//                        });
+//                    }, false)
+//                    .failureHandler(getDefaultDispatcherFailureHandler());
+//        });
 
 
     }
@@ -109,7 +118,7 @@ public class Dispatcher {
     private void setup(AppOptions options) {
         isDev = options.isDev();
         if (methodMap == null) {
-            methodMap = new ConcurrentHashMap();
+            methodMap = new ConcurrentHashMap<>();
             Reflections reflections = new Reflections(options.getPackageNmae() + ".controller", new SubTypesScanner(false));
             Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
             allClasses.forEach(aClass -> {

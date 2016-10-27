@@ -9,10 +9,12 @@ import io.vertx.core.shareddata.impl.ClusterSerializable;
 import io.vertx.ext.web.Session;
 import io.vertx.ext.web.impl.Utils;
 import io.vertx.ext.web.sstore.impl.SessionImpl;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -298,6 +300,24 @@ public class LightSession implements Session, ClusterSerializable, Shareable {
         } catch (Exception e) {
             throw new VertxException(e);
         }
+    }
+
+    public static LightSession fromDoc(Document doc) {
+        if (doc == null) {
+            return null;
+        }
+        byte[] aa = Base64.getDecoder().decode(doc.getString("rawData"));
+        Buffer buffer = Buffer.buffer();
+        buffer.appendBytes(aa);
+        LightSession s = new LightSession();
+        s.readFromBuffer(0, buffer);
+        return s;
+    }
+
+    public String toRawString() {
+        Buffer buffer = Buffer.buffer();
+        this.writeToBuffer(buffer);
+        return new String(Base64.getEncoder().encode(buffer.getBytes()));
     }
 
 }

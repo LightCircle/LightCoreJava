@@ -3,7 +3,9 @@ package cn.alphabets.light.db.mongo;
 import cn.alphabets.light.AppOptions;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.jongo.Jongo;
 
 
@@ -25,17 +27,18 @@ public class DBConnection extends MongoClient {
         options = opts;
     }
 
-    public MongoDatabase getRawDB() {
+    public MongoDatabase getDB() {
         return super.getDatabase(options.getAppDomain());
     }
 
-    public Jongo getDB() {
-        Jongo jongo = new Jongo(getDB(options.getAppDomain()));
-        return jongo;
+    public MongoCollection<Document> getCollection(String collectionName) {
+        return getDB().getCollection(collectionName);
     }
 
-    public org.jongo.MongoCollection getCollection(String collectionName) {
-        return getDB().getCollection(collectionName);
+    public org.jongo.MongoCollection getCollection2(String collectionName) {
+        Jongo jongo = new Jongo(getDB(options.getAppDomain()));
+
+        return jongo.getCollection(collectionName);
     }
 
 
