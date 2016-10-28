@@ -199,7 +199,6 @@ public class SessionHandlerImpl implements SessionHandler {
         // 设置cookie过期时间与session过期时间相同,session timeout 单位是毫秒,maxage单位是秒
         cookie.setMaxAge(session.timeout() / 1000);
         context.addCookie(cookie);
-        log.error("@@@@@@@@");
     }
 
 
@@ -213,7 +212,6 @@ public class SessionHandlerImpl implements SessionHandler {
         // 设置cookie过期时间与session过期时间相同,session timeout 单位是毫秒,maxage单位是秒
         cookie.setMaxAge(session.timeout() / 1000);
         context.addCookie(cookie);
-        log.error("!!!!!!!!!!!");
         addStoreSessionHandler(context);
     }
 

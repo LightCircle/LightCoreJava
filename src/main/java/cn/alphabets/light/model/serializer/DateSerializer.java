@@ -1,4 +1,4 @@
-package cn.alphabets.light.model;
+package cn.alphabets.light.model.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -13,7 +13,6 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.ResponseTimeHandler;
-import io.vertx.ext.web.handler.SessionHandler;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -63,31 +62,45 @@ public class App {
 
 
     public void start() {
-        Logger logger = LoggerFactory.getLogger(App.class);
+        Logger log = LoggerFactory.getLogger(App.class);
+
+        //cookie处理
         router.route().handler(CookieHandler.create());
 
+        //session处理
         router.route().handler(SessionHandlerImpl
                 .create(new MongoSessionStoreImpl(mongo, vertx))
                 .setNagHttps(false)
                 .setSessionTimeout(1000L * 60 * 10));
+
+        //request body处理
         router.route().handler(BodyHandler.create());
+
+        //响应头带上'x-response-time' 用来标示服务器响应时间
         if (options.isDev()) {
             router.route().handler(ResponseTimeHandler.create());
         }
 
         Dispatcher dispatcher = new Dispatcher();
+
+        //处理数据型和处理型接口路由
         dispatcher.routeProcessAPI(mongo, router, options);
+
+        //处理画面路径路由
         dispatcher.routeView(mongo, router, options);
 
+        //启动web server
         server.requestHandler(router::accept).listen(options.getAppPort());
-        logger.info("========route list========");
+
+        //将所有路由打印出来方便开发
+        log.info("========route list========");
         StringBuilder stringBuilder = new StringBuilder().append(System.lineSeparator());
         router.getRoutes().forEach(r -> {
             if (StringUtils.isNotEmpty(r.getPath())) {
                 stringBuilder.append(r.getPath()).append(System.lineSeparator());
             }
         });
-        logger.info(stringBuilder.toString());
-        logger.info("==========================");
+        log.info(stringBuilder.toString());
+        log.info("==========================");
     }
 }

@@ -2,19 +2,11 @@ package cn.alphabets.light.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
-
 /**
  * Created by luohao on 16/10/22.
  */
-public class ModRoute {
+public class ModRoute extends ModBase {
 
-    private String _id;
-    private int valid;
-    private Date createAt;
-    private String createBy;
-    private Date updateAt;
-    private String updateBy;
     private String url;
     @JsonProperty("class")
     private String class_;
@@ -22,54 +14,6 @@ public class ModRoute {
     private String template;
     private String description;
 
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
-
-    public int getValid() {
-        return valid;
-    }
-
-    public void setValid(int valid) {
-        this.valid = valid;
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
 
     public String getUrl() {
         return url;

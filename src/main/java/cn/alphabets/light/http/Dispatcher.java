@@ -30,6 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import static cn.alphabets.light.model.ModBase.fromDoc;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
+import static io.vertx.core.http.HttpHeaders.TEXT_HTML;
 
 
 /**
@@ -85,32 +87,35 @@ public class Dispatcher {
      */
     public void routeView(DBConnection db, Router router, AppOptions options) {
         this.setup(options);
-//        db.getCollection("light.routes").find("{valid:1}").as(ModRoute.class).forEach(r -> {
-//            router.route(r.getUrl())
-//                    .blockingHandler(ctx -> {
-//                        Context context = new Context(ctx, db);
-//
-//                        //如果定义了action，先调用action方法
-//                        Method method = resolve(r);
-//                        if (method != null) {
-//                            try {
-//                                method.invoke(method.getDeclaringClass().newInstance(), context);
-//                            } catch (Exception e) {
-//                                throw new RuntimeException(e);
-//                            }
-//                        }
-//
-//                        //然后执行渲染
-//                        templateEngine.render(ctx, "view/" + r.getTemplate(), ar -> {
-//                            if (ar.succeeded()) {
-//                                ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(ar.result());
-//                            } else {
-//                                throw new RuntimeException(ar.cause());
-//                            }
-//                        });
-//                    }, false)
-//                    .failureHandler(getDefaultDispatcherFailureHandler());
-//        });
+        db.getCollection("light.routes").find(Document.parse("{valid:1}")).forEach((Block<? super Document>) document -> {
+
+            ModRoute route = fromDoc(document, ModRoute.class);
+
+            router.route(route.getUrl())
+                    .blockingHandler(ctx -> {
+                        Context context = new Context(ctx, db);
+
+                        //如果定义了action，先调用action方法
+                        Method method = resolve(route);
+                        if (method != null) {
+                            try {
+                                method.invoke(method.getDeclaringClass().newInstance(), context);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        //然后执行渲染
+                        templateEngine.render(ctx, "view/" + route.getTemplate(), ar -> {
+                            if (ar.succeeded()) {
+                                ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(ar.result());
+                            } else {
+                                throw new RuntimeException(ar.cause());
+                            }
+                        });
+                    }, false)
+                    .failureHandler(getDefaultDispatcherFailureHandler());
+        });
 
 
     }

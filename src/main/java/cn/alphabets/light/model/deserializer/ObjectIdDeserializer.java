@@ -1,23 +1,22 @@
-package cn.alphabets.light.model;
+package cn.alphabets.light.model.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Created by luohao on 2016/10/27.
  */
-public class DateDeserializer extends JsonDeserializer<Date> {
-
+public class ObjectIdDeserializer extends JsonDeserializer<ObjectId> {
     @Override
-    public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public ObjectId deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode node = p.readValueAsTree();
-        long timestamp = node.get("$date").asLong();
-        return new Date(timestamp);
+        String id = node.get("$oid").asText();
+        return new ObjectId(id);
     }
 }
