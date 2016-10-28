@@ -8,7 +8,6 @@ import io.vertx.core.shareddata.Shareable;
 import io.vertx.core.shareddata.impl.ClusterSerializable;
 import io.vertx.ext.web.Session;
 import io.vertx.ext.web.impl.Utils;
-import io.vertx.ext.web.sstore.impl.SessionImpl;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -21,9 +20,9 @@ import java.util.Map;
 /**
  * Created by luohao on 16/10/23.
  */
-public class LightSession implements Session, ClusterSerializable, Shareable {
+public class SessionImpl implements Session, ClusterSerializable, Shareable {
 
-    private static final Logger log = LoggerFactory.getLogger(SessionImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(io.vertx.ext.web.sstore.impl.SessionImpl.class);
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     private static final byte TYPE_LONG = 1;
@@ -46,10 +45,10 @@ public class LightSession implements Session, ClusterSerializable, Shareable {
     private long lastAccessed;
     private boolean destroyed;
 
-    public LightSession() {
+    public SessionImpl() {
     }
 
-    public LightSession(long timeout) {
+    public SessionImpl(long timeout) {
         this.id = new ObjectId().toString();
         this.timeout = timeout;
         this.lastAccessed = System.currentTimeMillis();
@@ -302,14 +301,14 @@ public class LightSession implements Session, ClusterSerializable, Shareable {
         }
     }
 
-    public static LightSession fromDoc(Document doc) {
+    public static SessionImpl fromDoc(Document doc) {
         if (doc == null) {
             return null;
         }
         byte[] aa = Base64.getDecoder().decode(doc.getString("rawData"));
         Buffer buffer = Buffer.buffer();
         buffer.appendBytes(aa);
-        LightSession s = new LightSession();
+        SessionImpl s = new SessionImpl();
         s.readFromBuffer(0, buffer);
         return s;
     }

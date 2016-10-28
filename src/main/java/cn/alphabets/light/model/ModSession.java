@@ -1,7 +1,7 @@
 package cn.alphabets.light.model;
 
 
-import cn.alphabets.light.http.session.LightSession;
+import cn.alphabets.light.http.session.SessionImpl;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.ext.web.Session;
 
@@ -20,7 +20,7 @@ public class ModSession {
     }
 
     public static ModSession fromSession(Session session) {
-        LightSession session1 = (LightSession) session;
+        SessionImpl session1 = (SessionImpl) session;
         Buffer buffer = Buffer.buffer();
         session1.writeToBuffer(buffer);
         ModSession modSession = new ModSession();
@@ -28,14 +28,14 @@ public class ModSession {
         return modSession;
     }
 
-    public static LightSession toSession(ModSession mod) {
+    public static SessionImpl toSession(ModSession mod) {
         if (mod == null) {
             return null;
         }
         byte[] aa = Base64.getDecoder().decode(mod.getRawData());
         Buffer buffer = Buffer.buffer();
         buffer.appendBytes(aa);
-        LightSession s = new LightSession();
+        SessionImpl s = new SessionImpl();
         s.readFromBuffer(0, buffer);
         return s;
     }

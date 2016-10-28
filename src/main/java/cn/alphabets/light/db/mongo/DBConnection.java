@@ -6,7 +6,6 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.jongo.Jongo;
 
 
 /**
@@ -35,11 +34,6 @@ public class DBConnection extends MongoClient {
         return getDB().getCollection(collectionName);
     }
 
-    public org.jongo.MongoCollection getCollection2(String collectionName) {
-        Jongo jongo = new Jongo(getDB(options.getAppDomain()));
-
-        return jongo.getCollection(collectionName);
-    }
 
 
 }
