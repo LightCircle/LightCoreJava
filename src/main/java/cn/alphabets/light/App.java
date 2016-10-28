@@ -4,6 +4,7 @@ import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.TimeoutHandlerImpl;
+import cn.alphabets.light.http.session.AuthHandlerImpl;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
 import cn.alphabets.light.http.session.SessionHandlerImpl;
 import io.vertx.core.Vertx;
@@ -88,6 +89,10 @@ public class App {
 
         //request body处理
         router.route().handler(BodyHandler.create());
+
+        //未登录请求过滤
+        router.route().handler(new AuthHandlerImpl(mongo));
+
 
         //响应头带上'x-response-time' 用来标示服务器响应时间
         if (options.isDev()) {

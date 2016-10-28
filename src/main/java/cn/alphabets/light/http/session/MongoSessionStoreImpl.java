@@ -45,7 +45,6 @@ public class MongoSessionStoreImpl implements SessionStore {
     @Override
     public void get(String id, Handler<AsyncResult<Session>> resultHandler) {
 
-
         Document doc = mongo.getCollection(SESSION_COLLECTION_NAME)
                 .find(Filters.eq("_id", new ObjectId(id)))
                 .first();

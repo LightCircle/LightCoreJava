@@ -24,7 +24,7 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ModBase {
     @JsonIgnore
-    static final Logger logger = LoggerFactory.getLogger(ModBase.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModBase.class);
     @JsonIgnore
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -94,6 +94,25 @@ public class ModBase {
         this.updateBy = updateBy;
     }
 
+
+    public static <T> T fromJson(String json, Class<T> clz) {
+        try {
+            return objectMapper.readValue(json, clz);
+        } catch (IOException e) {
+            logger.error(e);
+        }
+        return null;
+    }
+
+    public String toJson() {
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            logger.error(e);
+        }
+        return null;
+    }
+
     public static <T> T fromDoc(Document doc, Class<T> clz) {
         try {
             return objectMapper.readValue(doc.toJson(), clz);
@@ -103,12 +122,13 @@ public class ModBase {
         return null;
     }
 
-    public static Document toDoc(ModBase obj) {
+    public Document toDoc() {
         try {
-            return Document.parse(objectMapper.writeValueAsString(obj));
+            return Document.parse(objectMapper.writeValueAsString(this));
         } catch (JsonProcessingException e) {
             logger.error(e);
         }
         return null;
     }
+
 }

@@ -2,11 +2,12 @@ package cn.alphabets.light.http;
 
 import cn.alphabets.light.AppOptions;
 import cn.alphabets.light.db.mongo.DBConnection;
-import cn.alphabets.light.exception.DispatcheException;
+import cn.alphabets.light.http.exception.MethodNotFoundException;
+import cn.alphabets.light.http.exception.ProcessingException;
+import cn.alphabets.light.http.exception.RenderException;
 import cn.alphabets.light.model.ModBoard;
 import cn.alphabets.light.model.ModRoute;
 import com.mongodb.Block;
-import com.sun.tools.javac.util.Assert;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -39,7 +40,7 @@ import static io.vertx.core.http.HttpHeaders.TEXT_HTML;
  */
 public class Dispatcher {
 
-    final Logger log = LoggerFactory.getLogger(Dispatcher.class);
+    private static final Logger log = LoggerFactory.getLogger(Dispatcher.class);
 
     private static ConcurrentHashMap<String, Method> methodMap;
     private boolean isDev;
@@ -55,19 +56,22 @@ public class Dispatcher {
                 .forEach((Block<? super Document>) document -> {
 
                     ModBoard board = fromDoc(document, ModBoard.class);
-                    Assert.checkNonNull(board);
+
+                    if (board == null) {
+                        throw new MethodNotFoundException("Document Parse Error , Board Info : " + board.toJson());
+                    }
 
                     router.route(board.getApi())
                             .blockingHandler(ctx -> {
                                 Method method = resolve(board);
                                 Context context = new Context(ctx, db);
                                 if (method == null) {
-                                    throw new DispatcheException("can not dispatch");
+                                    throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
                                 }
                                 try {
                                     method.invoke(method.getDeclaringClass().newInstance(), context);
                                 } catch (Exception e) {
-                                    throw new RuntimeException(e);
+                                    throw new ProcessingException(e);
                                 }
                             }, false)
                             .failureHandler(getDefaultDispatcherFailureHandler());
@@ -91,6 +95,10 @@ public class Dispatcher {
 
             ModRoute route = fromDoc(document, ModRoute.class);
 
+            if (route == null) {
+                throw new MethodNotFoundException("Document Parse Error , Route Info : " + route.toJson());
+            }
+
             router.route(route.getUrl())
                     .blockingHandler(ctx -> {
                         Context context = new Context(ctx, db);
@@ -101,7 +109,7 @@ public class Dispatcher {
                             try {
                                 method.invoke(method.getDeclaringClass().newInstance(), context);
                             } catch (Exception e) {
-                                throw new RuntimeException(e);
+                                throw new ProcessingException(e);
                             }
                         }
 
@@ -110,7 +118,7 @@ public class Dispatcher {
                             if (ar.succeeded()) {
                                 ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(ar.result());
                             } else {
-                                throw new RuntimeException(ar.cause());
+                                throw new RenderException(ar.cause());
                             }
                         });
                     }, false)
@@ -155,13 +163,22 @@ public class Dispatcher {
     protected Handler<RoutingContext> getDefaultDispatcherFailureHandler() {
         return ctx -> {
             Throwable error = ctx.failure();
-            error.printStackTrace();
+            log.error("Request Error:", error);
 
             HttpResponseStatus status = NOT_FOUND;
-            if (error instanceof DispatcheException) {
+            if (error instanceof MethodNotFoundException) {
                 status = NOT_FOUND;
-            } else if (error instanceof RuntimeException) {
+            } else if (error instanceof ProcessingException) {
                 status = INTERNAL_SERVER_ERROR;
+            } else if (error instanceof IllegalStateException) {
+                status = INTERNAL_SERVER_ERROR;
+            } else {
+                status = INTERNAL_SERVER_ERROR;
+            }
+
+            //请求已经结束
+            if (ctx.response().ended()) {
+                return;
             }
 
             if (isDev) {
