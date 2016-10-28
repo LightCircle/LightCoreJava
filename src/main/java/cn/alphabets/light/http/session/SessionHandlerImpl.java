@@ -24,7 +24,7 @@ public class SessionHandlerImpl implements SessionHandler {
     /**
      * Default name of session cookie
      */
-    private static String DEFAULT_SESSION_COOKIE_NAME = "light.sid";
+    private static String DEFAULT_SESSION_COOKIE_NAME = "light.jsid";
 
     /**
      * Default time, in ms, that a session lasts for without being accessed before expiring.
