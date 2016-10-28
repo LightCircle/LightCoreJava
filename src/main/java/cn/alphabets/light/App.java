@@ -76,6 +76,9 @@ public class App {
         //打印每个请求
         router.route().handler(LoggerHandler.create(LoggerFormat.SHORT));
 
+        //处理静态资源
+        router.route("/static/*").handler(StaticHandler.create().setWebRoot("static"));
+
         //cookie处理
         router.route().handler(CookieHandler.create());
 
