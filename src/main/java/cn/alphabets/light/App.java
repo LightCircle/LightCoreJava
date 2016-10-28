@@ -1,5 +1,6 @@
 package cn.alphabets.light;
 
+import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
@@ -10,9 +11,7 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.CookieHandler;
-import io.vertx.ext.web.handler.ResponseTimeHandler;
+import io.vertx.ext.web.handler.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -64,14 +63,22 @@ public class App {
     public void start() {
         Logger log = LoggerFactory.getLogger(App.class);
 
+        //初始化light设定
+        ConfigManager.getInstance().setUp(mongo);
+
+        //打印每个请求
+        router.route().handler(LoggerHandler.create(LoggerFormat.SHORT));
+
         //cookie处理
         router.route().handler(CookieHandler.create());
 
         //session处理
+        //session超时30天
+        long sessionTimeoute = 1000L * 60 * 60 * 24 * 30;
         router.route().handler(SessionHandlerImpl
                 .create(new MongoSessionStoreImpl(mongo, vertx))
                 .setNagHttps(false)
-                .setSessionTimeout(1000L * 60 * 10));
+                .setSessionTimeout(sessionTimeoute));
 
         //request body处理
         router.route().handler(BodyHandler.create());
@@ -83,10 +90,13 @@ public class App {
 
         Dispatcher dispatcher = new Dispatcher();
 
-        //处理数据型和处理型接口路由
+        //数据型接口路由
+        // TODO: 2016/10/28 完成数据型接口路由
+
+        //处理型接口路由
         dispatcher.routeProcessAPI(mongo, router, options);
 
-        //处理画面路径路由
+        //画面路径路由
         dispatcher.routeView(mongo, router, options);
 
         //启动web server

@@ -39,7 +39,7 @@ import static io.vertx.core.http.HttpHeaders.TEXT_HTML;
  */
 public class Dispatcher {
 
-    final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
+    final Logger log = LoggerFactory.getLogger(Dispatcher.class);
 
     private static ConcurrentHashMap<String, Method> methodMap;
     private boolean isDev;
