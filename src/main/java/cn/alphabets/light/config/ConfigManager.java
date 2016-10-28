@@ -37,6 +37,8 @@ public interface ConfigManager {
      */
     String getString(String group, String key);
 
+    String getString(String[] groupAndkey);
+
     /**
      * 获取整形类型的设定
      *
@@ -45,6 +47,8 @@ public interface ConfigManager {
      * @return 设定值
      */
     long getLong(String group, String key);
+
+    long getLong(String[] groupAndkey);
 
     /**
      * 获取布尔值类型的设定
@@ -55,6 +59,8 @@ public interface ConfigManager {
      */
     boolean getBoolean(String group, String key);
 
+    boolean getBoolean(String[] groupAndkey);
+
     /**
      * 获取布尔值类型的设定
      *
@@ -63,4 +69,6 @@ public interface ConfigManager {
      * @return 设定值
      */
     List<String> getArray(String group, String key);
+
+    List<String> getArray(String[] groupAndkey);
 }

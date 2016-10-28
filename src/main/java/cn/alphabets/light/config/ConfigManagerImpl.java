@@ -93,4 +93,24 @@ public enum ConfigManagerImpl implements ConfigManager {
     public List<String> getArray(String group, String key) {
         return (List<String>) map.get(group).get(key);
     }
+
+    @Override
+    public String getString(String[] groupAndkey) {
+        return getString(groupAndkey[0], groupAndkey[1]);
+    }
+
+    @Override
+    public long getLong(String[] groupAndkey) {
+        return getLong(groupAndkey[0], groupAndkey[1]);
+    }
+
+    @Override
+    public boolean getBoolean(String[] groupAndkey) {
+        return getBoolean(groupAndkey[0], groupAndkey[1]);
+    }
+
+    @Override
+    public List<String> getArray(String[] groupAndkey) {
+        return getArray(groupAndkey[0], groupAndkey[1]);
+    }
 }

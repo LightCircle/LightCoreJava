@@ -3,6 +3,7 @@ package cn.alphabets.light;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Dispatcher;
+import cn.alphabets.light.http.TimeoutHandlerImpl;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
 import cn.alphabets.light.http.session.SessionHandlerImpl;
 import io.vertx.core.Vertx;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
  * Created by luohao on 16/10/20.
  */
 public class App {
+
 
     private Vertx vertx;
     private HttpServer server;
@@ -62,9 +64,13 @@ public class App {
 
     public void start() {
         Logger log = LoggerFactory.getLogger(App.class);
+        ConfigManager configManager = ConfigManager.getInstance();
 
         //初始化light设定
-        ConfigManager.getInstance().setUp(mongo);
+        configManager.setUp(mongo);
+
+        //初始化timeout
+        router.route().handler(new TimeoutHandlerImpl(configManager.getLong(Constant.CFK_REQUEST_TIMEOUT) * 1000));
 
         //打印每个请求
         router.route().handler(LoggerHandler.create(LoggerFormat.SHORT));
@@ -74,7 +80,7 @@ public class App {
 
         //session处理
         //session超时30天
-        long sessionTimeoute = 1000L * 60 * 60 * 24 * 30;
+        long sessionTimeoute = 1000L * 60 * 60 * configManager.getLong(Constant.CFK_SESSION_TIMEOUT);
         router.route().handler(SessionHandlerImpl
                 .create(new MongoSessionStoreImpl(mongo, vertx))
                 .setNagHttps(false)
