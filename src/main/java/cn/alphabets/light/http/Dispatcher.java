@@ -1,13 +1,13 @@
 package cn.alphabets.light.http;
 
 import cn.alphabets.light.AppOptions;
+import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.http.exception.RenderException;
 import cn.alphabets.light.model.ModBoard;
 import cn.alphabets.light.model.ModRoute;
-import com.mongodb.Block;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -17,7 +17,6 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.templ.TemplateEngine;
 import io.vertx.ext.web.templ.ThymeleafTemplateEngine;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.Document;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -28,7 +27,6 @@ import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static cn.alphabets.light.model.ModBase.fromDoc;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
@@ -51,32 +49,24 @@ public class Dispatcher {
      */
     public void routeProcessAPI(DBConnection db, Router router, AppOptions options) {
         this.setup(options);
-        db.getCollection("light.boards")
-                .find(Document.parse("{kind:1,valid:1}"))
-                .forEach((Block<? super Document>) document -> {
-
-                    ModBoard board = fromDoc(document, ModBoard.class);
-
-                    if (board == null) {
-                        throw new MethodNotFoundException("Document Parse Error , Board Info : " + board.toJson());
-                    }
-
-                    router.route(board.getApi())
-                            .blockingHandler(ctx -> {
-                                Method method = resolve(board);
-                                Context context = new Context(ctx, db);
-                                if (method == null) {
-                                    throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
-                                }
-                                try {
-                                    method.invoke(method.getDeclaringClass().newInstance(), context);
-                                } catch (Exception e) {
-                                    throw new ProcessingException(e);
-                                }
-                            }, false)
-                            .failureHandler(getDefaultDispatcherFailureHandler());
-
-                });
+        CacheManager.INSTANCE.getBoards().forEach(board -> {
+            if (board.getKind() == 1) {
+                router.route(board.getApi())
+                        .blockingHandler(ctx -> {
+                            Method method = resolve(board);
+                            Context context = new Context(ctx, db);
+                            if (method == null) {
+                                throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
+                            }
+                            try {
+                                method.invoke(method.getDeclaringClass().newInstance(), context);
+                            } catch (Exception e) {
+                                throw new ProcessingException(e);
+                            }
+                        }, false)
+                        .failureHandler(getDefaultDispatcherFailureHandler());
+            }
+        });
     }
 
 
@@ -91,13 +81,7 @@ public class Dispatcher {
      */
     public void routeView(DBConnection db, Router router, AppOptions options) {
         this.setup(options);
-        db.getCollection("light.routes").find(Document.parse("{valid:1}")).forEach((Block<? super Document>) document -> {
-
-            ModRoute route = fromDoc(document, ModRoute.class);
-
-            if (route == null) {
-                throw new MethodNotFoundException("Document Parse Error , Route Info : " + route.toJson());
-            }
+        CacheManager.INSTANCE.getRoutes().forEach(route -> {
 
             router.route(route.getUrl())
                     .blockingHandler(ctx -> {
@@ -124,8 +108,6 @@ public class Dispatcher {
                     }, false)
                     .failureHandler(getDefaultDispatcherFailureHandler());
         });
-
-
     }
 
     private void setup(AppOptions options) {

@@ -18,7 +18,7 @@ import io.vertx.ext.web.sstore.SessionStore;
 
 public class SessionHandlerImpl implements SessionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(io.vertx.ext.web.handler.impl.SessionHandlerImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SessionHandlerImpl.class);
 
 
     /**

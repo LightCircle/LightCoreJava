@@ -1,5 +1,6 @@
 package cn.alphabets.light;
 
+import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Dispatcher;
@@ -69,6 +70,9 @@ public class App {
 
         //初始化light设定
         configManager.setUp(mongo);
+
+        //初始化基础数据
+        CacheManager.INSTANCE.setUp(mongo);
 
         //初始化timeout
         router.route().handler(new TimeoutHandlerImpl(configManager.getLong(Constant.CFK_REQUEST_TIMEOUT) * 1000));

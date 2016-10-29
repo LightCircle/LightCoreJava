@@ -99,7 +99,7 @@ public class ModBase {
         try {
             return objectMapper.readValue(json, clz);
         } catch (IOException e) {
-            logger.error(e);
+            logger.error("error fromJson", e);
         }
         return null;
     }
@@ -108,7 +108,7 @@ public class ModBase {
         try {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            logger.error(e);
+            logger.error("error toJson", e);
         }
         return null;
     }
@@ -117,7 +117,7 @@ public class ModBase {
         try {
             return objectMapper.readValue(doc.toJson(), clz);
         } catch (IOException e) {
-            logger.error(e);
+            logger.error("error fromDoc", e);
         }
         return null;
     }
@@ -126,7 +126,7 @@ public class ModBase {
         try {
             return Document.parse(objectMapper.writeValueAsString(this));
         } catch (JsonProcessingException e) {
-            logger.error(e);
+            logger.error("error fromDoc", e);
         }
         return null;
     }

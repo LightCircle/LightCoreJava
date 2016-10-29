@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class SessionImpl implements Session, ClusterSerializable, Shareable {
 
-    private static final Logger log = LoggerFactory.getLogger(io.vertx.ext.web.sstore.impl.SessionImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SessionImpl.class);
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     private static final byte TYPE_LONG = 1;
@@ -305,9 +305,9 @@ public class SessionImpl implements Session, ClusterSerializable, Shareable {
         if (doc == null) {
             return null;
         }
-        byte[] aa = Base64.getDecoder().decode(doc.getString("rawData"));
+        byte[] bytes = Base64.getDecoder().decode(doc.getString("rawData"));
         Buffer buffer = Buffer.buffer();
-        buffer.appendBytes(aa);
+        buffer.appendBytes(bytes);
         SessionImpl s = new SessionImpl();
         s.readFromBuffer(0, buffer);
         return s;
