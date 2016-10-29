@@ -97,8 +97,14 @@ public class Dispatcher {
                             }
                         }
 
+                        //有的设置是index.html 有的设置直接是index 所以需要补全
+                        String fileName = route.getTemplate();
+                        if (!StringUtils.endsWith(fileName, ".html")) {
+                            fileName += ".html";
+                        }
+
                         //然后执行渲染
-                        templateEngine.render(ctx, "view/" + route.getTemplate(), ar -> {
+                        templateEngine.render(ctx, "view/" + fileName, ar -> {
                             if (ar.succeeded()) {
                                 ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(ar.result());
                             } else {

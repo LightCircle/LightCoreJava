@@ -98,7 +98,9 @@ public class App {
         router.route().handler(BodyHandler.create());
 
         //未登录请求过滤
-        router.route().handler(new AuthHandlerImpl(mongo));
+        if (!options.isDev()) {
+            router.route().handler(new AuthHandlerImpl(mongo));
+        }
 
 
         //响应头带上'x-response-time' 用来标示服务器响应时间
