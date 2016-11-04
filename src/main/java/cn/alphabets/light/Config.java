@@ -21,10 +21,10 @@ public class Config {
     public ConfigMongoDB mongodb;
     public ConfigMySQL mysql;
     public Args args;
-    public Environment env;
+    public Environment environment;
 
     private Config() {
-        env = new Environment();
+        environment = new Environment();
         args = new Args();
     }
 
@@ -57,6 +57,16 @@ public class Config {
         public static final String ENV_LIGHT_MONGO_AUTH = "LIGHTDB_AUTH";
         public static final String ENV_LIGHT_APP_NAME = "APPNAME";
         public static final String ENV_LIGHT_APP_PORT = "PORT";
+
+        public static final String SYSTEM_DB = "LightDB";
+        public static final String SYSTEM_DB_PREFIX = "light";
+        public static final String SYSTEM_DB_CONFIG = "configuration";
+        public static final String SYSTEM_DB_VALIDATOR = "validator";
+        public static final String SYSTEM_DB_I18N = "i18n";
+        public static final String SYSTEM_DB_STRUCTURE = "structure";
+        public static final String SYSTEM_DB_BOARD = "board";
+        public static final String SYSTEM_DB_ROUTE = "route";
+        public static final String SYSTEM_DB_TENANT = "tenant";
     }
 
     public static class ConfigApp {
@@ -105,7 +115,7 @@ public class Config {
      */
     public static class Environment {
 
-        public String appName() {
+        public String getAppName() {
             Config config = Config.instance();
             if (config.args.local) {
                 return config.app.domain;
@@ -113,7 +123,7 @@ public class Config {
             return System.getenv(Constant.ENV_LIGHT_APP_NAME);
         }
 
-        public int appPort() {
+        public int getAppPort() {
             Config config = Config.instance();
             if (config.args.local) {
                 return config.app.port;
@@ -121,7 +131,7 @@ public class Config {
             return Integer.parseInt(System.getenv(Constant.ENV_LIGHT_APP_PORT));
         }
 
-        public String mongoHost() {
+        public String getMongoHost() {
             Config config = Config.instance();
             if (config.args.local) {
                 return config.mongodb.host;
@@ -129,15 +139,15 @@ public class Config {
             return System.getenv(Constant.ENV_LIGHT_MONGO_HOST);
         }
 
-        public int mongoPort() {
+        public String getMongoPort() {
             Config config = Config.instance();
             if (config.args.local) {
-                return config.mongodb.port;
+                return String.valueOf(config.mongodb.port);
             }
-            return Integer.parseInt(System.getenv(Constant.ENV_LIGHT_MONGO_PORT));
+            return System.getenv(Constant.ENV_LIGHT_MONGO_PORT);
         }
 
-        public String mongoUser() {
+        public String getMongoUser() {
             Config config = Config.instance();
             if (config.args.local) {
                 return config.mongodb.user;
@@ -145,7 +155,7 @@ public class Config {
             return System.getenv(Constant.ENV_LIGHT_MONGO_USER);
         }
 
-        public String mongoPass() {
+        public String getMongoPass() {
             Config config = Config.instance();
             if (config.args.local) {
                 return config.mongodb.pass;
@@ -153,7 +163,7 @@ public class Config {
             return System.getenv(Constant.ENV_LIGHT_MONGO_PASS);
         }
 
-        public String mongoAuth() {
+        public String getMongoAuth() {
             Config config = Config.instance();
             if (config.args.local) {
                 return config.mongodb.auth;

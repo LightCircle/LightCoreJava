@@ -1,13 +1,16 @@
 package cn.alphabets.light.db.mongo;
 
+import cn.alphabets.light.model.ModUser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
- * DBConnectionTest
+ * ControllerTest
  */
-public class DBConnectionTest {
+public class ControllerTest {
 
     @Before
     public void setUp() {
@@ -19,5 +22,8 @@ public class DBConnectionTest {
 
     @Test
     public void test() {
+        Controller ctrl = new Controller("user");
+
+        List<ModUser> u = ctrl.list(ModUser.class);
     }
 }

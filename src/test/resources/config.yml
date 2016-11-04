@@ -6,7 +6,7 @@ app:
   dev: true
 
 mongodb:
-  host: db.alphabets.cn
+  host: 127.0.0.1
   port: 57017
   user: light
   pass: 2e35501c2b7e
