@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Model
+ * Model async version.
  */
 public class Model {
 
