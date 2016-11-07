@@ -5,7 +5,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Stream;
 
 /**
  * ModelTest
@@ -18,7 +20,7 @@ public class ModelTest {
     }
 
     @Test
-    public void test() throws InterruptedException {
+    public void testGetBy() throws InterruptedException {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -31,4 +33,19 @@ public class ModelTest {
         latch.await();
     }
 
+    @Test
+    public void testCount() throws InterruptedException {
+
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Model m = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "users", null);
+        m.count((err, count) -> {
+
+            System.out.println(count);
+            Assert.assertTrue(count > 0);
+            latch.countDown();
+        });
+
+        latch.await();
+    }
 }

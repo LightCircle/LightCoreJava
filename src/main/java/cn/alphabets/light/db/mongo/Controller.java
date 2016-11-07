@@ -14,26 +14,28 @@ import java.util.List;
  */
 public class Controller {
 
-    private DBConnection connection;
     private String table;
+    private Model model;
+
 
     public Controller(String table) {
 
-        Config config = Config.instance();
+//        this.model = new Model();
 
         this.table = table;
     }
 
     public <T> List<T> list(Class clazz) {
 
-        List<T> result = new ArrayList<>();
-        this.connection.getCollection(this.table)
-                .find(Document.parse("{valid:1}"))
-                .projection(Projections.exclude("createAt", "updateAt", "valid", "createBy", "updateBy"))
-                .forEach((Block<? super Document>) document -> {
-                    result.add((T) ModBase.fromDoc(document, clazz.getClass()));
-                });
-
-        return result;
+//        List<T> result = new ArrayList<>();
+//        this.connection.getCollection(this.table)
+//                .find(Document.parse("{valid:1}"))
+//                .projection(Projections.exclude("createAt", "updateAt", "valid", "createBy", "updateBy"))
+//                .forEach((Block<? super Document>) document -> {
+//                    result.add((T) ModBase.fromDoc(document, clazz.getClass()));
+//                });
+//
+//        return result;
+        return null;
     }
 }

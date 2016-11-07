@@ -24,7 +24,6 @@ public class Model {
         void callback(Throwable error, E result);
     }
 
-    private MongoClient client;
     private MongoDatabase db;
     private MongoCollection<Document> collection;
 
@@ -37,8 +36,8 @@ public class Model {
     }
 
     private void initialize(String domain, String code, String table, String define) {
-        this.client = Connection.instance(Config.instance().environment);
-        this.db = this.client.getDatabase(domain);
+        MongoClient client = Connection.instance(Config.instance().environment);
+        this.db = client.getDatabase(domain);
 
         if (table != null) {
             this.collection = this.db.getCollection(table);
@@ -47,15 +46,18 @@ public class Model {
         logger.info("table : " + table);
     }
 
-    void getBy(Callback<List<Document>> handle) {
+    public void getBy(Callback<List<Document>> handle) {
 
-        this.collection.find().into(new ArrayList<>(),
-                new SingleResultCallback<List<Document>>() {
-                    @Override
-                    public void onResult(final List<Document> result, final Throwable error) {
-                        handle.callback(error, result);
-                    }
-                });
+        this.collection.find().into(new ArrayList<>(), new SingleResultCallback<List<Document>>() {
+            @Override
+            public void onResult(final List<Document> result, final Throwable throwable) {
+                handle.callback(throwable, result);
+            }
+        });
+    }
+
+    public void count(Callback<Long> handle) {
+        this.collection.count((count, throwable) -> handle.callback(throwable, count));
     }
 
 }
