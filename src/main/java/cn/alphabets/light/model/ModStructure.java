@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by luohao on 2016/10/29.
@@ -19,7 +21,7 @@ public class ModStructure extends ModBase {
     private HashMap<String, Field> items;
     private String tenant;
     private int lock;
-    private HashMap<String, Object> extend;
+    private List<Map<String, Object>> extend;
 
     public ModStructure() {
         super();
@@ -97,11 +99,11 @@ public class ModStructure extends ModBase {
         this.lock = lock;
     }
 
-    public HashMap<String, Object> getExtend() {
+    public List<Map<String, Object>> getExtend() {
         return extend;
     }
 
-    public void setExtend(HashMap<String, Object> extend) {
+    public void setExtend(List<Map<String, Object>> extend) {
         this.extend = extend;
     }
 

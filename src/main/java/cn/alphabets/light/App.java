@@ -72,7 +72,7 @@ public class App {
         configManager.setUp(mongo);
 
         //初始化基础数据
-        CacheManager.INSTANCE.setUp(mongo);
+        CacheManager.INSTANCE.setUp(options.getAppDomain());
 
         //初始化timeout
         router.route().handler(new TimeoutHandlerImpl(configManager.getLong(Constant.CFK_REQUEST_TIMEOUT) * 1000));
