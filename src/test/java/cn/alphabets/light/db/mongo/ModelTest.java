@@ -23,7 +23,7 @@ public class ModelTest {
 
         Model model = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        List<ModI18n> i18n = model.list(ModI18n.class);
+        List<ModI18n> i18n = model.list();
 
         Assert.assertTrue(i18n.size() > 0);
     }
@@ -33,7 +33,7 @@ public class ModelTest {
 
         Model model = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        ModI18n i18n = model.get(ModI18n.class);
+        ModI18n i18n = model.get();
 
         Assert.assertNotNull(i18n);
     }
