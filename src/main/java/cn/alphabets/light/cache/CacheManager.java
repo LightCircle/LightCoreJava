@@ -16,6 +16,7 @@ public enum CacheManager {
 
     INSTANCE;
 
+    private List<ModConfiguration> configuration;
     private List<ModI18n> i18ns;
     private List<ModTenant> tenants;
     private List<ModValidator> validators;
@@ -35,6 +36,7 @@ public enum CacheManager {
 
         // configuration
         select = Arrays.asList("type","key","value","valueType");
+        configuration = new Model(domain, code, Config.Constant.SYSTEM_DB_CONFIG).list(valid, select);
 
         // validator
         select = Arrays.asList("group","name","rule","key","option","message","sanitize","class","action","condition");
@@ -59,6 +61,10 @@ public enum CacheManager {
         // tenant
         select = Arrays.asList("code","name");
         tenants = new Model(domain, code, Config.Constant.SYSTEM_DB_TENANT).list(valid, select);
+    }
+
+    public List<ModConfiguration> getConfiguration() {
+        return configuration;
     }
 
     public List<ModI18n> getI18ns() {

@@ -1,5 +1,6 @@
 package cn.alphabets.light.config;
 
+import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import com.mongodb.Block;
 import com.mongodb.client.model.Sorts;
@@ -40,37 +41,34 @@ public enum ConfigManagerImpl implements ConfigManager {
         if (map == null) {
             map = new ConcurrentHashMap();
         }
-        db.getCollection(DEFAULT_CONFIG_COLLECTION_NAME)
-                .find(Document.parse("{valid:1}"))
-                .sort(Sorts.ascending("type"))
-                .forEach((Block<? super Document>) document -> {
 
-                    String type = document.getString("type");
-                    String key = document.getString("key");
-                    String valueType = document.getString("valueType");
+        CacheManager.INSTANCE.getConfiguration().forEach(document -> {
+            String type = document.getType();
+            String key = document.getKey();
+            String valueType = document.getValueType();
 
-                    ConcurrentHashMap<String, Object> typeData = map.get(type);
-                    if (typeData == null) {
-                        typeData = new ConcurrentHashMap<String, Object>();
-                    }
-                    map.put(type, typeData);
+            ConcurrentHashMap<String, Object> typeData = map.get(type);
+            if (typeData == null) {
+                typeData = new ConcurrentHashMap<String, Object>();
+            }
+            map.put(type, typeData);
 
-                    switch (valueType) {
-                        case "string":
-                            typeData.put(key, document.getString("value"));
-                            break;
-                        case "number":
-                            typeData.put(key, Long.parseLong(document.getString("value")));
-                            break;
-                        case "array":
-                            typeData.put(key, (List<String>) document.get("value"));
-                            break;
-                        case "boolean":
-                            typeData.put(key, "true".endsWith(document.getString("value")));
-                            break;
-                    }
+            switch (valueType) {
+                case "string":
+                    typeData.put(key, document.getValue());
+                    break;
+                case "number":
+                    typeData.put(key, Long.parseLong(String.valueOf(document.getValue())));
+                    break;
+                case "array":
+                    typeData.put(key, (List<String>) document.getValue());
+                    break;
+                case "boolean":
+                    typeData.put(key, Boolean.valueOf(String.valueOf(document.getValue())));
+                    break;
+            }
 
-                });
+        });
     }
 
     @Override

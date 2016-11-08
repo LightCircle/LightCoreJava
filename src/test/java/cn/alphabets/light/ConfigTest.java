@@ -20,7 +20,7 @@ public class ConfigTest {
         Assert.assertEquals(config.app.port, 7000);
 
         Optional<Config.ConfigMongoDB> host = Optional.ofNullable(config.mongodb);
-        host.ifPresent(mongo -> Assert.assertEquals(mongo.host, "db.alphabets.cn"));
+        host.ifPresent(mongo -> Assert.assertEquals(mongo.host, "127.0.0.1"));
     }
 
 }

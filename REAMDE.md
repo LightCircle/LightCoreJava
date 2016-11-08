@@ -16,3 +16,7 @@
   http://commons.apache.org/proper/commons-jcs/
 
 - SnakeYAML : yaml处理
+
+- JavaPoet : Java代码生成
+  https://github.com/square/javapoet
+
