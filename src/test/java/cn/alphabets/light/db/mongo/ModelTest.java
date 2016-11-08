@@ -1,11 +1,12 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Config;
+import cn.alphabets.light.model.ModI18n;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
 
 /**
  * ModelTest
@@ -18,32 +19,22 @@ public class ModelTest {
     }
 
     @Test
-    public void testGetBy() throws InterruptedException {
+    public void testGetBy() {
 
-        final CountDownLatch latch = new CountDownLatch(1);
+        Model model = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        Model m = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "users", null);
-        m.getBy((err, lookup) -> {
-            Assert.assertTrue(lookup.size() > 0);
-            latch.countDown();
-        });
+        List<ModI18n> i18n = model.list(ModI18n.class);
 
-        latch.await();
+        Assert.assertTrue(i18n.size() > 0);
     }
 
     @Test
-    public void testCount() throws InterruptedException {
+    public void testGet() {
 
-        final CountDownLatch latch = new CountDownLatch(1);
+        Model model = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        Model m = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "users", null);
-        m.count((err, count) -> {
+        ModI18n i18n = model.get(ModI18n.class);
 
-            System.out.println(count);
-            Assert.assertTrue(count > 0);
-            latch.countDown();
-        });
-
-        latch.await();
+        Assert.assertNotNull(i18n);
     }
 }

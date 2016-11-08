@@ -1,9 +1,8 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Config;
-import com.mongodb.ConnectionString;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,7 @@ class Connection {
 
     public static MongoClient instance(Config.Environment environment) {
         if (instance == null) {
-            ConnectionString uri = new ConnectionString(
+            MongoClientURI uri = new MongoClientURI(
                     String.format("mongodb://%s:%s@%s:%s/?authMechanism=%s&authSource=%s",
                             environment.getMongoUser(),
                             environment.getMongoPass(),
@@ -35,7 +34,7 @@ class Connection {
             logger.info("port : " + environment.getMongoPort());
             logger.info("user : " + environment.getMongoUser());
             logger.info("pass : " + environment.getMongoPass());
-            instance = MongoClients.create(uri);
+            instance = new MongoClient(uri);
         }
 
         return instance;
