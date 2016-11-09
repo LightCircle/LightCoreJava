@@ -8,11 +8,12 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class Model {
 
         // TODO: 临时写死package, 需要泛用化。可否去掉Mod前缀?
         String packageName = "cn.alphabets.light.model";
-        String className = "Mod" + StringUtils.capitalize(this.name);
+        String className = "Mod" + WordUtils.capitalize(this.name);
 
         try {
             return Class.forName(packageName + "." + className);

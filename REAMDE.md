@@ -5,9 +5,6 @@
 
 #### 依赖的第三方包
 
-- Thymeleaf : template engine
-  http://www.thymeleaf.org/index.html
-
 - vertx-web : web framework
 
 - mongo : mongo driver
@@ -20,3 +17,5 @@
 - JavaPoet : Java代码生成
   https://github.com/square/javapoet
 
+- 模板引擎
+  http://jtwig.org/

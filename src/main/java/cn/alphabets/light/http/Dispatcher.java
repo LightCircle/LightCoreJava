@@ -7,7 +7,6 @@ import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
-import cn.alphabets.light.http.exception.RenderException;
 import cn.alphabets.light.model.ModBoard;
 import cn.alphabets.light.model.ModRoute;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -16,8 +15,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.templ.TemplateEngine;
-import io.vertx.ext.web.templ.ThymeleafTemplateEngine;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
@@ -46,7 +43,6 @@ public class Dispatcher {
 
     private static ConcurrentHashMap<String, Method> methodMap;
     private boolean isDev;
-    private static TemplateEngine templateEngine;
 
     /*
     处理型API
@@ -112,7 +108,7 @@ public class Dispatcher {
                         Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
 
                         // TODO: 设定变量
-                        Map<String, Object> map = new ConcurrentHashMap<String, Object>() {{
+                        Map<String, Object> model = new ConcurrentHashMap<String, Object>() {{
                             put("req", Boolean.TRUE);
                             put("handler", context);
                             put("user", "");
@@ -122,7 +118,7 @@ public class Dispatcher {
 
                         //然后执行渲染
                         String name = "view/" + fileName;
-                        String html = Helper.loadTemplate(name, map, Arrays.asList(dynamic, i));
+                        String html = Helper.loadTemplate(name, model, Arrays.asList(dynamic, i));
                         ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(html);
                     }, false)
                     .failureHandler(getDefaultDispatcherFailureHandler());
@@ -142,10 +138,6 @@ public class Dispatcher {
                     methodMap.put(key, method);
                 });
             });
-        }
-
-        if (templateEngine == null) {
-            templateEngine = ThymeleafTemplateEngine.create();
         }
     }
 

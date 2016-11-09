@@ -20,7 +20,7 @@ public class HelperTest {
         Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
 
         Map<String, Object> map = new ConcurrentHashMap<String, Object>() {{
-            put("name", Config.instance());
+            put("conf", Config.instance());
             put("state", Boolean.TRUE);
         }};
 
