@@ -1,9 +1,14 @@
 <html>
-
-
+<head>login</head>
 <body>
 
-Hello
+Host : <%=name.mongodb.host%>
+<%= dynamic("Hello") %>
+<%~  if (state) %>
+  <%=  i("Hello") %>
+<%~ endif %>
+
+<%~ include 'login_sub.html' %>
 
 </body>
 </html>
