@@ -104,7 +104,9 @@ public class Dispatcher {
                         }
 
                         // TODO: 实现 dynamic 和 i 方法
-                        Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic", (x) -> x.get(0) + " : dynamic");
+                        Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic",
+                                (x) -> "static" + x.get(0)
+                        );
                         Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
 
                         // TODO: 设定变量
