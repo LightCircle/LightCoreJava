@@ -1,6 +1,8 @@
 package cn.alphabets.light.http;
 
 import cn.alphabets.light.AppOptions;
+import cn.alphabets.light.Config;
+import cn.alphabets.light.Helper;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
@@ -24,6 +26,8 @@ import org.reflections.scanners.SubTypesScanner;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -103,14 +107,23 @@ public class Dispatcher {
                             fileName += ".html";
                         }
 
+                        // TODO: 实现 dynamic 和 i 方法
+                        Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic", (x) -> x.get(0) + " : dynamic");
+                        Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
+
+                        // TODO: 设定变量
+                        Map<String, Object> map = new ConcurrentHashMap<String, Object>() {{
+                            put("req", Boolean.TRUE);
+                            put("handler", context);
+                            put("user", "");
+                            put("conf", Config.instance());
+                            put("environ", "");
+                        }};
+
                         //然后执行渲染
-                        templateEngine.render(ctx, "view/" + fileName, ar -> {
-                            if (ar.succeeded()) {
-                                ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(ar.result());
-                            } else {
-                                throw new RenderException(ar.cause());
-                            }
-                        });
+                        String name = "view/" + fileName;
+                        String html = Helper.loadTemplate(name, map, Arrays.asList(dynamic, i));
+                        ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(html);
                     }, false)
                     .failureHandler(getDefaultDispatcherFailureHandler());
         });
