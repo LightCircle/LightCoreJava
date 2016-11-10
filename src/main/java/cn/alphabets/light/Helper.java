@@ -2,6 +2,7 @@ package cn.alphabets.light;
 
 import cn.alphabets.light.model.Json;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.bson.Document;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.Environment;
@@ -164,6 +165,10 @@ public class Helper {
             template = new JtwigTemplate(environment, resource);
         }
         return template.render(JtwigModel.newModel(model));
+    }
+
+    static void cleanTemplate() {
+        template = null;
     }
 
     public static class TemplateFunction extends SimpleJtwigFunction {

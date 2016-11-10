@@ -1,7 +1,9 @@
 package cn.alphabets.light.http;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.Helper;
 import cn.alphabets.light.db.mongo.DBConnection;
+import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.ModBase;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -17,6 +19,7 @@ import org.bson.json.JsonWriterSettings;
 import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
 
 /**
+ * Context
  * Created by luohao on 16/10/22.
  */
 public class Context {
@@ -26,17 +29,40 @@ public class Context {
     private RoutingContext ctx;
     private DBConnection db;
 
+    private Json params;
+
     public Context(RoutingContext ctx, DBConnection db) {
         this.ctx = ctx;
         this.db = db;
+        this.params = new Json();
+
+        // query
+        if (ctx.request().params().size() > 0) {
+            this.params.putAll(Helper.unParam(ctx.request().uri()));
+        }
+
+        // form
+        if (ctx.getBodyAsString().length() > 0) {
+            this.params.putAll(Json.parse(ctx.getBodyAsString()));
+        }
+
+        // TODO: url path params
+
+        // TODO: file
+
+        log.debug(this.params.toJson());
+    }
+
+    public Json params() {
+        return this.params;
     }
 
     public HttpServerResponse res() {
-        return ctx.response();
+        return this.ctx.response();
     }
 
     public HttpServerRequest req() {
-        return ctx.request();
+        return this.ctx.request();
     }
 
     public DBConnection db() {
