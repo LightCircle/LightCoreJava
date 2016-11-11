@@ -1,40 +1,36 @@
 package cn.alphabets.light;
 
 /**
+ * Constant
  * Created by luohao on 2016/10/28.
  */
 public class Constant {
 
-    /**
-     * CFK 打头为APP设定的 key
-     */
+    public static final String CFK_REQUEST_TIMEOUT = "app.timeout";             // 请求超时设定, CFK 打头为APP设定的 key
+    public static final String CFK_REQUEST_IGNORE_TIMEOUT = "ignore.timeout";   // 请求超时例外设定
+    public static final String CFK_SESSION_TIMEOUT = "app.sessionTimeout";      // session有效期设定
+    public static final String CFK_IGNORE_AUTH = "ignore.auth";                 // 不需要登录能访问url
 
-    /**
-     * 请求超时设定
-     */
-    public static final String[] CFK_REQUEST_TIMEOUT = new String[]{"app", "timeout"};
+    public static final String SK_USER = "_sk_user";                            //当前用户 session key, SK 打头为Session中的key
 
-    /**
-     * 请求超时例外设定
-     */
-    public static final String[] CFK_REQUEST_IGNORE_TIMEOUT = new String[]{"ignore", "timeout"};
+    public static final String ENV_LIGHT_MONGO_HOST = "LIGHTDB_HOST";
+    public static final String ENV_LIGHT_MONGO_PORT = "LIGHTDB_PORT";
+    public static final String ENV_LIGHT_MONGO_USER = "LIGHTDB_USER";
+    public static final String ENV_LIGHT_MONGO_PASS = "LIGHTDB_PASS";
+    public static final String ENV_LIGHT_MONGO_AUTH = "LIGHTDB_AUTH";
+    public static final String ENV_LIGHT_APP_NAME = "APPNAME";
+    public static final String ENV_LIGHT_APP_PORT = "PORT";
 
-    /**
-     * session有效期设定
-     */
-    public static final String[] CFK_SESSION_TIMEOUT = new String[]{"app", "sessionTimeout"};
+    public static final String SYSTEM_DB = "LightDB";
+    public static final String SYSTEM_DB_PREFIX = "light";
+    public static final String SYSTEM_DB_CONFIG = "configuration";
+    public static final String SYSTEM_DB_VALIDATOR = "validator";
+    public static final String SYSTEM_DB_I18N = "i18n";
+    public static final String SYSTEM_DB_STRUCTURE = "structure";
+    public static final String SYSTEM_DB_BOARD = "board";
+    public static final String SYSTEM_DB_ROUTE = "route";
+    public static final String SYSTEM_DB_TENANT = "tenant";
 
-    /**
-     * 不需要登录能访问url
-     */
-    public static final String[] CFK_IGNORE_AUTH = new String[]{"ignore", "auth"};
+    public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
 
-    /**
-     * SK 打头为Session中的key
-     */
-
-    /**
-     * 当前用户 session key
-     */
-    public static final String SK_USER = "_sk_user";
 }

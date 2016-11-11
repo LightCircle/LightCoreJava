@@ -1,6 +1,5 @@
 package cn.alphabets.light.http;
 
-import cn.alphabets.light.Constant;
 import cn.alphabets.light.config.ConfigManager;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
@@ -39,7 +38,7 @@ public class TimeoutHandlerImpl implements Handler<RoutingContext> {
             throw new IllegalArgumentException("time out can not be less than 0");
         }
 
-        List<String> paths = ConfigManager.getInstance().getArray(Constant.CFK_REQUEST_IGNORE_TIMEOUT);
+        List<String> paths = ConfigManager.INSTANCE.getIgnoreTimeout();
         if (CollectionUtils.isNotEmpty(paths)) {
             String regex = StringUtils.join(paths, "|");
             ignore = Pattern.compile(regex.replace("*", ".*"));

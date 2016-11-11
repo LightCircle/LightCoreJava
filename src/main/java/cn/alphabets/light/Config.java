@@ -46,32 +46,6 @@ public class Config {
         return instance;
     }
 
-    public static final class CONSTANT {
-        private CONSTANT() {
-        }
-
-        public static final String ENV_LIGHT_MONGO_HOST = "LIGHTDB_HOST";
-        public static final String ENV_LIGHT_MONGO_PORT = "LIGHTDB_PORT";
-        public static final String ENV_LIGHT_MONGO_USER = "LIGHTDB_USER";
-        public static final String ENV_LIGHT_MONGO_PASS = "LIGHTDB_PASS";
-        public static final String ENV_LIGHT_MONGO_AUTH = "LIGHTDB_AUTH";
-        public static final String ENV_LIGHT_APP_NAME = "APPNAME";
-        public static final String ENV_LIGHT_APP_PORT = "PORT";
-
-        public static final String SYSTEM_DB = "LightDB";
-        public static final String SYSTEM_DB_PREFIX = "light";
-        public static final String SYSTEM_DB_CONFIG = "configuration";
-        public static final String SYSTEM_DB_VALIDATOR = "validator";
-        public static final String SYSTEM_DB_I18N = "i18n";
-        public static final String SYSTEM_DB_STRUCTURE = "structure";
-        public static final String SYSTEM_DB_BOARD = "board";
-        public static final String SYSTEM_DB_ROUTE = "route";
-        public static final String SYSTEM_DB_TENANT = "tenant";
-
-        public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
-
-    }
-
     public static class ConfigApp {
         public boolean dev;
         public int port;
@@ -124,7 +98,7 @@ public class Config {
             if (config.args.local) {
                 return config.app.domain;
             }
-            return System.getenv(CONSTANT.ENV_LIGHT_APP_NAME);
+            return System.getenv(Constant.ENV_LIGHT_APP_NAME);
         }
 
         public int getAppPort() {
@@ -132,7 +106,7 @@ public class Config {
             if (config.args.local) {
                 return config.app.port;
             }
-            return Integer.parseInt(System.getenv(CONSTANT.ENV_LIGHT_APP_PORT));
+            return Integer.parseInt(System.getenv(Constant.ENV_LIGHT_APP_PORT));
         }
 
         public String getMongoHost() {
@@ -140,7 +114,7 @@ public class Config {
             if (config.args.local) {
                 return config.mongodb.host;
             }
-            return System.getenv(CONSTANT.ENV_LIGHT_MONGO_HOST);
+            return System.getenv(Constant.ENV_LIGHT_MONGO_HOST);
         }
 
         public String getMongoPort() {
@@ -148,7 +122,7 @@ public class Config {
             if (config.args.local) {
                 return String.valueOf(config.mongodb.port);
             }
-            return System.getenv(CONSTANT.ENV_LIGHT_MONGO_PORT);
+            return System.getenv(Constant.ENV_LIGHT_MONGO_PORT);
         }
 
         public String getMongoUser() {
@@ -156,7 +130,7 @@ public class Config {
             if (config.args.local) {
                 return config.mongodb.user;
             }
-            return System.getenv(CONSTANT.ENV_LIGHT_MONGO_USER);
+            return System.getenv(Constant.ENV_LIGHT_MONGO_USER);
         }
 
         public String getMongoPass() {
@@ -164,7 +138,7 @@ public class Config {
             if (config.args.local) {
                 return config.mongodb.pass;
             }
-            return System.getenv(CONSTANT.ENV_LIGHT_MONGO_PASS);
+            return System.getenv(Constant.ENV_LIGHT_MONGO_PASS);
         }
 
         public String getMongoAuth() {
@@ -172,7 +146,7 @@ public class Config {
             if (config.args.local) {
                 return config.mongodb.auth;
             }
-            return System.getenv(CONSTANT.ENV_LIGHT_MONGO_AUTH);
+            return System.getenv(Constant.ENV_LIGHT_MONGO_AUTH);
         }
     }
 }

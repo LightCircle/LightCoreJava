@@ -1,5 +1,6 @@
 package cn.alphabets.light.db.mongo;
 
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.Config;
 import cn.alphabets.light.model.ModBase;
 import com.mongodb.Block;
@@ -47,7 +48,7 @@ public class Model {
 
         if (table != null) {
             table = English.plural(table);
-            if (!Config.CONSTANT.SYSTEM_DB.equals(domain)) {
+            if (!Constant.SYSTEM_DB.equals(domain)) {
                 table = code + '.' + table;
             }
         }
@@ -63,7 +64,7 @@ public class Model {
 
         String className = WordUtils.capitalize(this.name);
         String packageName = reserved.contains(this.name)
-                ? Config.CONSTANT.DEFAULT_PACKAGE_NAME + ".model"
+                ? Constant.DEFAULT_PACKAGE_NAME + ".model"
                 : Config.instance().app.packages + ".model";
 
         try {
@@ -116,13 +117,13 @@ public class Model {
     }
 
     private List<String> reserved = Arrays.asList(
-            Config.CONSTANT.SYSTEM_DB_BOARD,
-            Config.CONSTANT.SYSTEM_DB_CONFIG,
-            Config.CONSTANT.SYSTEM_DB_VALIDATOR,
-            Config.CONSTANT.SYSTEM_DB_I18N,
-            Config.CONSTANT.SYSTEM_DB_STRUCTURE,
-            Config.CONSTANT.SYSTEM_DB_BOARD,
-            Config.CONSTANT.SYSTEM_DB_ROUTE,
-            Config.CONSTANT.SYSTEM_DB_TENANT
+            Constant.SYSTEM_DB_BOARD,
+            Constant.SYSTEM_DB_CONFIG,
+            Constant.SYSTEM_DB_VALIDATOR,
+            Constant.SYSTEM_DB_I18N,
+            Constant.SYSTEM_DB_STRUCTURE,
+            Constant.SYSTEM_DB_BOARD,
+            Constant.SYSTEM_DB_ROUTE,
+            Constant.SYSTEM_DB_TENANT
     );
 }

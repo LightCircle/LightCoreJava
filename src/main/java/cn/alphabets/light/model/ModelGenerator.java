@@ -1,6 +1,6 @@
 package cn.alphabets.light.model;
 
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.db.mongo.Model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,7 +35,7 @@ public class ModelGenerator {
      */
     public void generate(String domain, List<String> schema) {
 
-        Model model = new Model(domain, Config.CONSTANT.SYSTEM_DB_PREFIX, Config.CONSTANT.SYSTEM_DB_STRUCTURE);
+        Model model = new Model(domain, Constant.SYSTEM_DB_PREFIX, Constant.SYSTEM_DB_STRUCTURE);
 
         Document condition = new Document("valid", 1);
         condition.put("schema", new Document("$in", schema));
@@ -98,9 +98,7 @@ public class ModelGenerator {
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                 .addAnnotation(annotation);
 
-        items.entrySet().forEach((item) -> {
-            this.subClass(builder, item.getKey(), (Document) item.getValue());
-        });
+        items.entrySet().forEach(item -> this.subClass(builder, item.getKey(), (Document) item.getValue()));
 
         spec.addType(builder.build());
     }
@@ -194,7 +192,7 @@ public class ModelGenerator {
             return Object.class;
         }
 
-        return null;
+        return String.class;
     }
 
     private final static List<String> lightReserved = Arrays.asList(

@@ -1,5 +1,6 @@
 package cn.alphabets.light.cache;
 
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.Config;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,7 +18,7 @@ public class CacheManagerTest {
 
     @Test
     public void test() {
-        CacheManager.INSTANCE.setUp(Config.CONSTANT.SYSTEM_DB);
+        CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
 
         Assert.assertTrue(CacheManager.INSTANCE.getI18ns().size() > 0);
         Assert.assertTrue(CacheManager.INSTANCE.getTenants().size() > 0);

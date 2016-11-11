@@ -1,6 +1,6 @@
 package cn.alphabets.light.cache;
 
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.model.*;
 import org.bson.Document;
@@ -30,37 +30,37 @@ public enum CacheManager {
      */
     public void setUp(String domain) {
 
-        String code = Config.CONSTANT.SYSTEM_DB_PREFIX;
+        String code = Constant.SYSTEM_DB_PREFIX;
         Document valid = Document.parse("{valid:1}");
         List<String> select;
 
         // configuration
         select = Arrays.asList("type","key","value","valueType");
-        configuration = new Model(domain, code, Config.CONSTANT.SYSTEM_DB_CONFIG).list(valid, select);
+        configuration = new Model(domain, code, Constant.SYSTEM_DB_CONFIG).list(valid, select);
 
         // validator
         select = Arrays.asList("group","name","rule","key","option","message","sanitize","class","action","condition");
-        validators = new Model(domain, code, Config.CONSTANT.SYSTEM_DB_VALIDATOR).list(valid, select);
+        validators = new Model(domain, code, Constant.SYSTEM_DB_VALIDATOR).list(valid, select);
 
         // i18n
         select = Arrays.asList("type","lang","key");
-        i18ns = new Model(domain, code, Config.CONSTANT.SYSTEM_DB_I18N).list(valid, select);
+        i18ns = new Model(domain, code, Constant.SYSTEM_DB_I18N).list(valid, select);
 
         // structure
         select = Arrays.asList("public","lock","type","kind","tenant","version","schema","items","extend","tenant");
-        structures = new Model(domain, code, Config.CONSTANT.SYSTEM_DB_STRUCTURE).list(valid, select);
+        structures = new Model(domain, code, Constant.SYSTEM_DB_STRUCTURE).list(valid, select);
 
         // board
         select = Arrays.asList("schema","api","type","kind","path","class","action","filters","selects","sorts","reserved","script");
-        boards = new Model(domain, code, Config.CONSTANT.SYSTEM_DB_BOARD).list(valid, select);
+        boards = new Model(domain, code, Constant.SYSTEM_DB_BOARD).list(valid, select);
 
         // route
         select = Arrays.asList("template","url","class","action");
-        routes = new Model(domain, code, Config.CONSTANT.SYSTEM_DB_ROUTE).list(valid, select);
+        routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE).list(valid, select);
 
         // tenant
         select = Arrays.asList("code","name");
-        tenants = new Model(domain, code, Config.CONSTANT.SYSTEM_DB_TENANT).list(valid, select);
+        tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT).list(valid, select);
     }
 
     public List<Configuration> getConfiguration() {

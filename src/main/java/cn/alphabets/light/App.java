@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 public class App {
 
 
+    private static final Logger log = LoggerFactory.getLogger(App.class);
+
     private Vertx vertx;
     private HttpServer server;
     private Router router;
@@ -65,17 +67,16 @@ public class App {
 
 
     public void start() {
-        Logger log = LoggerFactory.getLogger(App.class);
-        ConfigManager configManager = ConfigManager.getInstance();
+
 
         //初始化light设定
-        configManager.setUp(mongo);
+        ConfigManager config = ConfigManager.INSTANCE.setUp();
 
         //初始化基础数据
         CacheManager.INSTANCE.setUp(options.getAppDomain());
 
         //初始化timeout
-        router.route().handler(new TimeoutHandlerImpl(configManager.getLong(Constant.CFK_REQUEST_TIMEOUT) * 1000));
+        router.route().handler(new TimeoutHandlerImpl(config.getAppTimeout() * 1000));
 
         //打印每个请求
         router.route().handler(LoggerHandler.create(LoggerFormat.SHORT));
@@ -86,9 +87,8 @@ public class App {
         //cookie处理
         router.route().handler(CookieHandler.create());
 
-        //session处理
-        //session超时30天
-        long sessionTimeoute = 1000L * 60 * 60 * configManager.getLong(Constant.CFK_SESSION_TIMEOUT);
+        //session处理, 超时30天
+        long sessionTimeoute = 1000L * 60 * 60 * config.getAppSessionTimeout();
         router.route().handler(SessionHandlerImpl
                 .create(new MongoSessionStoreImpl(mongo, vertx))
                 .setNagHttps(false)

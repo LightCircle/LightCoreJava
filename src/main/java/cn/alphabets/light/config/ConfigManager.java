@@ -1,74 +1,70 @@
 package cn.alphabets.light.config;
 
-import cn.alphabets.light.db.mongo.DBConnection;
+import cn.alphabets.light.Constant;
+import cn.alphabets.light.cache.CacheManager;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Config
  * Created by luohao on 2016/10/28.
  */
-public interface ConfigManager {
+public enum ConfigManager {
 
+    INSTANCE;
 
-    String DEFAULT_CONFIG_COLLECTION_NAME = "light.configurations";
+    private Map<String, Object> map;
 
-    /**
-     * 初始化
-     *
-     * @param db 数据库连接
-     */
-    void setUp(DBConnection db);
+    public ConfigManager setUp() {
+        if (map == null) {
+            map = new ConcurrentHashMap<>();
+        }
 
-    /**
-     * 获取单例
-     *
-     * @return
-     */
-    static ConfigManager getInstance() {
-        return ConfigManagerImpl.INSTANCE;
+        CacheManager.INSTANCE.getConfiguration().forEach(document -> {
+            String key = document.getType() + "." + document.getKey();
+            map.put(key, document.getValue());
+        });
+
+        return this;
     }
 
-    /**
-     * 获取字符串类型的设定
-     *
-     * @param group 设定分类
-     * @param key   设定key
-     * @return 设定值
-     */
-    String getString(String group, String key);
+    public List<String> getIgnoreTimeout() {
+        return this.getArray(Constant.CFK_REQUEST_IGNORE_TIMEOUT);
+    }
 
-    String getString(String[] groupAndkey);
+    public Long getAppTimeout() {
+        return this.getLong(Constant.CFK_REQUEST_TIMEOUT);
+    }
 
-    /**
-     * 获取整形类型的设定
-     *
-     * @param group 设定分类
-     * @param key   设定key
-     * @return 设定值
-     */
-    long getLong(String group, String key);
+    public Long getAppSessionTimeout() {
+        return this.getLong(Constant.CFK_SESSION_TIMEOUT);
+    }
 
-    long getLong(String[] groupAndkey);
+    public List<String> getIgnoreAuth() {
+        return this.getArray(Constant.CFK_IGNORE_AUTH);
+    }
 
-    /**
-     * 获取布尔值类型的设定
-     *
-     * @param group 设定分类
-     * @param key   设定key
-     * @return 设定值
-     */
-    boolean getBoolean(String group, String key);
+    public String getString(String key) {
+        return String.valueOf(map.get(key));
+    }
 
-    boolean getBoolean(String[] groupAndkey);
+    public long getLong(String key) {
+        return Long.valueOf(this.getString(key));
+    }
 
-    /**
-     * 获取布尔值类型的设定
-     *
-     * @param group 设定分类
-     * @param key   设定key
-     * @return 设定值
-     */
-    List<String> getArray(String group, String key);
+    public long getInt(String key) {
+        return Integer.valueOf(this.getString(key));
+    }
 
-    List<String> getArray(String[] groupAndkey);
+    public boolean getBoolean(String key) {
+        return Boolean.valueOf(this.getString(key));
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> getArray(String key) {
+        return (List<String>) map.get(key);
+    }
+
 }

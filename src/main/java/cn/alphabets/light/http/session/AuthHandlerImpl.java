@@ -1,6 +1,5 @@
 package cn.alphabets.light.http.session;
 
-import cn.alphabets.light.Constant;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Context;
@@ -26,7 +25,7 @@ public class AuthHandlerImpl implements Handler<RoutingContext> {
 
     public AuthHandlerImpl(DBConnection mongo) {
         this.mongo = mongo;
-        List<String> paths = ConfigManager.getInstance().getArray(Constant.CFK_IGNORE_AUTH);
+        List<String> paths = ConfigManager.INSTANCE.getIgnoreAuth();
         if (CollectionUtils.isNotEmpty(paths)) {
             String regex = StringUtils.join(paths, "|");
             ignore = Pattern.compile(regex.replace("*", ".*"));

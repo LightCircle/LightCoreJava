@@ -1,6 +1,6 @@
 package cn.alphabets.light.model;
 
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.db.mongo.Model;
 import com.squareup.javapoet.*;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +30,7 @@ public class ConfigGenerator {
 
     public void generate(String domain) {
 
-        Model model = new Model(domain, Config.CONSTANT.SYSTEM_DB_PREFIX, Config.CONSTANT.SYSTEM_DB_CONFIG);
+        Model model = new Model(domain, Constant.SYSTEM_DB_PREFIX, Constant.SYSTEM_DB_CONFIG);
         List<Document> configs = model.list_(new Document(), Arrays.asList("type", "key", "value", "valueType"));
         Map<String, TypeSpec.Builder> classes = new HashMap<>();
 
