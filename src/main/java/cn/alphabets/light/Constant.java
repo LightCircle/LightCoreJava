@@ -22,6 +22,9 @@ public class Constant {
     public static final String ENV_LIGHT_APP_PORT = "PORT";
     public static final String ENV_LIGHT_APP_PACKAGE = "PACKAGE";
 
+    public static final String ENV_LIGHT_MYSQL_HOST = "LIGHTMYSQL_HOST";
+    public static final String ENV_LIGHT_MYSQL_PORT = "LIGHTMYSQL_PORT";
+
     public static final String SYSTEM_DB = "LightDB";
     public static final String SYSTEM_DB_PREFIX = "light";
     public static final String SYSTEM_DB_CONFIG = "configuration";

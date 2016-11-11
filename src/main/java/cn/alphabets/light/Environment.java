@@ -44,6 +44,10 @@ public class Environment {
         return instance;
     }
 
+    public static void clean() {
+        instance = null;
+    }
+
     /**
      * Command line parameters
      */
@@ -117,4 +121,19 @@ public class Environment {
         }
         return System.getenv(Constant.ENV_LIGHT_APP_PACKAGE);
     }
+
+    public String getMySQLHost() {
+        if (this.args.local) {
+            return this.mysql.getHost();
+        }
+        return System.getenv(Constant.ENV_LIGHT_MONGO_HOST);
+    }
+
+    public String getMySQLPort() {
+        if (this.args.local) {
+            return String.valueOf(this.mysql.getPort());
+        }
+        return System.getenv(Constant.ENV_LIGHT_MYSQL_PORT);
+    }
+
 }

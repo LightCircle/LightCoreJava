@@ -13,11 +13,9 @@ import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.resource.reference.ResourceReference;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +30,29 @@ public class Helper {
      */
     private static JtwigTemplate template;
 
+    /**
+     * Set the system environment variables
+     *
+     * @param newEnv environment
+     */
+    @SuppressWarnings("unchecked")
+    public static void setEnv(Map<String, String> newEnv) {
+        Class[] classes = Collections.class.getDeclaredClasses();
+        Map<String, String> env = System.getenv();
+        for (Class cl : classes) {
+            if ("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+                try {
+                    Field field = cl.getDeclaredField("m");
+                    field.setAccessible(true);
+                    Map<String, String> map = (Map<String, String>) field.get(env);
+                    map.clear();
+                    map.putAll(newEnv);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 
     /**
      * Use Json Path to set the value of the Json object. Supports embedded objects

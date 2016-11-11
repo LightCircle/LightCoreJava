@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,6 +14,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * HelperTest
  */
 public class HelperTest {
+
+    @Test
+    public void testSetEnv() {
+        Map<String, String> env = new HashMap<String, String>(){{
+            put("key1", "val1");
+            put("key2", "val2");
+        }};
+        Helper.setEnv(env);
+
+        Assert.assertEquals(System.getenv("key1"), "val1");
+        Assert.assertEquals(System.getenv("key2"), "val2");
+    }
 
     @Test
     public void testUnParam() {
