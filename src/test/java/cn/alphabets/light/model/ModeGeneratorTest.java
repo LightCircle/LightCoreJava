@@ -4,7 +4,6 @@ import cn.alphabets.light.Config;
 //import cn.alphabets.light.config.Configuration;
 import cn.alphabets.light.config.Configuration;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -29,14 +28,14 @@ public class ModeGeneratorTest {
                 "board", "configuration", "i18n", "route", "structure", "tenant", "user", "validator"
         );
 
-        new ModelGenerator(pkg).generate(Config.Constant.SYSTEM_DB, target);
+        new ModelGenerator(pkg).generate(Config.CONSTANT.SYSTEM_DB, target);
     }
 
 //    @Test
     public void testGenerateConfig() throws IOException {
         ConfigGenerator generator = new ConfigGenerator("cn.alphabets.light.config", "Configuration");
 
-        generator.generate(Config.Constant.SYSTEM_DB);
+        generator.generate(Config.CONSTANT.SYSTEM_DB);
 //        TypeSpec.Builder b = generator.subClass_(null, "aaa");
 //        System.out.println(b.build().toString());
 

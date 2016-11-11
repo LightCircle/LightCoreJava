@@ -17,7 +17,7 @@ public class CacheManagerTest {
 
     @Test
     public void test() {
-        CacheManager.INSTANCE.setUp(Config.Constant.SYSTEM_DB);
+        CacheManager.INSTANCE.setUp(Config.CONSTANT.SYSTEM_DB);
 
         Assert.assertTrue(CacheManager.INSTANCE.getI18ns().size() > 0);
         Assert.assertTrue(CacheManager.INSTANCE.getTenants().size() > 0);

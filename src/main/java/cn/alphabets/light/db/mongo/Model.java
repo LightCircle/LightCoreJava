@@ -8,7 +8,6 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
@@ -16,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,7 +47,7 @@ public class Model {
 
         if (table != null) {
             table = English.plural(table);
-            if (!Config.Constant.SYSTEM_DB.equals(domain)) {
+            if (!Config.CONSTANT.SYSTEM_DB.equals(domain)) {
                 table = code + '.' + table;
             }
         }
@@ -61,8 +61,10 @@ public class Model {
 
     private Class getModType() {
 
-        String packageName = Config.instance().app.packages + ".model";
         String className = WordUtils.capitalize(this.name);
+        String packageName = reserved.contains(this.name)
+                ? Config.CONSTANT.DEFAULT_PACKAGE_NAME + ".model"
+                : Config.instance().app.packages + ".model";
 
         try {
             return Class.forName(packageName + "." + className);
@@ -112,4 +114,15 @@ public class Model {
     public <T extends ModBase> String add(T document) {
         return "";
     }
+
+    private List<String> reserved = Arrays.asList(
+            Config.CONSTANT.SYSTEM_DB_BOARD,
+            Config.CONSTANT.SYSTEM_DB_CONFIG,
+            Config.CONSTANT.SYSTEM_DB_VALIDATOR,
+            Config.CONSTANT.SYSTEM_DB_I18N,
+            Config.CONSTANT.SYSTEM_DB_STRUCTURE,
+            Config.CONSTANT.SYSTEM_DB_BOARD,
+            Config.CONSTANT.SYSTEM_DB_ROUTE,
+            Config.CONSTANT.SYSTEM_DB_TENANT
+    );
 }

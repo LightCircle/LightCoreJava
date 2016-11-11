@@ -35,7 +35,7 @@ public class ModelGenerator {
      */
     public void generate(String domain, List<String> schema) {
 
-        Model model = new Model(domain, Config.Constant.SYSTEM_DB_PREFIX, Config.Constant.SYSTEM_DB_STRUCTURE);
+        Model model = new Model(domain, Config.CONSTANT.SYSTEM_DB_PREFIX, Config.CONSTANT.SYSTEM_DB_STRUCTURE);
 
         Document condition = new Document("valid", 1);
         condition.put("schema", new Document("$in", schema));
