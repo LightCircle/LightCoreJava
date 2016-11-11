@@ -88,6 +88,18 @@ public class Model {
         return result;
     }
 
+    public List<Document> list_(Document condition, List<String> fieldNames) {
+        List<Document> result = new ArrayList<>();
+
+        FindIterable<Document> find = this.collection.find(condition);
+        FindIterable<Document> projection = find.projection(Projections.include(fieldNames));
+        projection.forEach((Block<? super Document>) document -> {
+            result.add(document);
+        });
+
+        return result;
+    }
+
     public <T extends ModBase> T get() {
 
         Document document = this.collection
