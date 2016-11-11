@@ -2,7 +2,6 @@ package cn.alphabets.light.http;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Helper;
-import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.ModBase;
 import io.vertx.core.http.HttpServerRequest;
@@ -27,13 +26,11 @@ public class Context {
     private static final Logger log = LoggerFactory.getLogger(Context.class);
 
     private RoutingContext ctx;
-    private DBConnection db;
 
     private Json params;
 
-    public Context(RoutingContext ctx, DBConnection db) {
+    public Context(RoutingContext ctx) {
         this.ctx = ctx;
-        this.db = db;
         this.params = new Json();
 
         // query
@@ -63,10 +60,6 @@ public class Context {
 
     public HttpServerRequest req() {
         return this.ctx.request();
-    }
-
-    public DBConnection db() {
-        return this.db;
     }
 
     public Session session() {

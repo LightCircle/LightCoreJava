@@ -1,6 +1,9 @@
 package cn.alphabets.light.http.session;
 
-import cn.alphabets.light.db.mongo.DBConnection;
+import cn.alphabets.light.Environment;
+import cn.alphabets.light.db.mongo.Connection;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
@@ -23,12 +26,13 @@ import org.bson.types.ObjectId;
 public class MongoSessionStoreImpl implements SessionStore {
     private static final Logger log = LoggerFactory.getLogger(MongoSessionStoreImpl.class);
 
-    private DBConnection mongo;
     private static final String SESSION_COLLECTION_NAME = "sessiontttt";
     private Vertx vertx;
+    private MongoDatabase mongo;
 
-    public MongoSessionStoreImpl(DBConnection mongo, Vertx vertx) {
-        this.mongo = mongo;
+    public MongoSessionStoreImpl(String domain, Vertx vertx) {
+        MongoClient client = Connection.instance(Environment.instance());
+        this.mongo = client.getDatabase(domain);
         this.vertx = vertx;
     }
 

@@ -1,7 +1,6 @@
 package cn.alphabets.light.http.session;
 
 import cn.alphabets.light.config.ConfigManager;
-import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.User;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -16,15 +15,14 @@ import java.util.regex.Pattern;
 import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 
 /**
+ * AuthHandlerImpl
  * Created by luohao on 2016/10/28.
  */
 public class AuthHandlerImpl implements Handler<RoutingContext> {
-    private DBConnection mongo;
     private Pattern ignore;
     HttpResponseStatus errorStatus = UNAUTHORIZED;
 
-    public AuthHandlerImpl(DBConnection mongo) {
-        this.mongo = mongo;
+    public AuthHandlerImpl() {
         List<String> paths = ConfigManager.INSTANCE.getIgnoreAuth();
         if (CollectionUtils.isNotEmpty(paths)) {
             String regex = StringUtils.join(paths, "|");
@@ -44,7 +42,7 @@ public class AuthHandlerImpl implements Handler<RoutingContext> {
             return;
         }
 
-        Context context = new Context(ctx, mongo);
+        Context context = new Context(ctx);
         User user = context.user(User.class);
 
         //没有登录

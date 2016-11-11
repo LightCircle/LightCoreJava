@@ -1,10 +1,8 @@
 package cn.alphabets.light.http;
 
-import cn.alphabets.light.AppOptions;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.cache.CacheManager;
-import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.model.Board;
@@ -35,6 +33,7 @@ import static io.vertx.core.http.HttpHeaders.TEXT_HTML;
 
 
 /**
+ * Dispatcher
  * Created by luohao on 16/10/22.
  */
 public class Dispatcher {
@@ -42,19 +41,18 @@ public class Dispatcher {
     private static final Logger log = LoggerFactory.getLogger(Dispatcher.class);
 
     private static ConcurrentHashMap<String, Method> methodMap;
-    private boolean isDev;
 
     /*
     处理型API
      */
-    public void routeProcessAPI(DBConnection db, Router router, AppOptions options) {
-        this.setup(options);
+    public void routeProcessAPI(Router router) {
+        this.setup();
         CacheManager.INSTANCE.getBoards().forEach(board -> {
             if (board.getKind() == 1) {
                 router.route(board.getApi())
                         .blockingHandler(ctx -> {
                             Method method = null;//resolve(board);
-                            Context context = new Context(ctx, db);
+                            Context context = new Context(ctx);
                             if (method == null) {
                                 throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
                             }
@@ -73,19 +71,18 @@ public class Dispatcher {
     /*
     处理型API
      */
-    public void routeDataAPI(DBConnection db, Router router, AppOptions options) {
+    public void routeDataAPI(Router router) {
     }
 
     /*
     画面路径
      */
-    public void routeView(DBConnection db, Router router, AppOptions options) {
-        this.setup(options);
+    public void routeView(Router router) {
         CacheManager.INSTANCE.getRoutes().forEach(route -> {
 
             router.route(route.getUrl())
                     .blockingHandler(ctx -> {
-                        Context context = new Context(ctx, db);
+                        Context context = new Context(ctx);
 
                         //如果定义了action，先调用action方法
                         Method method = resolve(route);
@@ -127,11 +124,11 @@ public class Dispatcher {
         });
     }
 
-    private void setup(AppOptions options) {
-        isDev = options.isDev();
+    private void setup() {
+
         if (methodMap == null) {
             methodMap = new ConcurrentHashMap<>();
-            Reflections reflections = new Reflections(options.getPackageNmae() + ".controller", new SubTypesScanner(false));
+            Reflections reflections = new Reflections(Environment.instance().getPackages() + ".controller", new SubTypesScanner(false));
             Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
             allClasses.forEach(aClass -> {
                 Set<Method> getters = ReflectionUtils.getAllMethods(aClass);
@@ -176,7 +173,7 @@ public class Dispatcher {
                 return;
             }
 
-            if (isDev) {
+            if (Environment.instance().app.isDev()) {
                 StringWriter stringWriter = new StringWriter();
                 error.printStackTrace(new PrintWriter(stringWriter));
                 ctx.response().setStatusCode(status.code()).end(stringWriter.toString());

@@ -26,16 +26,7 @@ public class AppTest {
         conf.args.local = true;
         CacheManager.INSTANCE.setUp(conf.getAppName());
 
-        new App(new AppOptions()
-                .setAppDomain(conf.getAppName())
-                .setAppPort(conf.getAppPort())
-                .setDbHost(conf.getMongoHost())
-                .setDbPort(Integer.parseInt(conf.getMongoPort()))
-                .setDbUser(conf.getMongoUser())
-                .setDbPass(conf.getMongoAuth())
-                .setDev(true)
-                .setPackageNmae("test"))
-                .start();
+        new App().start();
     }
 
     @After

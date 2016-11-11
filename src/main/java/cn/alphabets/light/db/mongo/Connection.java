@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * Connection
  * Typically you only create one MongoClient instance for a given database cluster and use it across your application.
  */
-class Connection {
+public class Connection {
 
     private static final Logger logger = LoggerFactory.getLogger(Connection.class);
     private static MongoClient instance;
