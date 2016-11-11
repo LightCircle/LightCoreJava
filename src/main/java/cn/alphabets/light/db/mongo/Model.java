@@ -61,9 +61,8 @@ public class Model {
 
     private Class getModType() {
 
-        // TODO: 临时写死package, 需要泛用化。可否去掉Mod前缀?
-        String packageName = "cn.alphabets.light.model";
-        String className = "Mod" + WordUtils.capitalize(this.name);
+        String packageName = Config.instance().app.packages + ".model";
+        String className = WordUtils.capitalize(this.name);
 
         try {
             return Class.forName(packageName + "." + className);

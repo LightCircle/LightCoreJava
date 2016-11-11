@@ -1,7 +1,7 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Config;
-import cn.alphabets.light.model.ModI18n;
+import cn.alphabets.light.model.I18n;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class ModelTest {
 
         Model model = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        List<ModI18n> i18n = model.list();
+        List<I18n> i18n = model.list();
 
         Assert.assertTrue(i18n.size() > 0);
     }
@@ -33,7 +33,7 @@ public class ModelTest {
 
         Model model = new Model(Config.Constant.SYSTEM_DB, Config.Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        ModI18n i18n = model.get();
+        I18n i18n = model.get();
 
         Assert.assertNotNull(i18n);
     }

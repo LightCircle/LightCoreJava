@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * GeneratorTest
@@ -20,15 +21,15 @@ public class ModeGeneratorTest {
         Config.instance().args.local = true;
     }
 
-    @Test
+//    @Test
     public void test() throws IOException {
 
-        String pkg = "cn.alphabets.light.model";
+        String pkg = Config.instance().app.packages + ".model";
+        List<String> target = Arrays.asList(
+                "board", "configuration", "i18n", "route", "structure", "tenant", "user", "validator"
+        );
 
-        ModelGenerator generator = new ModelGenerator(pkg);
-
-        generator.generate(Config.Constant.SYSTEM_DB, Arrays.asList("board"));
-
+        new ModelGenerator(pkg).generate(Config.Constant.SYSTEM_DB, target);
     }
 
 //    @Test

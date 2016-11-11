@@ -16,13 +16,13 @@ public enum CacheManager {
 
     INSTANCE;
 
-    private List<ModConfiguration> configuration;
-    private List<ModI18n> i18ns;
-    private List<ModTenant> tenants;
-    private List<ModValidator> validators;
-    private List<ModStructure> structures;
-    private List<ModBoard> boards;
-    private List<ModRoute> routes;
+    private List<Configuration> configuration;
+    private List<I18n> i18ns;
+    private List<Tenant> tenants;
+    private List<Validator> validators;
+    private List<Structure> structures;
+    private List<Board> boards;
+    private List<Route> routes;
 
     /**
      * 初始化
@@ -38,18 +38,6 @@ public enum CacheManager {
         select = Arrays.asList("type","key","value","valueType");
         configuration = new Model(domain, code, Config.Constant.SYSTEM_DB_CONFIG).list(valid, select);
 
-        // validator
-        select = Arrays.asList("group","name","rule","key","option","message","sanitize","class","action","condition");
-        validators = new Model(domain, code, Config.Constant.SYSTEM_DB_VALIDATOR).list(valid, select);
-
-        // i18n
-        select = Arrays.asList("type","lang","key");
-        i18ns = new Model(domain, code, Config.Constant.SYSTEM_DB_I18N).list(valid, select);
-
-        // structure
-        select = Arrays.asList("public","lock","type","kind","tenant","version","schema","items","extend","tenant");
-        structures = new Model(domain, code, Config.Constant.SYSTEM_DB_STRUCTURE).list(valid, select);
-
         // board
         select = Arrays.asList("schema","api","type","kind","path","class","action","filters","selects","sorts","reserved","script");
         boards = new Model(domain, code, Config.Constant.SYSTEM_DB_BOARD).list(valid, select);
@@ -63,31 +51,31 @@ public enum CacheManager {
         tenants = new Model(domain, code, Config.Constant.SYSTEM_DB_TENANT).list(valid, select);
     }
 
-    public List<ModConfiguration> getConfiguration() {
+    public List<Configuration> getConfiguration() {
         return configuration;
     }
 
-    public List<ModI18n> getI18ns() {
+    public List<I18n> getI18ns() {
         return i18ns;
     }
 
-    public List<ModTenant> getTenants() {
+    public List<Tenant> getTenants() {
         return tenants;
     }
 
-    public List<ModValidator> getValidators() {
+    public List<Validator> getValidators() {
         return validators;
     }
 
-    public List<ModStructure> getStructures() {
+    public List<Structure> getStructures() {
         return structures;
     }
 
-    public List<ModBoard> getBoards() {
+    public List<Board> getBoards() {
         return boards;
     }
 
-    public List<ModRoute> getRoutes() {
+    public List<Route> getRoutes() {
         return routes;
     }
 }

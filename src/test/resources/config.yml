@@ -4,6 +4,7 @@ app:
   master: false
   local: false
   dev: true
+  packages: cn.alphabets.light
 
 mongodb:
   host: 127.0.0.1

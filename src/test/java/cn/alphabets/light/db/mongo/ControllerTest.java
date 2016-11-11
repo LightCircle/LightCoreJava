@@ -1,6 +1,6 @@
 package cn.alphabets.light.db.mongo;
 
-import cn.alphabets.light.model.ModUser;
+import cn.alphabets.light.model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +24,6 @@ public class ControllerTest {
     public void test() {
         Controller ctrl = new Controller("user");
 
-        List<ModUser> u = ctrl.list(ModUser.class);
+        List<User> u = ctrl.list(User.class);
     }
 }

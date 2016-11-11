@@ -75,6 +75,7 @@ public class Config {
         public String domain;
         public boolean master;
         public boolean local;
+        public String packages;
     }
 
     public static class ConfigMongoDB {

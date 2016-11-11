@@ -4,7 +4,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.Context;
-import cn.alphabets.light.model.ModUser;
+import cn.alphabets.light.model.User;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
@@ -46,7 +46,7 @@ public class AuthHandlerImpl implements Handler<RoutingContext> {
         }
 
         Context context = new Context(ctx, mongo);
-        ModUser user = context.user(ModUser.class);
+        User user = context.user(User.class);
 
         //没有登录
         if (user == null) {

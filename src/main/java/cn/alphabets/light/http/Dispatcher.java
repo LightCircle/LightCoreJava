@@ -7,8 +7,10 @@ import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.DBConnection;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
+import cn.alphabets.light.model.Board;
 import cn.alphabets.light.model.ModBoard;
 import cn.alphabets.light.model.ModRoute;
+import cn.alphabets.light.model.Route;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -53,7 +55,7 @@ public class Dispatcher {
             if (board.getKind() == 1) {
                 router.route(board.getApi())
                         .blockingHandler(ctx -> {
-                            Method method = resolve(board);
+                            Method method = null;//resolve(board);
                             Context context = new Context(ctx, db);
                             if (method == null) {
                                 throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
@@ -143,13 +145,13 @@ public class Dispatcher {
         }
     }
 
-    private Method resolve(ModBoard board) {
+    private Method resolve(Board board) {
         String className = StringUtils.capitalize(board.getClass_());
         String methodKey = className + "-" + board.getAction();
         return methodMap.get(methodKey);
     }
 
-    private Method resolve(ModRoute route) {
+    private Method resolve(Route route) {
         String className = StringUtils.capitalize(route.getClass_());
         String methodKey = className + "-" + route.getAction();
         return methodMap.get(methodKey);
