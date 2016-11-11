@@ -31,7 +31,7 @@ public class ConfigGenerator {
     public void generate(String domain) {
 
         Model model = new Model(domain, Constant.SYSTEM_DB_PREFIX, Constant.SYSTEM_DB_CONFIG);
-        List<Document> configs = model.list_(new Document(), Arrays.asList("type", "key", "value", "valueType"));
+        List<Document> configs = model.document(new Document(), Arrays.asList("type", "key", "value", "valueType"));
         Map<String, TypeSpec.Builder> classes = new HashMap<>();
 
         configs.forEach((config) -> {

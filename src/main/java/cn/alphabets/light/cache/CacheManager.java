@@ -36,31 +36,38 @@ public enum CacheManager {
 
         // configuration
         select = Arrays.asList("type","key","value","valueType");
-        configuration = new Model(domain, code, Constant.SYSTEM_DB_CONFIG).list(valid, select);
+        configuration = new Model(domain, code, Constant.SYSTEM_DB_CONFIG)
+                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
 
         // validator
         select = Arrays.asList("group","name","rule","key","option","message","sanitize","class","action","condition");
-        validators = new Model(domain, code, Constant.SYSTEM_DB_VALIDATOR).list(valid, select);
+        validators = new Model(domain, code, Constant.SYSTEM_DB_VALIDATOR)
+                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
 
         // i18n
         select = Arrays.asList("type","lang","key");
-        i18ns = new Model(domain, code, Constant.SYSTEM_DB_I18N).list(valid, select);
+        i18ns = new Model(domain, code, Constant.SYSTEM_DB_I18N)
+                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
 
         // structure
         select = Arrays.asList("public","lock","type","kind","tenant","version","schema","items","extend","tenant");
-        structures = new Model(domain, code, Constant.SYSTEM_DB_STRUCTURE).list(valid, select);
+        structures = new Model(domain, code, Constant.SYSTEM_DB_STRUCTURE)
+                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
 
         // board
         select = Arrays.asList("schema","api","type","kind","path","class","action","filters","selects","sorts","reserved","script");
-        boards = new Model(domain, code, Constant.SYSTEM_DB_BOARD).list(valid, select);
+        boards = new Model(domain, code, Constant.SYSTEM_DB_BOARD)
+                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
 
         // route
         select = Arrays.asList("template","url","class","action");
-        routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE).list(valid, select);
+        routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE)
+                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
 
         // tenant
         select = Arrays.asList("code","name");
-        tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT).list(valid, select);
+        tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT)
+                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
     }
 
     public List<Configuration> getConfiguration() {

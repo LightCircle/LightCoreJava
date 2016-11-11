@@ -39,7 +39,7 @@ public class ModelGenerator {
 
         Document condition = new Document("valid", 1);
         condition.put("schema", new Document("$in", schema));
-        List<Document> defines = model.list_(condition, Arrays.asList("schema", "items"));
+        List<Document> defines = model.document(condition, Arrays.asList("schema", "items"));
 
         defines.forEach((define) -> {
 
