@@ -38,6 +38,18 @@ public enum CacheManager {
         select = Arrays.asList("type","key","value","valueType");
         configuration = new Model(domain, code, Config.Constant.SYSTEM_DB_CONFIG).list(valid, select);
 
+        // validator
+        select = Arrays.asList("group","name","rule","key","option","message","sanitize","class","action","condition");
+        validators = new Model(domain, code, Config.Constant.SYSTEM_DB_VALIDATOR).list(valid, select);
+
+        // i18n
+        select = Arrays.asList("type","lang","key");
+        i18ns = new Model(domain, code, Config.Constant.SYSTEM_DB_I18N).list(valid, select);
+
+        // structure
+        select = Arrays.asList("public","lock","type","kind","tenant","version","schema","items","extend","tenant");
+        structures = new Model(domain, code, Config.Constant.SYSTEM_DB_STRUCTURE).list(valid, select);
+
         // board
         select = Arrays.asList("schema","api","type","kind","path","class","action","filters","selects","sorts","reserved","script");
         boards = new Model(domain, code, Config.Constant.SYSTEM_DB_BOARD).list(valid, select);
