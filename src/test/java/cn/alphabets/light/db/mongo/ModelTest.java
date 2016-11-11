@@ -1,7 +1,7 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Environment;
 import cn.alphabets.light.model.I18n;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,7 +16,7 @@ public class ModelTest {
 
     @Before
     public void setUp() {
-        Config.instance().args.local = true;
+        Environment.instance().args.local = true;
     }
 
     @Test

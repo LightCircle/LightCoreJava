@@ -15,24 +15,24 @@ import java.util.concurrent.CountDownLatch;
  */
 public class AppTest {
 
-    private Config conf;
+    private Environment conf;
     private Vertx vertx;
 
     @Before
     public void setUp() throws IOException {
 
         vertx = Vertx.vertx();
-        conf = Config.instance();
+        conf = Environment.instance();
         conf.args.local = true;
-        CacheManager.INSTANCE.setUp(conf.app.domain);
+        CacheManager.INSTANCE.setUp(conf.getAppName());
 
         new App(new AppOptions()
-                .setAppDomain(conf.app.domain)
-                .setAppPort(conf.app.port)
-                .setDbHost(conf.mongodb.host)
-                .setDbPort(conf.mongodb.port)
-                .setDbUser(conf.mongodb.user)
-                .setDbPass(conf.mongodb.pass)
+                .setAppDomain(conf.getAppName())
+                .setAppPort(conf.getAppPort())
+                .setDbHost(conf.getMongoHost())
+                .setDbPort(Integer.parseInt(conf.getMongoPort()))
+                .setDbUser(conf.getMongoUser())
+                .setDbPass(conf.getMongoAuth())
                 .setDev(true)
                 .setPackageNmae("test"))
                 .start();
@@ -48,7 +48,7 @@ public class AppTest {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        vertx.createHttpClient().getNow(conf.app.port, "localhost", "/", response -> {
+        vertx.createHttpClient().getNow(conf.getAppPort(), "localhost", "/", response -> {
             response.handler(body -> {
                 System.out.println(body.toString());
                 latch.countDown();

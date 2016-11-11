@@ -1,7 +1,7 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Environment;
 import cn.alphabets.light.model.ModBase;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -42,7 +42,7 @@ public class Model {
     }
 
     private void initialize(String domain, String code, String table) {
-        MongoClient client = Connection.instance(Config.instance().environment);
+        MongoClient client = Connection.instance(Environment.instance());
         this.db = client.getDatabase(domain);
         this.name = table;
 
@@ -65,7 +65,7 @@ public class Model {
         String className = WordUtils.capitalize(this.name);
         String packageName = reserved.contains(this.name)
                 ? Constant.DEFAULT_PACKAGE_NAME + ".model"
-                : Config.instance().app.packages + ".model";
+                : Environment.instance().getPackages() + ".model";
 
         try {
             return Class.forName(packageName + "." + className);

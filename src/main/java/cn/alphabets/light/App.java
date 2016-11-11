@@ -68,15 +68,14 @@ public class App {
 
     public void start() {
 
-
-        //初始化light设定
-        ConfigManager config = ConfigManager.INSTANCE.setUp();
+        CacheManager.INSTANCE.setUp(Environment.instance().getAppName());
+        ConfigManager.INSTANCE.setUp();
 
         //初始化基础数据
         CacheManager.INSTANCE.setUp(options.getAppDomain());
 
         //初始化timeout
-        router.route().handler(new TimeoutHandlerImpl(config.getAppTimeout() * 1000));
+        router.route().handler(new TimeoutHandlerImpl(ConfigManager.INSTANCE.getAppTimeout() * 1000));
 
         //打印每个请求
         router.route().handler(LoggerHandler.create(LoggerFormat.SHORT));
@@ -88,7 +87,7 @@ public class App {
         router.route().handler(CookieHandler.create());
 
         //session处理, 超时30天
-        long sessionTimeoute = 1000L * 60 * 60 * config.getAppSessionTimeout();
+        long sessionTimeoute = 1000L * 60 * 60 * ConfigManager.INSTANCE.getAppSessionTimeout();
         router.route().handler(SessionHandlerImpl
                 .create(new MongoSessionStoreImpl(mongo, vertx))
                 .setNagHttps(false)

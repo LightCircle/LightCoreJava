@@ -1,7 +1,7 @@
 package cn.alphabets.light.cache;
 
 import cn.alphabets.light.Constant;
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Environment;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ public class CacheManagerTest {
 
     @Before
     public void setUp() {
-        Config.instance().args.local = true;
+        Environment.instance().args.local = true;
     }
 
     @Test

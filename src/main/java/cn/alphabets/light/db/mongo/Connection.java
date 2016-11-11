@@ -1,6 +1,6 @@
 package cn.alphabets.light.db.mongo;
 
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Environment;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import org.slf4j.Logger;
@@ -18,22 +18,22 @@ class Connection {
     private Connection() {
     }
 
-    public static MongoClient instance(Config.Environment environment) {
+    public static MongoClient instance(Environment env) {
         if (instance == null) {
             MongoClientURI uri = new MongoClientURI(
                     String.format("mongodb://%s:%s@%s:%s/?authMechanism=%s&authSource=%s",
-                            environment.getMongoUser(),
-                            environment.getMongoPass(),
-                            environment.getMongoHost(),
-                            environment.getMongoPort(),
-                            environment.getMongoAuth(),
-                            environment.getAppName()
+                            env.getMongoUser(),
+                            env.getMongoPass(),
+                            env.getMongoHost(),
+                            env.getMongoPort(),
+                            env.getMongoAuth(),
+                            env.getAppName()
                     ));
 
-            logger.info("host : " + environment.getMongoHost());
-            logger.info("port : " + environment.getMongoPort());
-            logger.info("user : " + environment.getMongoUser());
-            logger.info("pass : " + environment.getMongoPass());
+            logger.info("host : " + env.getMongoHost());
+            logger.info("port : " + env.getMongoPort());
+            logger.info("user : " + env.getMongoUser());
+            logger.info("pass : " + env.getMongoPass());
             instance = new MongoClient(uri);
         }
 

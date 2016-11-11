@@ -20,6 +20,7 @@ public class Constant {
     public static final String ENV_LIGHT_MONGO_AUTH = "LIGHTDB_AUTH";
     public static final String ENV_LIGHT_APP_NAME = "APPNAME";
     public static final String ENV_LIGHT_APP_PORT = "PORT";
+    public static final String ENV_LIGHT_APP_PACKAGE = "PACKAGE";
 
     public static final String SYSTEM_DB = "LightDB";
     public static final String SYSTEM_DB_PREFIX = "light";

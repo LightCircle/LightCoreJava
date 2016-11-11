@@ -1,7 +1,7 @@
 package cn.alphabets.light.http;
 
 import cn.alphabets.light.AppOptions;
-import cn.alphabets.light.Config;
+import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.DBConnection;
@@ -114,7 +114,7 @@ public class Dispatcher {
                             put("req", Boolean.TRUE);
                             put("handler", context);
                             put("user", "");
-                            put("conf", Config.instance());
+                            put("conf", Environment.instance());
                             put("environ", "");
                         }};
 

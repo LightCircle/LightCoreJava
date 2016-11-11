@@ -1,6 +1,7 @@
 package cn.alphabets.light.model;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.Environment;
 import org.junit.Before;
 
 import java.io.IOException;
@@ -15,13 +16,13 @@ public class ModeGeneratorTest {
 
     @Before
     public void setUp() {
-        cn.alphabets.light.Config.instance().args.local = true;
+        Environment.instance().args.local = true;
     }
 
 //    @Test
     public void test() throws IOException {
 
-        String pkg = cn.alphabets.light.Config.instance().app.packages + ".model";
+        String pkg = Environment.instance().getPackages() + ".model";
         List<String> target = Arrays.asList(
                 "board", "configuration", "i18n", "route", "structure", "tenant", "user", "validator"
         );
