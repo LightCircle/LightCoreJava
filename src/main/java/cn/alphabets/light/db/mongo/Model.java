@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Indexes.descending;
 
@@ -119,8 +120,14 @@ public class Model {
         return this.collection.count(condition);
     }
 
-    public <T extends ModBase> String add(T document) {
-        return "";
+    public String add(Document document) {
+        this.collection.insertOne(document);
+        return document.get("_id").toString();
+    }
+
+    public List<String> add(List<Document> document) {
+        this.collection.insertMany(document);
+        return document.stream().map(item -> item.get("_id").toString()).collect(Collectors.toList());
     }
 
     private Class getModelType() {

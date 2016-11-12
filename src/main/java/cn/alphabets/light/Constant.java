@@ -38,5 +38,7 @@ public class Constant {
     public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
     public static final Integer DEFAULT_LIMIT = 100;    // 一次允许获取的数据库记录数
     public static final Integer MAX_LIMIT = -1;         // 数据库记录的最大值数
+    public static final Integer VALID = 1;              // 有效数据库记录
+    public static final Integer INVALID = 0;            // 无效数据库记录
 
 }

@@ -116,8 +116,19 @@ public class Context {
         this.code = code;
     }
 
+    public String uid() {
+        if (this.uid != null) {
+            return this.uid;
+        }
+
+        // TODO: get uid from session
+
+        return this.uid;
+    }
+
     private String domain;
     private String code;
+    private String uid;
 
     public static class Params {
         public Params(Json json) {
@@ -195,7 +206,7 @@ public class Context {
         }
 
         private Json condition;
-        private Json data;
+        private Json data; // TODO: support data list
         private String id;
         private List<String> select;
         private List<String> sort;
