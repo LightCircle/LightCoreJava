@@ -15,16 +15,15 @@ import java.util.concurrent.CountDownLatch;
  */
 public class AppTest {
 
-    private Environment conf;
+    private Environment env;
     private Vertx vertx;
 
     @Before
     public void setUp() throws IOException {
 
         vertx = Vertx.vertx();
-        conf = Environment.instance();
-        conf.args.local = true;
-        CacheManager.INSTANCE.setUp(conf.getAppName());
+        env = Environment.instance();
+        env.args.local = true;
 
         new App().start();
     }
@@ -39,7 +38,7 @@ public class AppTest {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        vertx.createHttpClient().getNow(conf.getAppPort(), "localhost", "/", response -> {
+        vertx.createHttpClient().getNow(env.getAppPort(), "localhost", "/", response -> {
             response.handler(body -> {
                 System.out.println(body.toString());
                 latch.countDown();

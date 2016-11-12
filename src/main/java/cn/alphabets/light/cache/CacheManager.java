@@ -37,37 +37,37 @@ public enum CacheManager {
         // configuration
         select = Arrays.asList("type","key","value","valueType");
         configuration = new Model(domain, code, Constant.SYSTEM_DB_CONFIG)
-                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
         // validator
         select = Arrays.asList("group","name","rule","key","option","message","sanitize","class","action","condition");
         validators = new Model(domain, code, Constant.SYSTEM_DB_VALIDATOR)
-                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
         // i18n
         select = Arrays.asList("type","lang","key");
         i18ns = new Model(domain, code, Constant.SYSTEM_DB_I18N)
-                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
         // structure
         select = Arrays.asList("public","lock","type","kind","tenant","version","schema","items","extend","tenant");
         structures = new Model(domain, code, Constant.SYSTEM_DB_STRUCTURE)
-                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
         // board
         select = Arrays.asList("schema","api","type","kind","path","class","action","filters","selects","sorts","reserved","script");
         boards = new Model(domain, code, Constant.SYSTEM_DB_BOARD)
-                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
         // route
         select = Arrays.asList("template","url","class","action");
         routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE)
-                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
         // tenant
         select = Arrays.asList("code","name");
         tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT)
-                .list(valid, select, null, 0, Constant.DEFAULT_LIMIT);
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
     }
 
     public List<Configuration> getConfiguration() {

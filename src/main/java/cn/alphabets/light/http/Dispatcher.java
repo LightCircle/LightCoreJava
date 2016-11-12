@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,27 +43,37 @@ public class Dispatcher {
 
     private static ConcurrentHashMap<String, Method> methodMap;
 
+    private final List<Board> boards;
+    private final List<Route> routes;
+
+    public Dispatcher() {
+        this.boards = CacheManager.INSTANCE.getBoards();
+        this.routes = CacheManager.INSTANCE.getRoutes();
+    }
+
     /*
     处理型API
      */
     public void routeProcessAPI(Router router) {
         this.setup();
-        CacheManager.INSTANCE.getBoards().forEach(board -> {
+
+        this.boards.forEach(board -> {
             if (board.getKind() == 1) {
-                router.route(board.getApi())
-                        .blockingHandler(ctx -> {
-                            Method method = null;//resolve(board);
-                            Context context = new Context(ctx);
-                            if (method == null) {
-                                throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
-                            }
-                            try {
-                                method.invoke(method.getDeclaringClass().newInstance(), context);
-                            } catch (Exception e) {
-                                throw new ProcessingException(e);
-                            }
-                        }, false)
-                        .failureHandler(getDefaultDispatcherFailureHandler());
+
+                io.vertx.ext.web.Route r = router.route(board.getApi());
+                r.blockingHandler(ctx -> {
+                    Method method = null;//resolve(board);
+                    Context context = new Context(ctx);
+                    if (method == null) {
+                        throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
+                    }
+                    try {
+                        method.invoke(method.getDeclaringClass().newInstance(), context);
+                    } catch (Exception e) {
+                        throw new ProcessingException(e);
+                    }
+                }, false);
+                r.failureHandler(getDefaultDispatcherFailureHandler());
             }
         });
     }
@@ -78,49 +89,49 @@ public class Dispatcher {
     画面路径
      */
     public void routeView(Router router) {
-        CacheManager.INSTANCE.getRoutes().forEach(route -> {
+        this.routes.forEach(route -> {
 
-            router.route(route.getUrl())
-                    .blockingHandler(ctx -> {
-                        Context context = new Context(ctx);
+            io.vertx.ext.web.Route r = router.route(route.getUrl());
+            r = r.blockingHandler(ctx -> {
+                Context context = new Context(ctx);
 
-                        //如果定义了action，先调用action方法
-                        Method method = resolve(route);
-                        if (method != null) {
-                            try {
-                                method.invoke(method.getDeclaringClass().newInstance(), context);
-                            } catch (Exception e) {
-                                throw new ProcessingException(e);
-                            }
-                        }
+                //如果定义了action，先调用action方法
+                Method method = resolve(route);
+                if (method != null) {
+                    try {
+                        method.invoke(method.getDeclaringClass().newInstance(), context);
+                    } catch (Exception e) {
+                        throw new ProcessingException(e);
+                    }
+                }
 
-                        //有的设置是index.html 有的设置直接是index 所以需要补全
-                        String fileName = route.getTemplate();
-                        if (!StringUtils.endsWith(fileName, ".html")) {
-                            fileName += ".html";
-                        }
+                //有的设置是index.html 有的设置直接是index 所以需要补全
+                String fileName = route.getTemplate();
+                if (!StringUtils.endsWith(fileName, ".html")) {
+                    fileName += ".html";
+                }
 
-                        // TODO: 实现 dynamic 和 i 方法
-                        Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic",
-                                (x) -> "static" + x.get(0)
-                        );
-                        Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
+                // TODO: 实现 dynamic 和 i 方法
+                Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic",
+                        (x) -> "static" + x.get(0)
+                );
+                Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
 
-                        // TODO: 设定变量
-                        Map<String, Object> model = new ConcurrentHashMap<String, Object>() {{
-                            put("req", Boolean.TRUE);
-                            put("handler", context);
-                            put("user", "");
-                            put("conf", Environment.instance());
-                            put("environ", "");
-                        }};
+                // TODO: 设定变量
+                Map<String, Object> model = new ConcurrentHashMap<String, Object>() {{
+                    put("req", Boolean.TRUE);
+                    put("handler", context);
+                    put("user", "");
+                    put("conf", Environment.instance());
+                    put("environ", "");
+                }};
 
-                        //然后执行渲染
-                        String name = "view/" + fileName;
-                        String html = Helper.loadTemplate(name, model, Arrays.asList(dynamic, i));
-                        ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(html);
-                    }, false)
-                    .failureHandler(getDefaultDispatcherFailureHandler());
+                //然后执行渲染
+                String name = "view/" + fileName;
+                String html = Helper.loadTemplate(name, model, Arrays.asList(dynamic, i));
+                ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(html);
+            }, false);
+            r.failureHandler(getDefaultDispatcherFailureHandler());
         });
     }
 
