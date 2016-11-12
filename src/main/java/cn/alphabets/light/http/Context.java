@@ -1,6 +1,7 @@
 package cn.alphabets.light.http;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.ModBase;
@@ -15,6 +16,7 @@ import org.bson.Document;
 import org.bson.json.JsonMode;
 import org.bson.json.JsonWriterSettings;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
@@ -74,13 +76,27 @@ public class Context {
         return ctx.session();
     }
 
-    public <T> T user(Class<T> clz) {
+    public Object user() {
         String json = ctx.session().get(Constant.SK_USER);
         if (StringUtils.isEmpty(json)) {
             return null;
         }
-        return ModBase.fromJson(json, clz);
+
+        try {
+            Class type =  Class.forName(Environment.instance().getPackages() + ".entity.User");
+            return ModBase.fromJson(json, type);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException();
+        }
     }
+
+//    public <T> T user(Class<T> clz) {
+//        String json = ctx.session().get(Constant.SK_USER);
+//        if (StringUtils.isEmpty(json)) {
+//            return null;
+//        }
+//        return ModBase.fromJson(json, clz);
+//    }
 
     public void setUser(ModBase user) {
         String json = user.toJson();

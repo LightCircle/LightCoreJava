@@ -2,7 +2,9 @@ package cn.alphabets.light.http;
 
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
+import cn.alphabets.light.I18N;
 import cn.alphabets.light.cache.CacheManager;
+import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.entity.Board;
@@ -45,10 +47,12 @@ public class Dispatcher {
 
     private final List<Board> boards;
     private final List<Route> routes;
+    private ConfigManager conf;
 
     public Dispatcher() {
         this.boards = CacheManager.INSTANCE.getBoards();
         this.routes = CacheManager.INSTANCE.getRoutes();
+        this.conf = ConfigManager.INSTANCE;
     }
 
     /*
@@ -85,54 +89,73 @@ public class Dispatcher {
     public void routeDataAPI(Router router) {
     }
 
-    /*
-    画面路径
+    /**
+     * Route the screen path
+     *
+     * @param router vert.x router
      */
     public void routeView(Router router) {
+
         this.routes.forEach(route -> {
 
             io.vertx.ext.web.Route r = router.route(route.getUrl());
-            r = r.blockingHandler(ctx -> {
-                Context context = new Context(ctx);
+            r.failureHandler(getDefaultDispatcherFailureHandler());
+            r.blockingHandler(ctx -> {
 
-                //如果定义了action，先调用action方法
+                final Context context = new Context(ctx);
+
+                // Try lookup controllers class
                 Method method = resolve(route);
-                if (method != null) {
-                    try {
-                        method.invoke(method.getDeclaringClass().newInstance(), context);
-                    } catch (Exception e) {
-                        throw new ProcessingException(e);
-                    }
-                }
+                final Object customized = invoke(method, context);
 
-                //有的设置是index.html 有的设置直接是index 所以需要补全
-                String fileName = route.getTemplate();
-                if (!StringUtils.endsWith(fileName, ".html")) {
-                    fileName += ".html";
-                }
+                // Define multiple template functions
+                Helper.TemplateFunction i = new Helper.TemplateFunction("i", (args) -> I18N.i((String) args.get(0)));
+                Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic", (args) -> {
+                    String url = (String) args.get(0);
+                    String stamp = this.conf.getString("app.stamp");
+                    String prefix = this.conf.getString("app.static");
+                    String connector = url.contains("?") ? "&" : "?";
+                    return String.format("%s%s%sstamp=%s", prefix, url, connector, stamp);
+                });
 
-                // TODO: 实现 dynamic 和 i 方法
-                Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic",
-                        (x) -> "static" + x.get(0)
-                );
-                Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
-
-                // TODO: 设定变量
+                // Create a template parameter
                 Map<String, Object> model = new ConcurrentHashMap<String, Object>() {{
-                    put("req", Boolean.TRUE);
+                    put("req", context.req());
                     put("handler", context);
-                    put("user", "");
                     put("conf", Environment.instance());
-                    put("environ", "");
-                }};
 
-                //然后执行渲染
-                String name = "view/" + fileName;
+                }};
+                if (context.user() != null) {
+                    model.put("user", context.user());
+                }
+                if (customized != null) {
+                    model.put("data", customized);
+                }
+
+                // Some settings are 'index.html' some settings directly 'index'. So need to fill
+                String template = route.getTemplate();
+                if (!StringUtils.endsWith(template, ".html")) {
+                    template += ".html";
+                }
+
+                // Execute the rendering
+                String name = "view/" + template;
                 String html = Helper.loadTemplate(name, model, Arrays.asList(dynamic, i));
                 ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(html);
+
             }, false);
-            r.failureHandler(getDefaultDispatcherFailureHandler());
         });
+    }
+
+    private Object invoke(Method method, Context handler) {
+        if (method == null) {
+            return null;
+        }
+        try {
+            return method.invoke(method.getDeclaringClass().newInstance(), handler);
+        } catch (Exception e) {
+            throw new ProcessingException(e);
+        }
     }
 
     private void setup() {

@@ -43,7 +43,7 @@ public class AuthHandlerImpl implements Handler<RoutingContext> {
         }
 
         Context context = new Context(ctx);
-        User user = context.user(User.class);
+        User user = (User)context.user();
 
         //没有登录
         if (user == null) {
