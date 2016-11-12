@@ -3,6 +3,7 @@ package cn.alphabets.light.model;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,10 +20,10 @@ public class ModeGeneratorTest {
         Environment.instance().args.local = true;
     }
 
-//    @Test
-    public void test() throws IOException {
+    @Test
+    public void testGenerateEntity() throws IOException {
 
-        String pkg = Environment.instance().getPackages() + ".model";
+        String pkg = Environment.instance().getPackages() + ".entity";
         List<String> target = Arrays.asList(
                 "board", "configuration", "i18n", "route", "structure", "tenant", "user", "validator"
         );

@@ -2,7 +2,7 @@ package cn.alphabets.light.cache;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.db.mongo.Model;
-import cn.alphabets.light.model.*;
+import cn.alphabets.light.entity.*;
 import org.bson.Document;
 
 import java.util.Arrays;

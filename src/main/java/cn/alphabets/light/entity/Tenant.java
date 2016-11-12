@@ -1,5 +1,6 @@
-package cn.alphabets.light.model;
+package cn.alphabets.light.entity;
 
+import cn.alphabets.light.model.ModBase;
 import java.lang.String;
 
 /**

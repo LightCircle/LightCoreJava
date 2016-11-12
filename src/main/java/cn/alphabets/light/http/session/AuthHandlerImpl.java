@@ -2,7 +2,7 @@ package cn.alphabets.light.http.session;
 
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.http.Context;
-import cn.alphabets.light.model.User;
+import cn.alphabets.light.entity.User;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;

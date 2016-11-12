@@ -1,6 +1,8 @@
-package cn.alphabets.light.model;
+package cn.alphabets.light.entity;
 
+import cn.alphabets.light.model.ModBase;
 import java.lang.Long;
+import java.lang.Object;
 import java.lang.String;
 import java.util.List;
 

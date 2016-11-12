@@ -6,7 +6,7 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.Result;
-import cn.alphabets.light.model.User;
+import cn.alphabets.light.entity.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

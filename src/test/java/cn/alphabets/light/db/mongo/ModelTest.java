@@ -2,7 +2,7 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
-import cn.alphabets.light.model.I18n;
+import cn.alphabets.light.entity.I18n;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

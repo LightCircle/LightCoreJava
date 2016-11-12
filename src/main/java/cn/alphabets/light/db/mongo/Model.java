@@ -134,8 +134,8 @@ public class Model {
 
         String className = WordUtils.capitalize(this.name);
         String packageName = reserved.contains(this.name)
-                ? Constant.DEFAULT_PACKAGE_NAME + ".model"
-                : Environment.instance().getPackages() + ".model";
+                ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
+                : Environment.instance().getPackages() + ".entity";
 
         try {
             return Class.forName(packageName + "." + className);
