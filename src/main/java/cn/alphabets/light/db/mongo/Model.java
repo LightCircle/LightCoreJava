@@ -115,6 +115,10 @@ public class Model {
         return (T) ModBase.fromDoc(document, this.getModelType());
     }
 
+    public Long count(Document condition) {
+        return this.collection.count(condition);
+    }
+
     public <T extends ModBase> String add(T document) {
         return "";
     }
