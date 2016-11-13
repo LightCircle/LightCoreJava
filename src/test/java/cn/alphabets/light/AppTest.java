@@ -1,9 +1,9 @@
 package cn.alphabets.light;
 
-import cn.alphabets.light.cache.CacheManager;
 import io.vertx.core.Vertx;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,11 +15,11 @@ import java.util.concurrent.CountDownLatch;
  */
 public class AppTest {
 
-    private Environment env;
-    private Vertx vertx;
+    private static Environment env;
+    private static Vertx vertx;
 
-    @Before
-    public void setUp() throws IOException {
+    @BeforeClass
+    public static void setUpBeforeClass() throws IOException {
 
         vertx = Vertx.vertx();
         env = Environment.instance();
@@ -28,22 +28,55 @@ public class AppTest {
         new App().start();
     }
 
-    @After
-    public void tearDown() {
+    @AfterClass
+    public static void tearDownAfterClass() {
         vertx.close();
     }
 
     @Test
-    public void testMyApplication() throws InterruptedException {
+    public void testHTML() throws InterruptedException {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        vertx.createHttpClient().getNow(env.getAppPort(), "localhost", "/", response -> {
-            response.handler(body -> {
-                System.out.println(body.toString());
-                latch.countDown();
-            });
-        });
+        vertx.createHttpClient().getNow(env.getAppPort(), "localhost", "/", response ->
+                response.handler(body -> {
+                    Assert.assertTrue(body.toString().contains("Host : 127.0.0.1"));
+                    Assert.assertTrue(body.toString().contains("/Hello"));
+                    Assert.assertTrue(body.toString().contains("Sub"));
+                    latch.countDown();
+                })
+        );
+
+        latch.await();
+    }
+
+    @Test
+    public void testProcessAPI() throws InterruptedException {
+
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        vertx.createHttpClient().getNow(env.getAppPort(), "localhost", "/api/account/login", response ->
+                response.handler(body -> {
+                    Assert.assertTrue(body.toString().contains("OK"));
+                    latch.countDown();
+                })
+        );
+
+        latch.await();
+    }
+
+    @Test
+    public void testDataAPI() throws InterruptedException {
+
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        vertx.createHttpClient().getNow(env.getAppPort(), "localhost", "/api/user/list", response ->
+                response.handler(body -> {
+                    Assert.assertTrue(body.toString().contains("user1"));
+                    Assert.assertTrue(body.toString().contains("user2"));
+                    latch.countDown();
+                })
+        );
 
         latch.await();
     }

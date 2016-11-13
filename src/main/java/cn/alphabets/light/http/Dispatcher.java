@@ -1,14 +1,16 @@
 package cn.alphabets.light.http;
 
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.I18N;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
-import cn.alphabets.light.http.exception.MethodNotFoundException;
-import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.entity.Board;
 import cn.alphabets.light.entity.Route;
+import cn.alphabets.light.http.exception.MethodNotFoundException;
+import cn.alphabets.light.http.exception.ProcessingException;
+import cn.alphabets.light.http.exception.RenderException;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -16,17 +18,15 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.StringUtils;
-import org.reflections.ReflectionUtils;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
@@ -41,52 +41,97 @@ import static io.vertx.core.http.HttpHeaders.TEXT_HTML;
  */
 public class Dispatcher {
 
-    private static final Logger log = LoggerFactory.getLogger(Dispatcher.class);
-
-    private static ConcurrentHashMap<String, Method> methodMap;
+    private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
 
     private final List<Board> boards;
     private final List<Route> routes;
-    private ConfigManager conf;
+    private final Map<String, Method> methods;
+    private final ConfigManager conf;
 
     public Dispatcher() {
         this.boards = CacheManager.INSTANCE.getBoards();
         this.routes = CacheManager.INSTANCE.getRoutes();
         this.conf = ConfigManager.INSTANCE;
+        this.methods = new ConcurrentHashMap<>();
     }
 
-    /*
-    处理型API
+    /**
+     * Route the process type api
+     *
+     * @param router vert.x router
      */
     public void routeProcessAPI(Router router) {
-        this.setup();
 
         this.boards.forEach(board -> {
-            if (board.getKind() == 1) {
-
-                io.vertx.ext.web.Route r = router.route(board.getApi());
-                r.blockingHandler(ctx -> {
-                    Method method = null;//resolve(board);
-                    Context context = new Context(ctx);
-                    if (method == null) {
-                        throw new MethodNotFoundException("Dispatch Method Not Found , Board Info : " + board.toJson());
-                    }
-                    try {
-                        method.invoke(method.getDeclaringClass().newInstance(), context);
-                    } catch (Exception e) {
-                        throw new ProcessingException(e);
-                    }
-                }, false);
-                r.failureHandler(getDefaultDispatcherFailureHandler());
+            if (!Constant.KIND_BOARD_PROCESS_API.equals(board.getKind())) {
+                return;
             }
+
+            io.vertx.ext.web.Route r = router.route(board.getApi());
+            r.failureHandler(getFailureHandler());
+            r.blockingHandler(ctx -> {
+
+                Object data = null;
+
+                String className = board.getClass_(), actionName = board.getAction();
+                if (className == null || actionName == null) {
+                    throw new MethodNotFoundException("Dispatch method not found.");
+                }
+
+                Method method = resolve(className, actionName);
+                if (method == null) {
+                    throw new MethodNotFoundException("Dispatch method not found.");
+                }
+
+                try {
+                    data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
+                } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                    throw new ProcessingException(e);
+                }
+
+                new Result(data).send(ctx);
+            }, false);
         });
     }
 
-
-    /*
-    处理型API
+    /**
+     * Route the data type api
+     *
+     * @param router vert.x router
      */
     public void routeDataAPI(Router router) {
+        this.boards.forEach(board -> {
+            if (!Constant.KIND_BOARD_DATA_API.equals(board.getKind())) {
+                return;
+            }
+
+            io.vertx.ext.web.Route r = router.route(board.getApi());
+            r.failureHandler(getFailureHandler());
+            r.blockingHandler(ctx -> {
+
+                Object data = null;
+
+                // Try lookup controller class
+                String className = board.getClass_(), actionName = board.getAction();
+                if (className != null && actionName != null) {
+
+                    Method method = resolve(className, actionName);
+                    if (method != null) {
+                        try {
+                            data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
+                        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                            throw new ProcessingException(e);
+                        }
+
+                        new Result(data).send(ctx);
+                    }
+                }
+
+                // TODO: Try lookup light model class
+
+                // TODO: Try lookup data rider class
+            }, false);
+        });
     }
 
     /**
@@ -99,14 +144,13 @@ public class Dispatcher {
         this.routes.forEach(route -> {
 
             io.vertx.ext.web.Route r = router.route(route.getUrl());
-            r.failureHandler(getDefaultDispatcherFailureHandler());
+            r.failureHandler(getFailureHandler());
             r.blockingHandler(ctx -> {
 
                 final Context context = new Context(ctx);
 
-                // Try lookup controllers class
-                Method method = resolve(route);
-                final Object customized = invoke(method, context);
+                // Try lookup controller class
+                final Object customized = invoke(route, context);
 
                 // Define multiple template functions
                 Helper.TemplateFunction i = new Helper.TemplateFunction("i", (args) -> I18N.i((String) args.get(0)));
@@ -147,62 +191,59 @@ public class Dispatcher {
         });
     }
 
-    private Object invoke(Method method, Context handler) {
+    private Object invoke(Route route, Context handler) {
+
+        String className = route.getClass_(), actionName = route.getAction();
+        if (className == null || actionName == null) {
+            return null;
+        }
+
+        Method method = resolve(className, actionName);
         if (method == null) {
             return null;
         }
+
         try {
             return method.invoke(method.getDeclaringClass().newInstance(), handler);
-        } catch (Exception e) {
-            throw new ProcessingException(e);
+        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            throw new RenderException(e);
         }
     }
 
-    private void setup() {
+    private Method resolve(String className, String methodName) {
 
-        if (methodMap == null) {
-            methodMap = new ConcurrentHashMap<>();
-            Reflections reflections = new Reflections(Environment.instance().getPackages() + ".controller", new SubTypesScanner(false));
-            Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
-            allClasses.forEach(aClass -> {
-                Set<Method> getters = ReflectionUtils.getAllMethods(aClass);
-                getters.forEach(method -> {
-                    String key = aClass.getSimpleName() + "-" + method.getName();
-                    methodMap.put(key, method);
-                });
-            });
+        String fullName = Environment.instance().getPackages() + ".controller." + WordUtils.capitalize(className);
+        String key = String.format("%s#%s", fullName, methodName);
+
+        if (!methods.containsKey(key)) {
+            try {
+                this.methods.put(key, Class.forName(fullName).getMethod(methodName, Context.class));
+            } catch (NoSuchMethodException | ClassNotFoundException e) {
+                return null;
+            }
         }
+
+        return methods.get(key);
     }
 
-    private Method resolve(Board board) {
-        String className = StringUtils.capitalize(board.getClass_());
-        String methodKey = className + "-" + board.getAction();
-        return methodMap.get(methodKey);
-    }
-
-    private Method resolve(Route route) {
-        String className = StringUtils.capitalize(route.getClass_());
-        String methodKey = className + "-" + route.getAction();
-        return methodMap.get(methodKey);
-    }
-
-    protected Handler<RoutingContext> getDefaultDispatcherFailureHandler() {
+    private Handler<RoutingContext> getFailureHandler() {
         return ctx -> {
             Throwable error = ctx.failure();
-            log.error("Request Error:", error);
+            logger.error(error);
 
-            HttpResponseStatus status = NOT_FOUND;
+            HttpResponseStatus status = INTERNAL_SERVER_ERROR;
             if (error instanceof MethodNotFoundException) {
                 status = NOT_FOUND;
-            } else if (error instanceof ProcessingException) {
-                status = INTERNAL_SERVER_ERROR;
-            } else if (error instanceof IllegalStateException) {
-                status = INTERNAL_SERVER_ERROR;
-            } else {
+            }
+
+            if (error instanceof ProcessingException) {
                 status = INTERNAL_SERVER_ERROR;
             }
 
-            //请求已经结束
+            if (error instanceof IllegalStateException) {
+                status = INTERNAL_SERVER_ERROR;
+            }
+
             if (ctx.response().ended()) {
                 return;
             }
@@ -216,5 +257,4 @@ public class Dispatcher {
             }
         };
     }
-
 }

@@ -2,9 +2,8 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.http.Context;
-import cn.alphabets.light.model.Json;
+import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.ModBase;
-import cn.alphabets.light.model.Result;
 import org.bson.Document;
 
 import java.util.Date;
@@ -29,7 +28,7 @@ public class Controller {
         this.uid = handler.uid();
     }
 
-    public <T extends ModBase> Result<T> list() {
+    public <T extends ModBase> Plural<T> list() {
 
         if (!this.params.getCondition().containsKey("valid")) {
             this.params.getCondition().put("valid", Constant.VALID);
@@ -41,7 +40,7 @@ public class Controller {
                 this.params.getSkip(),
                 this.params.getLimit());
 
-        return new Result<>(this.count(), items);
+        return new Plural<>(this.count(), items);
     }
 
     public String add() {

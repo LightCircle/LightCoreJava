@@ -98,10 +98,8 @@ public class App {
         //数据型接口路由
         // TODO: 2016/10/28 完成数据型接口路由
 
-        //处理型接口路由
         dispatcher.routeProcessAPI(router);
-
-        //画面路径路由
+        dispatcher.routeDataAPI(router);
         dispatcher.routeView(router);
 
         //启动web server

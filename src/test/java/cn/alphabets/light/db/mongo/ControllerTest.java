@@ -4,8 +4,8 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
+import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Json;
-import cn.alphabets.light.model.Result;
 import cn.alphabets.light.entity.User;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,14 +33,12 @@ public class ControllerTest {
 
         Controller ctrl = new Controller(handler, "user");
 
-        Result<User> result = ctrl.list();
-        User a = result.getItems().get(0);
+        Plural result = ctrl.list();
 
         System.out.println(result.getTotalItems());
-        System.out.println(a.toJson());
     }
 
-    @Test
+//    @Test
     public void testAdd() {
 
         User user = new User();
