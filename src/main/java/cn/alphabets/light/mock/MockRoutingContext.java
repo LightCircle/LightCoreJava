@@ -11,6 +11,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -142,7 +143,7 @@ public class MockRoutingContext implements RoutingContext {
 
     @Override
     public Session session() {
-        return null;
+        return new MockSession();
     }
 
     @Override
