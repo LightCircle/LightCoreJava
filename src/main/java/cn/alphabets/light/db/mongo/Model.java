@@ -163,7 +163,11 @@ public class Model {
         try {
             return Class.forName(packageName + "." + className);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException();
+            try {
+                return Class.forName(Constant.DEFAULT_PACKAGE_NAME + ".entity." + className);
+            } catch (ClassNotFoundException e1) {
+                throw new RuntimeException();
+            }
         }
     }
 

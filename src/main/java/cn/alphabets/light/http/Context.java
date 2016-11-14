@@ -84,7 +84,7 @@ public class Context {
         }
 
         try {
-            Class type =  Class.forName(Environment.instance().getPackages() + ".entity.User");
+            Class type = Class.forName(Environment.instance().getPackages() + ".entity.User");
             return ModBase.fromJson(json, type);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException();
@@ -135,7 +135,7 @@ public class Context {
             return this.uid;
         }
 
-        ModBase user = (ModBase)this.user();
+        ModBase user = (ModBase) this.user();
         if (user == null) {
             return null;
         }
@@ -153,11 +153,21 @@ public class Context {
 
     public static class Params {
         public Params(Json json) {
-            this.condition = (Json)json.get("condition");
+            this.condition = (Json) json.get("condition");
             this.id = json.getString("id");
             this.data = json.get("data");
-            this.skip = json.containsKey("skip") ? json.getInteger("skip") : 0;
-            this.limit = json.containsKey("limit") ? json.getInteger("limit") : Constant.DEFAULT_LIMIT;
+            this.skip = 0;
+            this.limit = Constant.DEFAULT_LIMIT;
+
+            String skip = json.getString("skip");
+            if (StringUtils.isNotEmpty(skip)) {
+                this.skip = Integer.parseInt(skip);
+            }
+
+            String limit = json.getString("limit");
+            if (StringUtils.isNotEmpty(limit)) {
+                this.limit = Integer.parseInt(limit);
+            }
 
             // TODO
             //select;
