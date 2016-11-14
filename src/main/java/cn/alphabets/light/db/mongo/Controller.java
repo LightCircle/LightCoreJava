@@ -18,10 +18,6 @@ public class Controller {
     private Context.Params params;
     private String uid;
 
-    public Controller(Context handler) {
-        this(handler, null);
-    }
-
     public Controller(Context handler, String table) {
         this.model = new Model(handler.getDomain(), handler.getCode(), table);
         this.params = handler.params;
@@ -63,5 +59,13 @@ public class Controller {
         }
 
         return this.model.count(this.params.getCondition());
+    }
+
+    public <T extends ModBase> T get() {
+        if (!this.params.getCondition().containsKey("valid")) {
+            this.params.getCondition().put("valid", Constant.VALID);
+        }
+
+        return this.model.get(this.params.getCondition());
     }
 }

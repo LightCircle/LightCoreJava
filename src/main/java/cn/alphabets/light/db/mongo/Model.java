@@ -107,12 +107,24 @@ public class Model {
     }
 
     public <T extends ModBase> T get() {
+        return this.get(null, null);
+    }
 
-        Document document = this.collection
-                .find(Document.parse("{valid:1}"))
-                .projection(Projections.exclude("createAt", "updateAt", "valid", "createBy", "updateBy"))
-                .first();
+    public <T extends ModBase> T get(Document condition) {
+        return this.get(condition, null);
+    }
 
+    public <T extends ModBase> T get(Document condition, List<String> fieldNames) {
+
+        // default value
+        condition = condition == null ? new Document() : condition;
+        fieldNames = fieldNames == null ? Collections.emptyList() : fieldNames;
+
+        // set fetch condition
+        FindIterable<Document> find = this.collection.find(condition);
+        FindIterable<Document> projection = find.projection(Projections.include(fieldNames));
+
+        Document document = find.first();
         return (T) ModBase.fromDoc(document, this.getModelType());
     }
 
