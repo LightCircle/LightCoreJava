@@ -149,7 +149,7 @@ public class Context {
     public static class Params {
         public Params(Json json) {
             this.condition = (Json)json.get("condition");
-            this.data = (Json)json.get("data");
+            this.data = json.get("data");
             this.skip = json.containsKey("skip") ? json.getInteger("skip") : 0;
             this.limit = json.containsKey("limit") ? json.getInteger("limit") : Constant.DEFAULT_LIMIT;
         }
@@ -165,19 +165,31 @@ public class Context {
             this.condition = condition;
         }
 
-        public Json getData() {
+        public Object getData() {
             return data;
         }
 
-        public void setData(Json data) {
+        public void setData(ModBase data) {
+            this.data = data.toDoc();
+        }
+
+        public void setDataList(List<ModBase> data) {
             this.data = data;
         }
 
-        public String getId() {
+        public void setDataJson(Json data) {
+            this.data = data;
+        }
+
+        public void setDataJsonList(List<Json> data) {
+            this.data = data;
+        }
+
+        public Object getId() {
             return id;
         }
 
-        public void setId(String id) {
+        public void setId(Object id) {
             this.id = id;
         }
 
@@ -222,8 +234,8 @@ public class Context {
         }
 
         private Json condition;
-        private Json data; // TODO: support data list
-        private String id;
+        private Object data; // TODO: support data list
+        private Object id;
         private List<String> select;
         private List<String> sort;
         private List<Object> files; // TODO

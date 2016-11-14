@@ -3,6 +3,7 @@ package cn.alphabets.light.db.mongo;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.entity.I18n;
+import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class ModelTest {
 
         Model model = new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        I18n i18n = model.get();
+        I18n i18n = model.get(new Document("key", "i18n"));
 
         Assert.assertNotNull(i18n);
     }

@@ -15,7 +15,10 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Indexes.descending;
@@ -106,10 +109,6 @@ public class Model {
         return result;
     }
 
-    public <T extends ModBase> T get() {
-        return this.get(null, null);
-    }
-
     public <T extends ModBase> T get(Document condition) {
         return this.get(condition, null);
     }
@@ -126,6 +125,18 @@ public class Model {
 
         Document document = find.first();
         return (T) ModBase.fromDoc(document, this.getModelType());
+    }
+
+    public Long remove(Document condition) {
+        return this.update(condition, new Document("valid", Constant.INVALID));
+    }
+
+    public Long delete(Document condition) {
+        return this.collection.deleteMany(condition).getDeletedCount();
+    }
+
+    public Long update(Document condition, Document data) {
+        return this.collection.updateMany(condition, data).getModifiedCount();
     }
 
     public Long count(Document condition) {

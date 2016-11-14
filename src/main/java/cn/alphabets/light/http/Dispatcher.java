@@ -11,6 +11,7 @@ import cn.alphabets.light.entity.Route;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.http.exception.RenderException;
+import cn.alphabets.light.model.DataRider;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -110,6 +111,7 @@ public class Dispatcher {
             r.blockingHandler(ctx -> {
 
                 Object data = null;
+                Context handler = new Context(ctx);
 
                 // Try lookup controller class
                 String className = board.getClass_(), actionName = board.getAction();
@@ -118,7 +120,7 @@ public class Dispatcher {
                     Method method = resolve(className, actionName);
                     if (method != null) {
                         try {
-                            data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
+                            data = method.invoke(method.getDeclaringClass().newInstance(), handler);
                         } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                             throw new ProcessingException(e);
                         }
@@ -129,7 +131,9 @@ public class Dispatcher {
 
                 // TODO: Try lookup light model class
 
-                // TODO: Try lookup data rider class
+                data = new DataRider(className).call(handler, actionName);
+                new Result(data).send(ctx);
+
             }, false);
         });
     }

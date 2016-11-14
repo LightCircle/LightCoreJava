@@ -2,9 +2,12 @@ package cn.alphabets.light.model;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
+import cn.alphabets.light.cache.CacheManager;
+import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.entity.User;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,31 +24,54 @@ public class DataRiderTest {
     @Before
     public void setUp() {
         Environment.instance().args.local = true;
+        CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
     @Test
     public void testList() {
 
+        handler.params.setCondition(new Json("keyword", "admin"));
         Plural<User> result = new DataRider(User.class).list(handler);
-        List<User> u = result.getItems();
+        List<User> user = result.getItems();
 
-        System.out.println(u.size());
+        Assert.assertEquals("admin", user.get(0).getName());
     }
 
     @Test
     public void testGet() {
 
-        User u = new DataRider(User.class).get(handler);
+        handler.params.setId("000000000000000000000001");
+        User user = new DataRider(User.class).get(handler);
 
-        System.out.println(u.getName());
+        Assert.assertEquals("admin", user.getName());
     }
 
-//    @Test
+    @Test
     public void testAdd() {
 
-        String result = new DataRider(User.class).add(handler);
+        DataRider rider = new DataRider(User.class);
 
-        System.out.println(result);
+        User user = new User();
+        user.setName("test user name");
+
+        // add user
+        handler.params.setData(user);
+        String result = rider.add(handler);
+        Assert.assertNotNull(result);
+
+        // delete test user
+        handler.params.setId(result);
+        Long count = new Controller(handler, User.class).delete();
+        Assert.assertTrue(1L == count);
+    }
+
+    @Test
+    public void testCall() {
+
+        handler.params.setCondition(new Json("id", "admin"));
+        User user = (User)new DataRider(User.class).call(handler, "get");
+
+        Assert.assertEquals("admin", user.getName());
     }
 }

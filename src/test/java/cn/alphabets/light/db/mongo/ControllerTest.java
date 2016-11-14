@@ -17,14 +17,12 @@ import org.junit.Test;
  */
 public class ControllerTest {
 
-    private Environment env;
     private Context handler;
 
     @Before
     public void setUp() {
         Environment.clean();
-        env = Environment.instance();
-        env.args.local = true;
+        Environment.instance().args.local = true;
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
@@ -38,21 +36,25 @@ public class ControllerTest {
         System.out.println(result.getTotalItems());
     }
 
-//    @Test
+    @Test
     public void testAdd() {
 
         User user = new User();
         user.setName("test user");
 
-        Json j = new Json();
-        j.putAll(user.toDoc());
+        Json json = new Json();
+        json.putAll(user.toDoc());
 
-        handler.params.setData(j);
+        handler.params.setDataJson(json);
         Controller ctrl = new Controller(handler, "user");
 
+        // add test user
         String id = ctrl.add();
         Assert.assertNotNull(id);
 
-        System.out.println(id);
+        // delete test user
+        handler.params.setId(id);
+        Long count = ctrl.delete();
+        Assert.assertTrue(1L == count);
     }
 }
