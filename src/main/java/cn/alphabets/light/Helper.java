@@ -54,6 +54,14 @@ public class Helper {
         }
     }
 
+    public static void setEnv(String key, String value) {
+        Map<String, String> env = new HashMap<String, String>(){{
+            put(key, value);
+        }};
+
+        Helper.setEnv(env);
+    }
+
     /**
      * Use Json Path to set the value of the Json object. Supports embedded objects
      *

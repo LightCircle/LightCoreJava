@@ -131,9 +131,9 @@ public class Dispatcher {
 
                 // TODO: Try lookup light model class
 
+                // Try lookup rider class
                 data = new DataRider(className).call(handler, actionName);
                 new Result(data).send(ctx);
-
             }, false);
         });
     }

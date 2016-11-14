@@ -1,8 +1,10 @@
 package cn.alphabets.light.http;
 
+import cn.alphabets.light.ConfigFile;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
+import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.ModBase;
 import io.vertx.core.http.HttpServerRequest;
@@ -63,7 +65,6 @@ public class Context {
         this.params = new Params(parameter);
     }
 
-
     public HttpServerResponse res() {
         return this.ctx.response();
     }
@@ -90,34 +91,22 @@ public class Context {
         }
     }
 
-//    public <T> T user(Class<T> clz) {
-//        String json = ctx.session().get(Constant.SK_USER);
-//        if (StringUtils.isEmpty(json)) {
-//            return null;
-//        }
-//        return ModBase.fromJson(json, clz);
-//    }
-
     public void setUser(ModBase user) {
         String json = user.toJson();
         ctx.session().put(Constant.SK_USER, json);
     }
 
-    public void end(Document bson) {
-        String json = bson.toJson(new JsonWriterSettings(JsonMode.SHELL, true));
-        /**
-         * 执行以下替换操作：
-         * ObjectId("57c52f87fb35fd050073f9c4") -> "57c52f87fb35fd050073f9c4"
-         * ISODate("2016-08-30T07:02:31.391Z") -> "2016-08-30T07:02:31.391Z"
-         */
-
-        json = json.replaceAll("ObjectId\\((\\\"\\w{24}\\\")\\)|ISODate\\((\\\"\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z\\\")\\)", "$1$2");
-        res().putHeader(CONTENT_TYPE, "application/json").end(json);
-    }
-
-
     public String getDomain() {
-        return this.domain;
+        if (this.domain != null) {
+            return this.domain;
+        }
+
+        String sessionDomain = ctx.session().get(Constant.SK_DOMAIN);
+        if (sessionDomain != null) {
+            return sessionDomain;
+        }
+
+        return Environment.instance().getAppName();
     }
 
     public void setDomain(String domain) {
@@ -125,7 +114,16 @@ public class Context {
     }
 
     public String getCode() {
-        return code;
+        if (this.code != null) {
+            return this.code;
+        }
+
+        String sessionCode = ctx.session().get(Constant.SK_CODE);
+        if (sessionCode != null) {
+            return sessionCode;
+        }
+
+        return Constant.DEFAULT_TENANT;
     }
 
     public void setCode(String code) {
@@ -137,9 +135,16 @@ public class Context {
             return this.uid;
         }
 
-        // TODO: get uid from session
+        ModBase user = (ModBase)this.user();
+        if (user == null) {
+            return null;
+        }
 
-        return this.uid;
+        return user.get_id().toString();
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     private String domain;
@@ -149,9 +154,15 @@ public class Context {
     public static class Params {
         public Params(Json json) {
             this.condition = (Json)json.get("condition");
+            this.id = json.getString("id");
             this.data = json.get("data");
             this.skip = json.containsKey("skip") ? json.getInteger("skip") : 0;
             this.limit = json.containsKey("limit") ? json.getInteger("limit") : Constant.DEFAULT_LIMIT;
+
+            // TODO
+            //select;
+            //sort;
+            //files;
         }
 
         public Json getCondition() {
@@ -234,14 +245,13 @@ public class Context {
         }
 
         private Json condition;
-        private Object data; // TODO: support data list
+        private Object data;
         private Object id;
         private List<String> select;
         private List<String> sort;
-        private List<Object> files; // TODO
+        private List<Object> files;
         private int skip;
         private int limit;
     }
-
 
 }

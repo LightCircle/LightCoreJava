@@ -80,4 +80,21 @@ public class AppTest {
 
         latch.await();
     }
+
+    @Test
+    public void testRiderAPI() throws InterruptedException {
+
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        String id = "000000000000000000000001";
+        vertx.createHttpClient().getNow(env.getAppPort(), "localhost", "/api/user/get?id=" + id, response ->
+                response.handler(body -> {
+                    System.out.println(body.toString());
+                    Assert.assertTrue(body.toString().contains("admin"));
+                    latch.countDown();
+                })
+        );
+
+        latch.await();
+    }
 }

@@ -11,7 +11,9 @@ public class Constant {
     public static final String CFK_SESSION_TIMEOUT = "app.sessionTimeout";      // session有效期设定
     public static final String CFK_IGNORE_AUTH = "ignore.auth";                 // 不需要登录能访问url
 
-    public static final String SK_USER = "_sk_user";                            //当前用户 session key, SK 打头为Session中的key
+    public static final String SK_USER = "_sk_user";                            // 当前用户 session key, SK 打头为Session中的key
+    public static final String SK_DOMAIN = "cn.alphabets.light.sk_domain";      // domain key
+    public static final String SK_CODE = "cn.alphabets.light.sk_code";          // tenant key
 
     public static final String ENV_LIGHT_MONGO_HOST = "LIGHTDB_HOST";
     public static final String ENV_LIGHT_MONGO_PORT = "LIGHTDB_PORT";
@@ -35,6 +37,7 @@ public class Constant {
     public static final String SYSTEM_DB_ROUTE = "route";
     public static final String SYSTEM_DB_TENANT = "tenant";
 
+    public static final String DEFAULT_TENANT = "Default";
     public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
     public static final Integer DEFAULT_LIMIT = 100;        // 一次允许获取的数据库记录数
     public static final Integer MAX_LIMIT = 10000;          // 数据库记录的最大值数, 超过这个应该使用Cursor
