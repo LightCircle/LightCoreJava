@@ -89,7 +89,6 @@ public class AppTest {
         String id = "000000000000000000000001";
         vertx.createHttpClient().getNow(env.getAppPort(), "localhost", "/api/user/get?id=" + id, response ->
                 response.handler(body -> {
-                    System.out.println(body.toString());
                     Assert.assertTrue(body.toString().contains("admin"));
                     latch.countDown();
                 })
