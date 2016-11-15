@@ -1,6 +1,5 @@
 package cn.alphabets.light.model;
 
-
 import cn.alphabets.light.http.session.SessionImpl;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.ext.web.Session;
@@ -8,6 +7,7 @@ import io.vertx.ext.web.Session;
 import java.util.Base64;
 
 /**
+ * ModSession
  * Created by luohao on 16/10/22.
  */
 public class ModSession {

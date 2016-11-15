@@ -9,12 +9,13 @@ import org.bson.types.ObjectId;
 import java.io.IOException;
 
 /**
+ * ObjectIdSerializer
  * Created by luohao on 2016/10/27.
  */
 public class ObjectIdSerializer extends JsonSerializer<ObjectId> {
 
     @Override
-    public void serialize(ObjectId value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+    public void serialize(ObjectId value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeString(value.toString());
     }
 }
