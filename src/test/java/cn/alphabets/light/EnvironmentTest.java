@@ -32,7 +32,7 @@ public class EnvironmentTest {
         env.args.local = true;
 
         Assert.assertEquals(env.getAppName(), "LightDB");
-        Assert.assertEquals(env.getAppPort(), 7000);
+        Assert.assertEquals(env.getAppPort(), 7001);
         Assert.assertEquals(env.getMongoHost(), "127.0.0.1");
 
         Assert.assertEquals(env.getMySQLHost(), "db.alphabets.cn");

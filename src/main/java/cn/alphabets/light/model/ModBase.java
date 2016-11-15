@@ -16,6 +16,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -23,7 +24,7 @@ import java.util.Date;
  * Created by luohao on 2016/10/27.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ModBase {
+public class ModBase implements Serializable {
 
     @JsonIgnore
     private static final Logger logger = LoggerFactory.getLogger(ModBase.class);

@@ -1,5 +1,5 @@
 app:
-  port: 7000
+  port: 7001
   domain: LightDB
   master: false
   local: false

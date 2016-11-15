@@ -5,6 +5,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.config.ConfigManager;
+import cn.alphabets.light.entity.ModUser;
 import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.ModBase;
 import io.vertx.core.http.HttpServerRequest;
@@ -78,17 +79,7 @@ public class Context {
     }
 
     public Object user() {
-        String json = ctx.session().get(Constant.SK_USER);
-        if (StringUtils.isEmpty(json)) {
-            return null;
-        }
-
-        try {
-            Class type = Class.forName(Environment.instance().getPackages() + ".entity.User");
-            return ModBase.fromJson(json, type);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException();
-        }
+        return ctx.session().get(Constant.SK_USER);
     }
 
     public void setUser(ModBase user) {
@@ -180,6 +171,10 @@ public class Context {
 
         public String getString(String key) {
             return this.json.getString(key);
+        }
+
+        public void set(String key, Object val) {
+            this.json.put(key, val);
         }
 
         public Json getCondition() {
