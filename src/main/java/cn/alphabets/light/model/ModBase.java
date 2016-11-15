@@ -19,14 +19,21 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
+ * ModBase
  * Created by luohao on 2016/10/27.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ModBase {
+
     @JsonIgnore
     private static final Logger logger = LoggerFactory.getLogger(ModBase.class);
+
     @JsonIgnore
     private static ObjectMapper objectMapper = new ObjectMapper();
+
+    private int valid;
+    private String createBy;
+    private String updateBy;
 
     @JsonSerialize(using = ObjectIdSerializer.class)
     @JsonDeserialize(using = ObjectIdDeserializer.class)
@@ -39,12 +46,6 @@ public class ModBase {
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializer.class)
     private Date updateAt;
-
-
-    private int valid;
-    private String createBy;
-    private String updateBy;
-
 
     public Date getCreateAt() {
         return createAt;
@@ -114,10 +115,14 @@ public class ModBase {
     }
 
     public static <T> T fromDoc(Document doc, Class<T> clz) {
+        if (doc == null) {
+            return null;
+        }
+
         try {
             return objectMapper.readValue(doc.toJson(), clz);
         } catch (IOException e) {
-            logger.error("error fromDoc", e);
+            logger.error("error fromDoc", e); // TODO: throw exception
         }
         return null;
     }
@@ -130,5 +135,4 @@ public class ModBase {
         }
         return null;
     }
-
 }

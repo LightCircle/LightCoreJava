@@ -1,11 +1,13 @@
 package cn.alphabets.light.model;
 
 
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.exception.DatabaseException;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,7 +35,7 @@ public class DataRider {
     );
 
     public DataRider(Class clazz) {
-        this(clazz.getSimpleName().toLowerCase());
+        this(clazz.getSimpleName().replace(Constant.MODEL_PREFIX, "").toLowerCase());
     }
 
     public DataRider(String clazz) {
@@ -101,7 +103,14 @@ public class DataRider {
         try {
             Method method = ctrl.getClass().getMethod(METHOD.get(board.getType().intValue()));
             return method.invoke(ctrl);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
+            e.getTargetException().printStackTrace(); // TODO: change to log
+
+            // throw DB Exception
+
+            throw new DatabaseException("Board method not found.");
+        } catch (NoSuchMethodException | IllegalAccessException e) {
+            e.printStackTrace(); // TODO: change to log
             throw new MethodNotFoundException("Board method not found.");
         }
     }

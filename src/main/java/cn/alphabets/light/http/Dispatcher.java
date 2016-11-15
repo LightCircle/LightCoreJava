@@ -86,7 +86,16 @@ public class Dispatcher {
 
                 try {
                     data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
-                } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                } catch (InvocationTargetException e) {
+                    e.getTargetException().printStackTrace(); // TODO: to log
+
+                    // is LightException send error to client
+
+                    // 500 错误
+
+                    throw new ProcessingException(e);
+                } catch (IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace(); // TODO: to log
                     throw new ProcessingException(e);
                 }
 

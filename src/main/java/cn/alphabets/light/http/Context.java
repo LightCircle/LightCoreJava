@@ -152,7 +152,10 @@ public class Context {
     private String uid;
 
     public static class Params {
+
+        private Json json;
         public Params(Json json) {
+            this.json = json;
             this.condition = (Json) json.get("condition");
             this.id = json.getString("id");
             this.data = json.get("data");
@@ -173,6 +176,10 @@ public class Context {
             //select;
             //sort;
             //files;
+        }
+
+        public String getString(String key) {
+            return this.json.getString(key);
         }
 
         public Json getCondition() {

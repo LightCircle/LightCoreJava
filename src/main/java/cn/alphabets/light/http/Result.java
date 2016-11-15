@@ -1,5 +1,6 @@
 package cn.alphabets.light.http;
 
+import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.model.Error;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,8 +23,8 @@ public class Result {
         this.data = data;
     }
 
-    public Result(String code, String message) {
-        this.error = new Error(code, message);
+    public Result(LightException exception) {
+        this.error = new Error(exception.getCode(), exception.getMessage());
     }
 
     public String getApiVersion() {
