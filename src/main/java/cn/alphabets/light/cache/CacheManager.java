@@ -16,13 +16,13 @@ public enum CacheManager {
 
     INSTANCE;
 
-    private List<Configuration> configuration;
-    private List<I18n> i18ns;
-    private List<Tenant> tenants;
-    private List<Validator> validators;
-    private List<Structure> structures;
-    private List<Board> boards;
-    private List<Route> routes;
+    private List<ModConfiguration> configuration;
+    private List<ModI18n> i18ns;
+    private List<ModTenant> tenants;
+    private List<ModValidator> validators;
+    private List<ModStructure> structures;
+    private List<ModBoard> boards;
+    private List<ModRoute> routes;
 
     /**
      * 初始化
@@ -70,31 +70,31 @@ public enum CacheManager {
                 .list(valid, select, null, 0, Constant.MAX_LIMIT);
     }
 
-    public List<Configuration> getConfiguration() {
+    public List<ModConfiguration> getConfiguration() {
         return configuration;
     }
 
-    public List<I18n> getI18ns() {
+    public List<ModI18n> getI18ns() {
         return i18ns;
     }
 
-    public List<Tenant> getTenants() {
+    public List<ModTenant> getTenants() {
         return tenants;
     }
 
-    public List<Validator> getValidators() {
+    public List<ModValidator> getValidators() {
         return validators;
     }
 
-    public List<Structure> getStructures() {
+    public List<ModStructure> getStructures() {
         return structures;
     }
 
-    public List<Board> getBoards() {
+    public List<ModBoard> getBoards() {
         return boards;
     }
 
-    public List<Route> getRoutes() {
+    public List<ModRoute> getRoutes() {
         return routes;
     }
 }

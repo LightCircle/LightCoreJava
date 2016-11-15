@@ -2,7 +2,7 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
-import cn.alphabets.light.entity.I18n;
+import cn.alphabets.light.entity.ModI18n;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +26,7 @@ public class ModelTest {
 
         Model model = new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        List<I18n> i18n = model.list();
+        List<ModI18n> i18n = model.list();
 
         Assert.assertTrue(i18n.size() > 0);
     }
@@ -36,7 +36,7 @@ public class ModelTest {
 
         Model model = new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX, "i18n");
 
-        I18n i18n = model.get(new Document("key", "i18n"));
+        ModI18n i18n = model.get(new Document("key", "i18n"));
 
         Assert.assertNotNull(i18n);
     }

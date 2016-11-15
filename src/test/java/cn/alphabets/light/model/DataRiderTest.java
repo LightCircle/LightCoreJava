@@ -4,7 +4,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.Controller;
-import cn.alphabets.light.entity.User;
+import cn.alphabets.light.entity.ModUser;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import org.junit.Assert;
@@ -32,8 +32,8 @@ public class DataRiderTest {
     public void testList() {
 
         handler.params.setCondition(new Json("keyword", "admin"));
-        Plural<User> result = new DataRider(User.class).list(handler);
-        List<User> user = result.getItems();
+        Plural<ModUser> result = new DataRider(User.class).list(handler);
+        List<ModUser> user = result.getItems();
 
         Assert.assertEquals("admin", user.get(0).getName());
     }
@@ -42,7 +42,7 @@ public class DataRiderTest {
     public void testGet() {
 
         handler.params.setId("000000000000000000000001");
-        User user = new DataRider(User.class).get(handler);
+        ModUser user = new DataRider(User.class).get(handler);
 
         Assert.assertEquals("admin", user.getName());
     }
@@ -52,7 +52,7 @@ public class DataRiderTest {
 
         DataRider rider = new DataRider(User.class);
 
-        User user = new User();
+        ModUser user = new ModUser();
         user.setName("test user name");
 
         // add user
@@ -70,7 +70,7 @@ public class DataRiderTest {
     public void testCall() {
 
         handler.params.setCondition(new Json("id", "admin"));
-        User user = (User)new DataRider(User.class).call(handler, "get");
+        ModUser user = (ModUser)new DataRider(User.class).call(handler, "get");
 
         Assert.assertEquals("admin", user.getName());
     }

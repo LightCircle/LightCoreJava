@@ -37,6 +37,7 @@ public class Constant {
     public static final String SYSTEM_DB_ROUTE = "route";
     public static final String SYSTEM_DB_TENANT = "tenant";
 
+    public static final String MODEL_PREFIX = "Mod";
     public static final String DEFAULT_TENANT = "Default";
     public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
     public static final Integer DEFAULT_LIMIT = 100;        // 一次允许获取的数据库记录数
@@ -46,4 +47,6 @@ public class Constant {
 
     public static final Long KIND_BOARD_PROCESS_API = 1L;   // 处理类型API
     public static final Long KIND_BOARD_DATA_API = 2L;      // 数据类型API
+
+
 }

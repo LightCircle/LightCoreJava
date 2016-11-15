@@ -11,10 +11,10 @@ import java.util.Arrays;
  */
 public class User {
 
-    public Plural<cn.alphabets.light.entity.User> list(Context handler) {
+    public Plural<cn.alphabets.light.entity.ModUser> list(Context handler) {
 
-        cn.alphabets.light.entity.User user1 = new cn.alphabets.light.entity.User();
-        cn.alphabets.light.entity.User user2 = new cn.alphabets.light.entity.User();
+        cn.alphabets.light.entity.ModUser user1 = new cn.alphabets.light.entity.ModUser();
+        cn.alphabets.light.entity.ModUser user2 = new cn.alphabets.light.entity.ModUser();
 
         user1.setName("user1");
         user2.setName("user2");

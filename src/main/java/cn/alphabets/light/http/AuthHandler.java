@@ -1,7 +1,7 @@
 package cn.alphabets.light.http;
 
 import cn.alphabets.light.config.ConfigManager;
-import cn.alphabets.light.entity.User;
+import cn.alphabets.light.entity.ModUser;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;

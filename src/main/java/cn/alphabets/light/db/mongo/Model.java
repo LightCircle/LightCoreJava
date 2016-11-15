@@ -2,6 +2,7 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
+import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.model.ModBase;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -155,7 +156,7 @@ public class Model {
 
     private Class getModelType() {
 
-        String className = WordUtils.capitalize(this.name);
+        String className = Constant.MODEL_PREFIX + WordUtils.capitalize(this.name);
         String packageName = reserved.contains(this.name)
                 ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
                 : Environment.instance().getPackages() + ".entity";

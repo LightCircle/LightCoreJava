@@ -13,7 +13,7 @@ import java.util.List;
  * GeneratorTest
  * Created by lilin on 2016/11/8.
  */
-public class ModeGeneratorTest {
+public class GeneratorTest {
 
     @Before
     public void setUp() {
@@ -28,19 +28,7 @@ public class ModeGeneratorTest {
                 "board", "configuration", "i18n", "route", "structure", "tenant", "user", "validator"
         );
 
-        new ModelGenerator(pkg).generate(Constant.SYSTEM_DB, target);
+        new Generator(pkg).generate(Constant.SYSTEM_DB, target);
     }
 
-//    @Test
-    public void testGenerateConfig() throws IOException {
-        ConfigGenerator generator = new ConfigGenerator("cn.alphabets.light.config", "Configuration");
-
-        generator.generate(Constant.SYSTEM_DB);
-//        TypeSpec.Builder b = generator.subClass_(null, "aaa");
-//        System.out.println(b.build().toString());
-
-        generator.write();
-
-//        String i = new Config().app.getHost();
-    }
 }

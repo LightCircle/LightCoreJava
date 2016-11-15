@@ -6,8 +6,8 @@ import cn.alphabets.light.Helper;
 import cn.alphabets.light.I18N;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
-import cn.alphabets.light.entity.Board;
-import cn.alphabets.light.entity.Route;
+import cn.alphabets.light.entity.ModBoard;
+import cn.alphabets.light.entity.ModRoute;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.http.exception.RenderException;
@@ -44,8 +44,8 @@ public class Dispatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
 
-    private final List<Board> boards;
-    private final List<Route> routes;
+    private final List<ModBoard> boards;
+    private final List<ModRoute> routes;
     private final Map<String, Method> methods;
     private final ConfigManager conf;
 
@@ -195,7 +195,7 @@ public class Dispatcher {
         });
     }
 
-    private Object invoke(Route route, Context handler) {
+    private Object invoke(ModRoute route, Context handler) {
 
         String className = route.getClass_(), actionName = route.getAction();
         if (className == null || actionName == null) {

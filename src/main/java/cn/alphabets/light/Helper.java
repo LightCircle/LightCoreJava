@@ -26,11 +26,6 @@ import java.util.regex.Pattern;
 public class Helper {
 
     /**
-     * An singleton instance of the template engine
-     */
-    private static JtwigTemplate template;
-
-    /**
      * Set the system environment variables
      *
      * @param newEnv environment
@@ -55,7 +50,7 @@ public class Helper {
     }
 
     public static void setEnv(String key, String value) {
-        Map<String, String> env = new HashMap<String, String>(){{
+        Map<String, String> env = new HashMap<String, String>() {{
             put(key, value);
         }};
 
@@ -172,31 +167,24 @@ public class Helper {
      */
     public static String loadTemplate(String name, Map<String, Object> model, List<TemplateFunction> function) {
 
-        if (template == null) {
-            EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
-                    .configuration()
-                    .functions()
-                    .add(function)
-                    .and()
-                    .parser()
-                    .syntax()
-                    .withStartCode("<%~").withEndCode("%>")
-                    .withStartOutput("<%=").withEndOutput("%>")
-                    .withStartComment("<#").withEndComment("#>")
-                    .and()
-                    .and()
-                    .build();
+        EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
+                .configuration()
+                .functions()
+                .add(function)
+                .and()
+                .parser()
+                .syntax()
+                .withStartCode("<%~").withEndCode("%>")
+                .withStartOutput("<%=").withEndOutput("%>")
+                .withStartComment("<#").withEndComment("#>")
+                .and()
+                .and()
+                .build();
 
-            Environment environment = new EnvironmentFactory().create(configuration);
-            ResourceReference resource = new ResourceReference(ResourceReference.CLASSPATH, name);
+        Environment environment = new EnvironmentFactory().create(configuration);
+        ResourceReference resource = new ResourceReference(ResourceReference.CLASSPATH, name);
 
-            template = new JtwigTemplate(environment, resource);
-        }
-        return template.render(JtwigModel.newModel(model));
-    }
-
-    static void cleanTemplate() {
-        template = null;
+        return new JtwigTemplate(environment, resource).render(JtwigModel.newModel(model));
     }
 
     public static class TemplateFunction extends SimpleJtwigFunction {

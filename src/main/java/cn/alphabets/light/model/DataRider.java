@@ -3,8 +3,8 @@ package cn.alphabets.light.model;
 
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.Controller;
-import cn.alphabets.light.entity.Board;
-import cn.alphabets.light.entity.Structure;
+import cn.alphabets.light.entity.ModBoard;
+import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import org.apache.commons.lang3.StringUtils;
@@ -26,8 +26,8 @@ public class DataRider {
 
     private String clazz;
 
-    private List<Structure> structures;
-    private List<Board> boards;
+    private List<ModStructure> structures;
+    private List<ModBoard> boards;
     private static final List<String> METHOD = Arrays.asList(
             "", "add", "update", "remove", "list", "search", "get", "count", "upsert"
     );
@@ -88,7 +88,7 @@ public class DataRider {
             action = stacktrace[3].getMethodName();
         }
 
-        Board board = getBoard(action);
+        ModBoard board = getBoard(action);
         if (board == null) {
             throw new MethodNotFoundException("Board method not found.");
         }
@@ -131,23 +131,23 @@ public class DataRider {
         return keyword;
     }
 
-    private Board getBoard(String action) {
+    private ModBoard getBoard(String action) {
 
-        for (Board board : this.boards) {
+        for (ModBoard board : this.boards) {
             if (board.getClass_().equals(this.clazz) && board.getAction().equals(action)) {
                 return board;
             }
         }
 
         // TODO: default board
-        return new Board();
+        return new ModBoard();
     }
 
     private void getSort() {
 
     }
 
-    private Json getFilter(Context handler, Board board) {
+    private Json getFilter(Context handler, ModBoard board) {
         final Json data = handler.params.getCondition();
         final Json or = new Json();
 
