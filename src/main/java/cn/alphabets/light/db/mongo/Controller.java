@@ -2,7 +2,6 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.http.Context;
-import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.ModBase;
 import cn.alphabets.light.model.Plural;
 import org.bson.Document;
@@ -50,8 +49,7 @@ public class Controller {
         if (this.params.getData() instanceof List) {
             List<Document> data = new ArrayList<>();
             for (Object json: (List)this.params.getData()) {
-                Document document = new Document();
-                document.putAll((Json)json);
+                Document document = (Document) json;
                 document.put("createAt", new Date());
                 document.put("updateAt", new Date());
                 document.put("createBy", this.uid);
@@ -64,8 +62,7 @@ public class Controller {
             return this.model.add(data).get(0);
         }
 
-        Document document = new Document();
-        document.putAll((Document)this.params.getData());
+        Document document = (Document)this.params.getData();
         document.put("createAt", new Date());
         document.put("updateAt", new Date());
         document.put("createBy", this.uid);

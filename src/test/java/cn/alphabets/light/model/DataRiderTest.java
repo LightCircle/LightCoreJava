@@ -7,6 +7,7 @@ import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.entity.ModUser;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
+import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class DataRiderTest {
     @Test
     public void testList() {
 
-        handler.params.setCondition(new Json("keyword", "admin"));
+        handler.params.setCondition(new Document("keyword", "admin"));
         Plural<ModUser> result = new DataRider(User.class).list(handler);
         List<ModUser> user = result.getItems();
 
@@ -69,7 +70,7 @@ public class DataRiderTest {
     @Test
     public void testCall() {
 
-        handler.params.setCondition(new Json("id", "admin"));
+        handler.params.setCondition(new Document("id", "admin"));
         ModUser user = (ModUser)new DataRider(User.class).call(handler, "get");
 
         Assert.assertEquals("admin", user.getName());

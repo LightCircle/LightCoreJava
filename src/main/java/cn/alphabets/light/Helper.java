@@ -1,7 +1,7 @@
 package cn.alphabets.light;
 
-import cn.alphabets.light.model.Json;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.bson.Document;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.Environment;
@@ -65,7 +65,7 @@ public class Helper {
      * @param val    value
      */
     @SuppressWarnings("unchecked")
-    public static void setValueByJsonPath(Json source, List<String> path, Object val) {
+    public static void setValueByJsonPath(Document source, List<String> path, Object val) {
 
         Object parent = source;
 
@@ -79,7 +79,7 @@ public class Helper {
                 if (isList) {
                     ((List<Object>) parent).add(val);
                 } else {
-                    ((Json) parent).put(key, val);
+                    ((Document) parent).put(key, val);
                 }
                 return;
             }
@@ -96,22 +96,22 @@ public class Helper {
                         ((List<Object>) parent).add(new ArrayList<>());
                     }
                     if (isObjectValue) {
-                        ((List<Json>) parent).add(new Json());
+                        ((List<Document>) parent).add(new Document());
                     }
                     parent = ((List<?>) parent).get(Integer.parseInt(key));
                 }
             } else {
 
-                if (((Json) parent).containsKey(key)) {
-                    parent = ((Json) parent).get(key);
+                if (((Document) parent).containsKey(key)) {
+                    parent = ((Document) parent).get(key);
                 } else {
                     if (isListValue) {
-                        ((Json) parent).put(key, new ArrayList<>());
+                        ((Document) parent).put(key, new ArrayList<>());
                     }
                     if (isObjectValue) {
-                        ((Json) parent).put(key, new Json());
+                        ((Document) parent).put(key, new Document());
                     }
-                    parent = ((Json) parent).get(key);
+                    parent = ((Document) parent).get(key);
                 }
             }
         }
@@ -123,7 +123,7 @@ public class Helper {
      * @param url full request url
      * @return Json Object
      */
-    public static Json unParam(String url) {
+    public static Document unParam(String url) {
 
         String decoded;
         Pattern pattern = Pattern.compile("\\[([^\\]]*)\\]");
@@ -135,7 +135,7 @@ public class Helper {
             throw new RuntimeException(e);
         }
 
-        final Json json = new Json();
+        final Document json = new Document();
 
         Arrays.stream(decoded.split("&")).forEach(keyVal -> {
 

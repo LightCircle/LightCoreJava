@@ -10,6 +10,7 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.exception.DatabaseException;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -115,8 +116,8 @@ public class DataRider {
         }
     }
 
-    private Json compare(String operator, String field, Object value) {
-        return new Json(field, new Json(operator, value));
+    private Document compare(String operator, String field, Object value) {
+        return new Document(field, new Document(operator, value));
     }
 
     private Object reserved(Context handler, String keyword) {
@@ -156,9 +157,9 @@ public class DataRider {
 
     }
 
-    private Json getFilter(Context handler, ModBoard board) {
-        final Json data = handler.params.getCondition();
-        final Json or = new Json();
+    private Document getFilter(Context handler, ModBoard board) {
+        final Document data = handler.params.getCondition();
+        final Document or = new Document();
 
         board.getFilters().forEach((filter) -> {
 
@@ -191,10 +192,10 @@ public class DataRider {
             }
 
             if (!or.containsKey(group)) {
-                or.put(group, new Json());
+                or.put(group, new Document());
             }
 
-            Json and = (Json) or.get(group);
+            Document and = (Document) or.get(group);
             and.putAll(compare(operator, key, value));
         });
 
@@ -205,9 +206,9 @@ public class DataRider {
 
         // If only one condition or group, are removed or comparison operators
         if (or.size() == 1) {
-            return (Json) or.values().toArray()[0];
+            return (Document) or.values().toArray()[0];
         }
 
-        return new Json("$or", or.values().stream().map((val) -> val).collect(Collectors.toList()));
+        return new Document("$or", or.values().stream().map((val) -> val).collect(Collectors.toList()));
     }
 }

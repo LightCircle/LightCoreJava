@@ -1,12 +1,8 @@
 package cn.alphabets.light.http;
 
-import cn.alphabets.light.ConfigFile;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
-import cn.alphabets.light.config.ConfigManager;
-import cn.alphabets.light.entity.ModUser;
-import cn.alphabets.light.model.Json;
 import cn.alphabets.light.model.ModBase;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -16,13 +12,8 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
-import org.bson.json.JsonMode;
-import org.bson.json.JsonWriterSettings;
 
-import java.lang.reflect.Type;
 import java.util.List;
-
-import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
 
 /**
  * Context
@@ -45,7 +36,7 @@ public class Context {
         this.domain = domain;
         this.code = code;
 
-        Json parameter = new Json();
+        Document parameter = new Document();
 
         // query
         if (ctx.request().params().size() > 0) {
@@ -54,7 +45,7 @@ public class Context {
 
         // form
         if (ctx.getBodyAsString().length() > 0) {
-            parameter.putAll(Json.parse(ctx.getBodyAsString()));
+            parameter.putAll(Document.parse(ctx.getBodyAsString()));
         }
 
         // TODO: url path params
@@ -144,10 +135,10 @@ public class Context {
 
     public static class Params {
 
-        private Json json;
-        public Params(Json json) {
+        private Document json;
+        public Params(Document json) {
             this.json = json;
-            this.condition = (Json) json.get("condition");
+            this.condition = (Document) json.get("condition");
             this.id = json.getString("id");
             this.data = json.get("data");
             this.skip = 0;
@@ -177,14 +168,14 @@ public class Context {
             this.json.put(key, val);
         }
 
-        public Json getCondition() {
+        public Document getCondition() {
             if (this.condition == null) {
-                this.condition = new Json();
+                this.condition = new Document();
             }
             return this.condition;
         }
 
-        public void setCondition(Json condition) {
+        public void setCondition(Document condition) {
             this.condition = condition;
         }
 
@@ -200,11 +191,11 @@ public class Context {
             this.data = data;
         }
 
-        public void setDataJson(Json data) {
+        public void setDataJson(Document data) {
             this.data = data;
         }
 
-        public void setDataJsonList(List<Json> data) {
+        public void setDataJsonList(List<Document> data) {
             this.data = data;
         }
 
@@ -256,7 +247,7 @@ public class Context {
             this.limit = limit;
         }
 
-        private Json condition;
+        private Document condition;
         private Object data;
         private Object id;
         private List<String> select;

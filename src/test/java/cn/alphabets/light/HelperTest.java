@@ -1,6 +1,6 @@
 package cn.alphabets.light;
 
-import cn.alphabets.light.model.Json;
+import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,7 +31,7 @@ public class HelperTest {
     public void testUnParam() {
 
         String slimjson = "[ \"]*";
-        Json source = Helper.unParam("s=0&c[m][]=a&c[m][]=b&c[p][p1][p11]=d&c[p][p1][p12][]=1&c[p][p1][p12][]=2");
+        Document source = Helper.unParam("s=0&c[m][]=a&c[m][]=b&c[p][p1][p11]=d&c[p][p1][p12][]=1&c[p][p1][p12][]=2");
         String json = source.toJson().replaceAll(slimjson, "");
 
         Assert.assertEquals(json, "{s:0,c:{m:[a,b],p:{p1:{p11:d,p12:[1,2]}}}}");
@@ -42,16 +42,16 @@ public class HelperTest {
 
         String slimjson = "[ \"]*";
 
-        Json source = new Json();
+        Document source = new Document();
         Helper.setValueByJsonPath(source, Arrays.asList("key", ""), 1);
         Helper.setValueByJsonPath(source, Arrays.asList("key", ""), 2);
         Assert.assertEquals(source.toJson().replaceAll(slimjson, ""), "{key:[1,2]}");
 
-        source = new Json();
+        source = new Document();
         Helper.setValueByJsonPath(source, Arrays.asList("key", "son"), 1);
         Assert.assertEquals(source.toJson().replaceAll(slimjson, ""), "{key:{son:1}}");
 
-        source = new Json();
+        source = new Document();
         Helper.setValueByJsonPath(source, Arrays.asList("key", "0", "son"), "value1");
         Helper.setValueByJsonPath(source, Arrays.asList("key", "1", "son"), "value2");
         Assert.assertEquals(source.toJson().replaceAll(slimjson, ""), "{key:[{son:value1},{son:value2}]}");

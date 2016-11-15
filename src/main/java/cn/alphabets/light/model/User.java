@@ -7,6 +7,7 @@ import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.security.Crypto;
+import org.bson.Document;
 
 /**
  * User
@@ -16,7 +17,7 @@ public class User {
 
     public static void verify(Context handler) throws LightException {
 
-        handler.params.setCondition(new Json("id", handler.params.getId()));
+        handler.params.setCondition(new Document("id", handler.params.getId()));
         handler.params.setId(null);
         ModUser user = new DataRider(ModUser.class).get(handler);
 

@@ -5,8 +5,8 @@ import cn.alphabets.light.Environment;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import cn.alphabets.light.model.Plural;
-import cn.alphabets.light.model.Json;
 import cn.alphabets.light.entity.ModUser;
+import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class ControllerTest {
         ModUser user = new ModUser();
         user.setName("test user");
 
-        Json json = new Json();
+        Document json = new Document();
         json.putAll(user.toDoc());
 
         handler.params.setDataJson(json);
