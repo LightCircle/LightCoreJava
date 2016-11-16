@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Map;
+
 /**
  * I18NTest
  * Created by lilin on 2016/11/16.
@@ -27,4 +29,10 @@ public class I18NTest {
         Assert.assertEquals("Hello", lang);
     }
 
+    @Test
+    public void testCatalog() {
+
+        Map<String, String> lang = I18N.catalog("en", "common");
+        Assert.assertTrue(lang.size() > 0);
+    }
 }

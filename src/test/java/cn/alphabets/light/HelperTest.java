@@ -59,8 +59,8 @@ public class HelperTest {
     @Test
     public void testLoadTemplate() throws IOException {
 
-        Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic", (x) -> x.get(0) + " : dynamic");
-        Helper.TemplateFunction i = new Helper.TemplateFunction("i", (x) -> x.get(0) + " : i");
+        Helper.StringFunction dynamic = new Helper.StringFunction("dynamic", (x) -> x.get(0) + " : dynamic");
+        Helper.StringFunction i = new Helper.StringFunction("i", (x) -> x.get(0) + " : i");
 
         Map<String, Object> map = new ConcurrentHashMap<String, Object>() {{
             put("conf", Environment.instance());

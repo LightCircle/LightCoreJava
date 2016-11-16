@@ -166,7 +166,7 @@ public class Helper {
      * @param function custom functions
      * @return The resulting string
      */
-    public static String loadTemplate(String name, Map<String, Object> model, List<TemplateFunction> function) {
+    public static String loadTemplate(String name, Map<String, Object> model, List<SimpleJtwigFunction> function) {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
@@ -188,12 +188,54 @@ public class Helper {
         return new JtwigTemplate(environment, resource).render(JtwigModel.newModel(model));
     }
 
-    public static class TemplateFunction extends SimpleJtwigFunction {
+    public static class StringFunction extends SimpleJtwigFunction {
 
         private String name;
         Function<List<Object>, String> function;
 
-        public TemplateFunction(String name, Function<List<Object>, String> function) {
+        public StringFunction(String name, Function<List<Object>, String> function) {
+            this.name = name;
+            this.function = function;
+        }
+
+        @Override
+        public String name() {
+            return this.name;
+        }
+
+        @Override
+        public Object execute(FunctionRequest request) {
+            return this.function.apply(request.getArguments());
+        }
+    }
+
+    public static class ListFunction extends SimpleJtwigFunction {
+
+        private String name;
+        Function<List<Object>, List<String>> function;
+
+        public ListFunction(String name, Function<List<Object>, List<String>> function) {
+            this.name = name;
+            this.function = function;
+        }
+
+        @Override
+        public String name() {
+            return this.name;
+        }
+
+        @Override
+        public Object execute(FunctionRequest request) {
+            return this.function.apply(request.getArguments());
+        }
+    }
+
+    public static class MapFunction extends SimpleJtwigFunction {
+
+        private String name;
+        Function<List<Object>, Map<String, String>> function;
+
+        public MapFunction(String name, Function<List<Object>, Map<String, String>> function) {
             this.name = name;
             this.function = function;
         }

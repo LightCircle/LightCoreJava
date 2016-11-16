@@ -12,13 +12,10 @@ import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.http.exception.RenderException;
 import cn.alphabets.light.model.DataRider;
-import com.sun.org.apache.xml.internal.security.utils.I18n;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.sun.tools.doclint.Entity.or;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
@@ -174,11 +170,17 @@ public class Dispatcher {
                 final Object customized = invoke(route, handler);
 
                 // Define multiple template functions
-                Helper.TemplateFunction i = new Helper.TemplateFunction("i", (args) -> {
+                Helper.StringFunction i = new Helper.StringFunction("i", (args) -> {
                     String lang = handler.getLang(), key = (String) args.get(0);
                     return I18N.i(lang, key);
                 });
-                Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic", (args) -> {
+
+                Helper.MapFunction catalog = new Helper.MapFunction("catalog", (args) -> {
+                    String lang = handler.getLang(), type = (String) args.get(0);
+                    return I18N.catalog(lang, type);
+                });
+
+                Helper.StringFunction dynamic = new Helper.StringFunction("dynamic", (args) -> {
                     String url = (String) args.get(0);
                     String stamp = this.conf.getString("app.stamp");
                     String prefix = this.conf.getString("app.static");
@@ -208,7 +210,7 @@ public class Dispatcher {
 
                 // Execute the rendering
                 String name = "view/" + template;
-                String html = Helper.loadTemplate(name, model, Arrays.asList(dynamic, i));
+                String html = Helper.loadTemplate(name, model, Arrays.asList(dynamic, i, catalog));
                 ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(html);
 
             }, false);

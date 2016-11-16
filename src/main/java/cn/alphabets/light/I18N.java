@@ -5,8 +5,8 @@ import cn.alphabets.light.entity.ModI18n;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * I18N
@@ -27,13 +27,29 @@ public class I18N {
         String type = message.substring(0, index);
         String key = message.substring(index + 1);
 
-        List<ModI18n> i18ns = CacheManager.INSTANCE.getI18ns();
-        for (ModI18n i18n : i18ns) {
+        for (ModI18n i18n : CacheManager.INSTANCE.getI18ns()) {
             if (type.equals(i18n.getType()) && key.equals(i18n.getKey())) {
                 return (String) ((Map) i18n.getLang()).get(lang);
             }
         }
 
         return message;
+    }
+
+    public static Map<String, String> catalog(String lang, String type) {
+
+        Map<String, String> catalog = new ConcurrentHashMap<>();
+
+        for (ModI18n i18n : CacheManager.INSTANCE.getI18ns()) {
+            if (type == null) {
+                catalog.put(i18n.getKey(), (String) ((Map) i18n.getLang()).get(lang));
+            } else {
+                if (type.equals(i18n.getType())) {
+                    catalog.put(i18n.getKey(), (String) ((Map) i18n.getLang()).get(lang));
+                }
+            }
+        }
+
+        return catalog;
     }
 }
