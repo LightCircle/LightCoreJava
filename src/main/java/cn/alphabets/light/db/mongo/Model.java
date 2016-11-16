@@ -2,7 +2,6 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
-import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.model.ModBase;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -11,10 +10,10 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
 import org.apache.commons.lang3.text.WordUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +28,7 @@ import static com.mongodb.client.model.Indexes.descending;
  */
 public class Model {
 
-    private static final Logger logger = LoggerFactory.getLogger(Model.class);
+    private static final Logger logger = LogManager.getLogger(Model.class);
 
     private MongoDatabase db;
     private MongoCollection<Document> collection;

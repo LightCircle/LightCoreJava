@@ -1,7 +1,7 @@
 package cn.alphabets.light;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Environment {
 
-    private static final Logger logger = LoggerFactory.getLogger(Environment.class);
+    private static final Logger logger = LogManager.getLogger(Environment.class);
     private static Environment instance;
     public final Args args = new Args();
 

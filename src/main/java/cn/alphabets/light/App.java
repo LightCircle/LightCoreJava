@@ -2,18 +2,18 @@ package cn.alphabets.light;
 
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
+import cn.alphabets.light.http.AuthHandler;
 import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.TimeoutHandler;
-import cn.alphabets.light.http.AuthHandler;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
 import cn.alphabets.light.http.session.SessionHandlerImpl;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServer;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * App
@@ -21,16 +21,13 @@ import io.vertx.ext.web.handler.*;
  */
 public class App {
 
-    private static final Logger log = LoggerFactory.getLogger(App.class);
+    private static final Logger logger = LogManager.getLogger(App.class);
 
     private Vertx vertx;
     private HttpServer server;
     private Router router;
 
     public App() {
-
-        // 设定使用log4j2
-        System.setProperty(LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME, "io.vertx.core.logging.SLF4JLogDelegateFactory");
 
         // 运行环境
         vertx = Vertx.vertx(new VertxOptions());
@@ -88,6 +85,6 @@ public class App {
 
         // Start the web server
         server.requestHandler(router::accept).listen(env.getAppPort());
-        log.info(String.format("Running on http://%s:%s/", "127.0.0.1", env.getAppPort()));
+        logger.info(String.format("Running on http://%s:%s/", "127.0.0.1", env.getAppPort()));
     }
 }
