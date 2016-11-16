@@ -5,6 +5,7 @@ import cn.alphabets.light.model.Error;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 
@@ -53,5 +54,12 @@ public class Result {
         HttpServerResponse response = context.response();
         response.putHeader(CONTENT_TYPE, "application/json; charset=utf-8");
         response.end(this.json());
+    }
+
+    public static void redirect(RoutingContext context, String path) {
+        HttpServerResponse response = context.response();
+        response.putHeader("Location", path);
+        response.setStatusCode(HttpResponseStatus.FOUND.code());
+        response.end();
     }
 }

@@ -52,8 +52,9 @@ public interface AuthHandler extends Handler<RoutingContext> {
             if (ctx.session().get(Constant.SK_USER) == null) {
 
                 if (Helper.isBrowser(ctx.request())) {
-                    ctx.response().putHeader("Location", "/").setStatusCode(HttpResponseStatus.FOUND.code()).end();
+                    Result.redirect(ctx, ConfigManager.INSTANCE.getString("app.home"));
                 } else  {
+                    // TODO: move err to Result class
                     ctx.response().setStatusCode(errorStatus.code()).end(errorStatus.reasonPhrase());
                 }
             } else {
