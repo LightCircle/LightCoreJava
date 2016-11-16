@@ -2,10 +2,10 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
+import cn.alphabets.light.entity.ModUser;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import cn.alphabets.light.model.Plural;
-import cn.alphabets.light.entity.ModUser;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
