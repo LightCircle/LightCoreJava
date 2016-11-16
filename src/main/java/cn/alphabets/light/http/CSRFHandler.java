@@ -32,7 +32,7 @@ public interface CSRFHandler extends Handler<RoutingContext> {
 
     CSRFHandler setTimeout(long timeout);
 
-    public class CSRFHandlerImpl implements CSRFHandler {
+    class CSRFHandlerImpl implements CSRFHandler {
 
         private static final Logger log = LoggerFactory.getLogger(CSRFHandlerImpl.class);
         private static final Base64.Encoder BASE64 = Base64.getMimeEncoder();
