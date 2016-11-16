@@ -3,6 +3,7 @@ package cn.alphabets.light;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.http.AuthHandler;
+import cn.alphabets.light.http.CSRFHandler;
 import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.TimeoutHandler;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
@@ -29,13 +30,8 @@ public class App {
 
     public App() {
 
-        // 运行环境
         vertx = Vertx.vertx(new VertxOptions());
-
-        // 路由
         router = Router.router(vertx);
-
-        // web服务
         server = vertx.createHttpServer();
     }
 
@@ -57,12 +53,17 @@ public class App {
         // Handle cookie
         router.route().handler(CookieHandler.create());
 
-        //session处理, 超时30天
+        // Handle session, overtime 30 days
         long sessionTimeoute = 1000L * 60 * 60 * ConfigManager.INSTANCE.getAppSessionTimeout();
         router.route().handler(SessionHandlerImpl
                 .create(new MongoSessionStoreImpl(env.getAppName(), vertx))
                 .setNagHttps(false)
                 .setSessionTimeout(sessionTimeoute));
+
+        // Handle CSRF token, overtime = session timeout
+        router.route().handler(CSRFHandler
+                .create(ConfigManager.INSTANCE.getString("app.hmackey"))
+                .setTimeout(sessionTimeoute));
 
         // Handle body
         router.route().handler(BodyHandler.create());

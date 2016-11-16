@@ -193,7 +193,7 @@ public class Dispatcher {
                     put("req", handler.req());
                     put("handler", handler);
                     put("conf", Environment.instance());
-
+                    put("csrftoken", ctx.get(CSRFHandler.DEFAULT_HEADER_NAME));
                 }};
                 if (handler.user() != null) {
                     model.put("user", handler.user());
