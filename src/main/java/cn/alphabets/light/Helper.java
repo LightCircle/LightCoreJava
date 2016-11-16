@@ -1,5 +1,6 @@
 package cn.alphabets.light;
 
+import io.vertx.core.http.HttpServerRequest;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bson.Document;
 import org.jtwig.JtwigModel;
@@ -116,6 +117,34 @@ public class Helper {
                 }
             }
         }
+    }
+
+    /**
+     * Determines whether the current runtime environment is JUnit
+     *
+     * @return true is JUnit
+     */
+    public static boolean isJUnitTest() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        List<StackTraceElement> list = Arrays.asList(stackTrace);
+        for (StackTraceElement element : list) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determine whether the request comes to the browser
+     *
+     * @param request request
+     * @return true is browser
+     */
+    public static boolean isBrowser(HttpServerRequest request) {
+
+        String ua = request.getHeader("user-agent");
+        return ua != null && ua.toLowerCase().matches("mozilla.*");
     }
 
     /**

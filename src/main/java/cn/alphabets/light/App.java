@@ -68,14 +68,13 @@ public class App {
         router.route().handler(BodyHandler.create());
 
         // Handle login
-        if (!env.app.isDev()) {
+        boolean isDevUnit = (env.app.isDev() && Helper.isJUnitTest());
+        if (!isDevUnit) {
             router.route().handler(AuthHandler.create());
         }
 
         // The 'x-response-time' on the headband is used to indicate the server response time
-        if (env.app.isDev()) {
-            router.route().handler(ResponseTimeHandler.create());
-        }
+        router.route().handler(ResponseTimeHandler.create());
 
         // Route the Web request
         Dispatcher dispatcher = new Dispatcher();

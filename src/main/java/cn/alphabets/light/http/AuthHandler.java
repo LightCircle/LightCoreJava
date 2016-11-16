@@ -1,5 +1,7 @@
 package cn.alphabets.light.http;
 
+import cn.alphabets.light.Constant;
+import cn.alphabets.light.Helper;
 import cn.alphabets.light.config.ConfigManager;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
@@ -31,7 +33,7 @@ public interface AuthHandler extends Handler<RoutingContext> {
             List<String> paths = ConfigManager.INSTANCE.getIgnoreAuth();
             if (CollectionUtils.isNotEmpty(paths)) {
                 String regex = StringUtils.join(paths, "|");
-                ignore = Pattern.compile(regex.replace("*", ".*"));
+                ignore = Pattern.compile(regex.replaceAll("(?<!\\.)\\*", ".*"));
             }
         }
 
@@ -47,8 +49,13 @@ public interface AuthHandler extends Handler<RoutingContext> {
             }
 
             // No login
-            if (new Context(ctx).user() == null) {
-                ctx.response().setStatusCode(errorStatus.code()).end(errorStatus.reasonPhrase());
+            if (ctx.session().get(Constant.SK_USER) == null) {
+
+                if (Helper.isBrowser(ctx.request())) {
+                    ctx.response().putHeader("Location", "/").setStatusCode(HttpResponseStatus.FOUND.code()).end();
+                } else  {
+                    ctx.response().setStatusCode(errorStatus.code()).end(errorStatus.reasonPhrase());
+                }
             } else {
                 ctx.next();
             }
