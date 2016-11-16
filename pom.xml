@@ -46,6 +46,12 @@
             <artifactId>vertx-web</artifactId>
             <version>3.3.3</version>
         </dependency>
+        <!-- 去除vertx相关的编译警告 -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-codegen</artifactId>
+            <version>3.3.3</version>
+        </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>

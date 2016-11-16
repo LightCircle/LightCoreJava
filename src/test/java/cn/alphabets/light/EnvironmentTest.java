@@ -3,7 +3,7 @@ package cn.alphabets.light;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Config Test
@@ -14,7 +14,7 @@ public class EnvironmentTest {
     @Test
     public void testInstance() {
 
-        Helper.setEnv(new HashMap<String, String>(){{
+        Helper.setEnv(new ConcurrentHashMap<String, String>(){{
             put(Constant.ENV_LIGHT_APP_NAME, "DOMAIN");
             put(Constant.ENV_LIGHT_APP_PORT, "8000");
             put(Constant.ENV_LIGHT_MONGO_HOST, "localhost");

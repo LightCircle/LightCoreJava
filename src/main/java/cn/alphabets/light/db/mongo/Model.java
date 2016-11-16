@@ -72,6 +72,7 @@ public class Model {
         return this.list(condition, fieldNames, null, 0, Constant.DEFAULT_LIMIT);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends ModBase> List<T> list(
             Document condition,
             List<String> fieldNames,
@@ -113,6 +114,7 @@ public class Model {
         return this.get(condition, null);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends ModBase> T get(Document condition, List<String> fieldNames) {
 
         // default value

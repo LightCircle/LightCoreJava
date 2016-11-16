@@ -14,10 +14,11 @@ import org.bson.types.ObjectId;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * SessionImpl
  * Created by luohao on 16/10/23.
  */
 public class SessionImpl implements Session, ClusterSerializable, Shareable {
@@ -137,7 +138,7 @@ public class SessionImpl implements Session, ClusterSerializable, Shareable {
 
     private Map<String, Object> getData() {
         if (data == null) {
-            data = new HashMap<>();
+            data = new ConcurrentHashMap<>();
         }
         return data;
     }
@@ -206,7 +207,7 @@ public class SessionImpl implements Session, ClusterSerializable, Shareable {
         try {
             int entries = buffer.getInt(pos);
             pos += 4;
-            data = new HashMap<>(entries);
+            data = new ConcurrentHashMap<>(entries);
             for (int i = 0; i < entries; i++) {
                 int keylen = buffer.getInt(pos);
                 pos += 4;

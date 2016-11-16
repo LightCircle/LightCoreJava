@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +16,7 @@ public class HelperTest {
 
     @Test
     public void testSetEnv() {
-        Map<String, String> env = new HashMap<String, String>(){{
+        Map<String, String> env = new ConcurrentHashMap<String, String>(){{
             put("key1", "val1");
             put("key2", "val2");
         }};

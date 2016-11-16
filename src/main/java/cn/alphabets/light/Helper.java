@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,7 +51,7 @@ public class Helper {
     }
 
     public static void setEnv(String key, String value) {
-        Map<String, String> env = new HashMap<String, String>() {{
+        Map<String, String> env = new ConcurrentHashMap<String, String>() {{
             put(key, value);
         }};
 
