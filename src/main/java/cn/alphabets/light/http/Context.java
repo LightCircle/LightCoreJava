@@ -8,6 +8,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 import org.apache.commons.lang3.StringUtils;
@@ -129,6 +130,23 @@ public class Context {
         this.uid = uid;
     }
 
+    public String getLang() {
+
+        // The cookie takes precedence
+        Cookie uaLang = this.ctx.getCookie(Constant.COOKIE_KEY_LANG);
+        if (uaLang != null) {
+            return uaLang.getValue();
+        }
+
+        // Ping available languages
+        uaLang = this.ctx.getCookie((Constant.COOKIE_KEY_ACCEPT_LANGUAGE));
+        if (uaLang != null) {
+            return uaLang.getValue().split(",")[0];
+        }
+
+        return "zh";
+    }
+
     private String domain;
     private String code;
     private String uid;
@@ -136,6 +154,7 @@ public class Context {
     public static class Params {
 
         private Document json;
+
         public Params(Document json) {
             this.json = json;
             this.condition = (Document) json.get("condition");

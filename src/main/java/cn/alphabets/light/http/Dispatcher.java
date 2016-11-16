@@ -12,10 +12,13 @@ import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.http.exception.RenderException;
 import cn.alphabets.light.model.DataRider;
+import com.sun.org.apache.xml.internal.security.utils.I18n;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.sun.tools.doclint.Entity.or;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
@@ -87,7 +91,7 @@ public class Dispatcher {
                 try {
                     data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
                 } catch (InvocationTargetException e) {
-                    e.getTargetException().printStackTrace(); // TODO: to log
+                    logger.error(e.getTargetException());
 
                     // is LightException send error to client
 
@@ -95,7 +99,7 @@ public class Dispatcher {
 
                     throw new ProcessingException(e);
                 } catch (IllegalAccessException | InstantiationException e) {
-                    e.printStackTrace(); // TODO: to log
+                    logger.error(e);
                     throw new ProcessingException(e);
                 }
 
@@ -130,7 +134,11 @@ public class Dispatcher {
                     if (method != null) {
                         try {
                             data = method.invoke(method.getDeclaringClass().newInstance(), handler);
-                        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        } catch (InvocationTargetException e) {
+                            logger.error(e.getTargetException());
+                            throw new ProcessingException(e);
+                        } catch (IllegalAccessException | InstantiationException e) {
+                            logger.error(e);
                             throw new ProcessingException(e);
                         }
 
@@ -160,13 +168,16 @@ public class Dispatcher {
             r.failureHandler(getFailureHandler());
             r.blockingHandler(ctx -> {
 
-                final Context context = new Context(ctx);
+                final Context handler = new Context(ctx);
 
                 // Try lookup controller class
-                final Object customized = invoke(route, context);
+                final Object customized = invoke(route, handler);
 
                 // Define multiple template functions
-                Helper.TemplateFunction i = new Helper.TemplateFunction("i", (args) -> I18N.i((String) args.get(0)));
+                Helper.TemplateFunction i = new Helper.TemplateFunction("i", (args) -> {
+                    String lang = handler.getLang(), key = (String) args.get(0);
+                    return I18N.i(lang, key);
+                });
                 Helper.TemplateFunction dynamic = new Helper.TemplateFunction("dynamic", (args) -> {
                     String url = (String) args.get(0);
                     String stamp = this.conf.getString("app.stamp");
@@ -177,13 +188,13 @@ public class Dispatcher {
 
                 // Create a template parameter
                 Map<String, Object> model = new ConcurrentHashMap<String, Object>() {{
-                    put("req", context.req());
-                    put("handler", context);
+                    put("req", handler.req());
+                    put("handler", handler);
                     put("conf", Environment.instance());
 
                 }};
-                if (context.user() != null) {
-                    model.put("user", context.user());
+                if (handler.user() != null) {
+                    model.put("user", handler.user());
                 }
                 if (customized != null) {
                     model.put("data", customized);
@@ -218,7 +229,11 @@ public class Dispatcher {
 
         try {
             return method.invoke(method.getDeclaringClass().newInstance(), handler);
-        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+        } catch (InvocationTargetException e) {
+            logger.error(e.getTargetException());
+            throw new RenderException(e);
+        } catch (IllegalAccessException | InstantiationException e) {
+            logger.error(e);
             throw new RenderException(e);
         }
     }
@@ -270,4 +285,5 @@ public class Dispatcher {
             }
         };
     }
+
 }

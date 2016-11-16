@@ -4,8 +4,8 @@
 
 Host : <%=conf.mongodb.host%>
 <%= dynamic("/Hello") %>
-<%~  if (state) %>
-  <%=  i("Hello") %>
+<%~  if (state == false) %>
+<%=  i("Hello") %>
 <%~ endif %>
 
 <%~ include 'accounts_sub.html' %>

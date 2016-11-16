@@ -40,13 +40,14 @@ public class Constant {
     public static final String MODEL_PREFIX = "Mod";
     public static final String DEFAULT_TENANT = "Default";
     public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
-    public static final Integer DEFAULT_LIMIT = 100;        // 一次允许获取的数据库记录数
-    public static final Integer MAX_LIMIT = 10000;          // 数据库记录的最大值数, 超过这个应该使用Cursor
-    public static final Integer VALID = 1;                  // 有效数据库记录
-    public static final Integer INVALID = 0;                // 无效数据库记录
+    public static final Integer DEFAULT_LIMIT = 100;                            // 一次允许获取的数据库记录数
+    public static final Integer MAX_LIMIT = 10000;                              // 数据库记录的最大值数, 超过这个应该使用Cursor
+    public static final Integer VALID = 1;                                      // 有效数据库记录
+    public static final Integer INVALID = 0;                                    // 无效数据库记录
 
-    public static final Long KIND_BOARD_PROCESS_API = 1L;   // 处理类型API
-    public static final Long KIND_BOARD_DATA_API = 2L;      // 数据类型API
+    public static final Long KIND_BOARD_PROCESS_API = 1L;                       // 处理类型API
+    public static final Long KIND_BOARD_DATA_API = 2L;                          // 数据类型API
 
-
+    public static final String COOKIE_KEY_LANG = "light.lang";
+    public static final String COOKIE_KEY_ACCEPT_LANGUAGE = "Accept-Language";
 }

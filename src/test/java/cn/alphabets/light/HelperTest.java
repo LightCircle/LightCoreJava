@@ -70,7 +70,6 @@ public class HelperTest {
         String result = Helper.loadTemplate("view/accounts.html", map, Arrays.asList(dynamic, i));
         Assert.assertTrue(result.contains("Host : 127.0.0.1"));
         Assert.assertTrue(result.contains("Hello : dynamic"));
-        Assert.assertTrue(result.contains("Hello : i"));
         Assert.assertTrue(result.contains("Sub"));
     }
 
