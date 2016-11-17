@@ -4,7 +4,9 @@ import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,8 +17,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HelperTest {
 
     @Test
+    public void testGetMimeType() throws FileNotFoundException {
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream inputStream;
+
+        inputStream = classLoader.getResourceAsStream("tmp/logo.png");
+        Assert.assertEquals("image/png", Helper.getContentType(inputStream));
+
+        inputStream = classLoader.getResourceAsStream("view/accounts.html");
+        Assert.assertEquals("text/html", Helper.getContentType(inputStream));
+
+        inputStream = classLoader.getResourceAsStream("config.yml");
+        Assert.assertEquals("text/plain", Helper.getContentType(inputStream));
+
+        inputStream = classLoader.getResourceAsStream("log4j2.xml");
+        Assert.assertEquals("application/xml", Helper.getContentType(inputStream));
+    }
+
+    @Test
     public void testSetEnv() {
-        Map<String, String> env = new ConcurrentHashMap<String, String>(){{
+        Map<String, String> env = new ConcurrentHashMap<String, String>() {{
             put("key1", "val1");
             put("key2", "val2");
         }};

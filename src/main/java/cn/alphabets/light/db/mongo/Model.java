@@ -2,19 +2,26 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
+import cn.alphabets.light.Helper;
 import cn.alphabets.light.model.ModBase;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import com.mongodb.client.model.Projections;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -153,6 +160,92 @@ public class Model {
     public List<String> add(List<Document> document) {
         this.collection.insertMany(document);
         return document.stream().map(item -> item.get("_id").toString()).collect(Collectors.toList());
+    }
+
+    /**
+     * Write the file to GridFS
+     *
+     * @param path full path
+     * @return file meta info
+     */
+    public Document writeFileToGrid(String path) {
+
+        File file = new File(path);
+        if (!file.exists()) {
+            return null;
+        }
+
+        FileInputStream stream;
+        String contentType;
+        try {
+            stream = new FileInputStream(file);
+            contentType = Helper.getContentType(stream);    // get content type
+            stream.getChannel().position(0);                // Resets the file stream position
+        } catch (IOException e) {
+            logger.error(e);
+            return null;
+        }
+
+        return this.writeStreamToGrid(file.getName(), stream, contentType);
+    }
+
+    /**
+     * Writes a stream to GridFS
+     *
+     * @param name        file name
+     * @param stream      stream
+     * @param contentType file content-type
+     * @return file meta info
+     */
+    public Document writeStreamToGrid(String name, InputStream stream, String contentType) {
+
+        // create a gridFSBucket using the default bucket name "fs"
+        GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
+
+        // create some custom options
+        Document meta = new Document("contentType", contentType);
+        GridFSUploadOptions options = new GridFSUploadOptions().metadata(meta);
+
+        // upload stream
+        ObjectId fileId = gridFSBucket.uploadFromStream(name, stream, options);
+        GridFSFile fs = gridFSBucket.find(new Document("_id", fileId)).first();
+
+        meta.put("name", fs.getFilename());
+        meta.put("length", fs.getLength());
+        meta.put("fileId", fileId);
+
+        return meta;
+    }
+
+    /**
+     * Reads the stream from GridFS
+     *
+     * @param fileId       file id
+     * @param outputStream stream
+     * @return file meta info
+     */
+    public Document readStreamFromGrid(String fileId, OutputStream outputStream) {
+        return this.readStreamFromGrid(new ObjectId(fileId), outputStream);
+    }
+
+    public Document readStreamFromGrid(ObjectId fileId, OutputStream outputStream) {
+
+        GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
+
+        gridFSBucket.downloadToStream(fileId, outputStream);
+        GridFSFile fs = gridFSBucket.find(new Document("_id", fileId)).first();
+
+        Document meta = new Document();
+        meta.put("name", fs.getFilename());
+        meta.put("length", fs.getLength());
+        meta.put("contentType", fs.getMetadata().get("contentType"));
+        meta.put("fileId", fileId);
+
+        return meta;
+    }
+
+    public void deleteFromGrid(ObjectId fileId) {
+        GridFSBuckets.create(this.db).delete(fileId);
     }
 
     private Class getModelType() {

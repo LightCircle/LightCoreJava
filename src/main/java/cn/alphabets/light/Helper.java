@@ -2,6 +2,12 @@ package cn.alphabets.light;
 
 import io.vertx.core.http.HttpServerRequest;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.sax.BodyContentHandler;
 import org.bson.Document;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
@@ -12,7 +18,10 @@ import org.jtwig.environment.EnvironmentFactory;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.resource.reference.ResourceReference;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
@@ -26,6 +35,25 @@ import java.util.regex.Pattern;
  * Helper
  */
 public class Helper {
+
+    /**
+     * Speculate Content-Type from a file
+     *
+     * @param stream file stream
+     * @return content type
+     */
+    public static String getContentType(InputStream stream) {
+
+        Metadata metadata = new Metadata();
+        Parser parser = new AutoDetectParser();
+        try {
+            parser.parse(stream, new BodyContentHandler(), metadata, new ParseContext());
+        } catch (IOException | SAXException | TikaException e) {
+            return null;
+        }
+
+        return metadata.get(Metadata.CONTENT_TYPE);
+    }
 
     /**
      * Set the system environment variables

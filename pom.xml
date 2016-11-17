@@ -109,6 +109,12 @@
             <artifactId>jtwig-core</artifactId>
             <version>5.65</version>
         </dependency>
+        <!-- 提取文件的MimeType -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>1.14</version>
+        </dependency>
 
     </dependencies>
 </project>
