@@ -115,7 +115,7 @@ public class ModBase implements Serializable {
         return null;
     }
 
-    public static <T> T fromDoc(Document doc, Class<T> clz) {
+    public static <T extends ModBase> T fromDoc(Document doc, Class<T> clz) {
         if (doc == null) {
             return null;
         }
@@ -130,6 +130,7 @@ public class ModBase implements Serializable {
 
     public Document toDoc() {
         try {
+            // TODO:自己写转换方法？
             return Document.parse(objectMapper.writeValueAsString(this));
         } catch (JsonProcessingException e) {
             logger.error("error fromDoc", e);

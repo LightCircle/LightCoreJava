@@ -36,6 +36,7 @@ public class Constant {
     public static final String SYSTEM_DB_BOARD = "board";
     public static final String SYSTEM_DB_ROUTE = "route";
     public static final String SYSTEM_DB_TENANT = "tenant";
+    public static final String SYSTEM_DB_FILE = "file";
 
     public static final String MODEL_PREFIX = "Mod";
     public static final String DEFAULT_TENANT = "Default";
@@ -50,4 +51,14 @@ public class Constant {
 
     public static final String COOKIE_KEY_LANG = "light.lang";
     public static final String COOKIE_KEY_ACCEPT_LANGUAGE = "Accept-Language";
+
+    public static final String PARAM_FILES = "files";
+    public static final String PARAM_FILE_NAME = "filename";
+    public static final String PARAM_FILE_TYPE = "content_type";
+    public static final String PARAM_FILE_PHYSICAL = "file";
+    public static final String PARAM_CONDITION = "condition";
+    public static final String PARAM_ID = "id";
+    public static final String PARAM_DATA = "data";
+    public static final String PARAM_SKIP = "skip";
+    public static final String PARAM_LIMIT = "limit";
 }

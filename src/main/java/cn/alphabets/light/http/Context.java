@@ -9,12 +9,15 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Cookie;
+import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Context
@@ -51,10 +54,19 @@ public class Context {
 
         // TODO: url path params
 
-        // TODO: file
+        // file
+        if (ctx.fileUploads().size() > 0) {
+            Set<FileUpload> uploads = ctx.fileUploads();
+            List<Document> files = uploads.stream().map((x) -> {
+                Document file = new Document(Constant.PARAM_FILE_NAME, x.fileName());
+                file.put(Constant.PARAM_FILE_TYPE, x.contentType());
+                file.put(Constant.PARAM_FILE_PHYSICAL, x.uploadedFileName());
+                return file;
+            }).collect(Collectors.toList());
+            parameter.put(Constant.PARAM_FILES, files);
+        }
 
         log.debug(parameter.toJson());
-
         this.params = new Params(parameter);
     }
 
@@ -153,22 +165,22 @@ public class Context {
 
     public static class Params {
 
-        private Document json;
-
+        @SuppressWarnings("unchecked")
         public Params(Document json) {
             this.json = json;
-            this.condition = (Document) json.get("condition");
-            this.id = json.getString("id");
-            this.data = json.get("data");
+            this.condition = (Document) json.get(Constant.PARAM_CONDITION);
+            this.id = json.getString(Constant.PARAM_ID);
+            this.data = json.get(Constant.PARAM_DATA);
             this.skip = 0;
             this.limit = Constant.DEFAULT_LIMIT;
+            this.files = (List<Document>)json.get(Constant.PARAM_FILES);
 
-            String skip = json.getString("skip");
+            String skip = json.getString(Constant.PARAM_SKIP);
             if (StringUtils.isNotEmpty(skip)) {
                 this.skip = Integer.parseInt(skip);
             }
 
-            String limit = json.getString("limit");
+            String limit = json.getString(Constant.PARAM_LIMIT);
             if (StringUtils.isNotEmpty(limit)) {
                 this.limit = Integer.parseInt(limit);
             }
@@ -176,7 +188,6 @@ public class Context {
             // TODO
             //select;
             //sort;
-            //files;
         }
 
         public String getString(String key) {
@@ -206,7 +217,7 @@ public class Context {
             this.data = data.toDoc();
         }
 
-        public void setDataList(List<ModBase> data) {
+        public void setDataList(List<? extends ModBase> data) {
             this.data = data;
         }
 
@@ -242,11 +253,11 @@ public class Context {
             this.sort = sort;
         }
 
-        public List<Object> getFiles() {
+        public List<Document> getFiles() {
             return files;
         }
 
-        public void setFiles(List<Object> files) {
+        public void setFiles(List<Document> files) {
             this.files = files;
         }
 
@@ -266,12 +277,13 @@ public class Context {
             this.limit = limit;
         }
 
+        private Document json;
         private Document condition;
         private Object data;
         private Object id;
         private List<String> select;
         private List<String> sort;
-        private List<Object> files;
+        private List<Document> files;
         private int skip;
         private int limit;
     }

@@ -2,6 +2,7 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
+import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.entity.ModI18n;
 import org.bson.Document;
 import org.junit.Assert;
@@ -22,7 +23,7 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ModelTest {
 
-    private static Document document;
+    private static ModFile document;
 
     @Before
     public void setUp() {
@@ -60,7 +61,7 @@ public class ModelTest {
 
         document = model.writeStreamToGrid("test", inputStream, "image/png");
         Assert.assertNotNull(document);
-        Assert.assertTrue(document.getLong("length") > 0);
+        Assert.assertTrue(document.getLength() > 0);
     }
 
     @Test
@@ -68,19 +69,19 @@ public class ModelTest {
 
         Model model = new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
 
-        FileOutputStream outputStream = new FileOutputStream(document.getString("name"));
-        Document output = model.readStreamFromGrid(document.getObjectId("fileId"), outputStream);
+        FileOutputStream outputStream = new FileOutputStream(document.getName());
+        ModFile output = model.readStreamFromGrid(document.getFileId(), outputStream);
         Assert.assertNotNull(output);
         outputStream.close();
 
         // Delete the temporary file
-        boolean delete = new File(document.getString("name")).delete();
+        boolean delete = new File(document.getName()).delete();
         Assert.assertTrue(delete);
     }
 
     @Test
     public void test_AC_DeleteFromGrid() throws IOException {
-        new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX).deleteFromGrid(document.getObjectId("fileId"));
+        new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX).deleteFromGrid(document.getFileId());
     }
 
     @Test
@@ -90,11 +91,11 @@ public class ModelTest {
 
         document = model.writeFileToGrid("pom.xml");
         Assert.assertNotNull(document);
-        Assert.assertTrue(document.getLong("length") > 0);
+        Assert.assertTrue(document.getLength() > 0);
     }
 
     @Test
     public void test_BB_DeleteFromGrid() throws IOException {
-        new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX).deleteFromGrid(document.getObjectId("fileId"));
+        new Model(Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX).deleteFromGrid(document.getFileId());
     }
 }

@@ -11,6 +11,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -137,7 +138,7 @@ public class MockRoutingContext implements RoutingContext {
 
     @Override
     public Set<FileUpload> fileUploads() {
-        return null;
+        return new HashSet<>();
     }
 
     @Override

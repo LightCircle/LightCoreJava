@@ -1,15 +1,18 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.ModBase;
 import cn.alphabets.light.model.Plural;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller
@@ -20,9 +23,16 @@ public class Controller {
     private Context.Params params;
     private String uid;
 
+    public Controller(Context handler) {
+        this.model = new Model(handler.getDomain(), handler.getCode());
+        this.params = handler.params;
+        this.uid = handler.uid();
+    }
+
     public Controller(Context handler, Class table) {
         this(handler, table.getSimpleName().toLowerCase());
     }
+
     public Controller(Context handler, String table) {
         this.model = new Model(handler.getDomain(), handler.getCode(), table);
         this.params = handler.params;
@@ -44,32 +54,46 @@ public class Controller {
         return new Plural<>(this.count(), items);
     }
 
-    public String add() {
+    /**
+     * Add document
+     *
+     * @param <T> ModBase
+     * @return document
+     */
+    public <T extends ModBase> List<T> add() {
 
-        if (this.params.getData() instanceof List) {
-            List<Document> data = new ArrayList<>();
-            for (Object json: (List)this.params.getData()) {
-                Document document = (Document) json;
-                document.put("createAt", new Date());
-                document.put("updateAt", new Date());
-                document.put("createBy", this.uid);
-                document.put("updateBy", this.uid);
-                document.put("valid", Constant.VALID);
-                document.remove("_id");
-                data.add(document);
-            }
+        List<Object> data;
+        Object object = this.params.getData();
 
-            return this.model.add(data).get(0);
+        // Transforms a single object into a list
+        if (object instanceof List) {
+            data = (List<Object>) object;
+        } else {
+            data = new ArrayList<>();
+            data.add(object);
         }
 
-        Document document = (Document)this.params.getData();
-        document.put("createAt", new Date());
-        document.put("updateAt", new Date());
-        document.put("createBy", this.uid);
-        document.put("updateBy", this.uid);
-        document.put("valid", Constant.VALID);
-        document.remove("_id");
-        return this.model.add(document);
+        List<Document> documents =  data.stream().map((x) -> {
+
+            Document document;
+
+            // If ModBase, need to be converted to Document
+            if (x instanceof ModBase) {
+                document = ((ModBase)x).toDoc();
+            } else {
+                document = (Document)x;
+            }
+
+            document.put("createAt", new Date());
+            document.put("updateAt", new Date());
+            document.put("createBy", this.uid);
+            document.put("updateBy", this.uid);
+            document.put("valid", Constant.VALID);
+            document.remove("_id");
+            return document;
+        }).collect(Collectors.toList());
+
+        return this.model.add(documents);
     }
 
     public Long count() {
@@ -86,7 +110,7 @@ public class Controller {
 
         if (this.params.getId() != null) {
             Object id = this.params.getId();
-            condition.put("_id", (id instanceof String) ? new ObjectId((String)id) : id);
+            condition.put("_id", (id instanceof String) ? new ObjectId((String) id) : id);
         } else {
             condition.putAll(this.params.getCondition());
         }
@@ -104,7 +128,7 @@ public class Controller {
 
         if (this.params.getId() != null) {
             Object id = this.params.getId();
-            condition.put("_id", (id instanceof String) ? new ObjectId((String)id) : id);
+            condition.put("_id", (id instanceof String) ? new ObjectId((String) id) : id);
         } else {
             condition.putAll(this.params.getCondition());
         }
@@ -119,7 +143,7 @@ public class Controller {
 
         if (this.params.getId() != null) {
             Object id = this.params.getId();
-            condition.put("_id", (id instanceof String) ? new ObjectId((String)id) : id);
+            condition.put("_id", (id instanceof String) ? new ObjectId((String) id) : id);
         } else {
             condition.putAll(this.params.getCondition());
         }
@@ -130,5 +154,12 @@ public class Controller {
 
         assert condition.size() > 0 : "The remove condition can not be null";
         return this.model.remove(condition);
+    }
+
+    public List<ModFile> writeFileToGrid() {
+
+        return this.params.getFiles().stream().map((document) ->
+                this.model.writeFileToGrid(document)
+        ).collect(Collectors.toList());
     }
 }

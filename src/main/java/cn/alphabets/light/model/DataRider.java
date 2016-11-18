@@ -46,8 +46,13 @@ public class DataRider {
         this.boards = CacheManager.INSTANCE.getBoards();
     }
 
-    public String add(Context handler) {
-        return (String) this.call(handler);
+    @SuppressWarnings("unchecked")
+    public <T extends ModBase> T add(Context handler) {
+        List<T> result = (List<T>) this.call(handler);
+        if (result.size() > 0) {
+            return result.get(0);
+        }
+        return null;
     }
 
     public String update() {

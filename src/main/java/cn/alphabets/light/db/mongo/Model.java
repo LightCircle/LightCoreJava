@@ -3,6 +3,7 @@ package cn.alphabets.light.db.mongo;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
+import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.model.ModBase;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Indexes.descending;
 
@@ -152,14 +152,16 @@ public class Model {
         return this.collection.count(condition);
     }
 
-    public String add(Document document) {
-        this.collection.insertOne(document);
-        return document.get("_id").toString();
-    }
+    @SuppressWarnings("unchecked")
+    public <T extends ModBase> List<T> add(List<Document> document) {
 
-    public List<String> add(List<Document> document) {
         this.collection.insertMany(document);
-        return document.stream().map(item -> item.get("_id").toString()).collect(Collectors.toList());
+
+        List<T> result = new ArrayList<>();
+        document.forEach((x) ->
+                result.add((T) ModBase.fromDoc(x, this.getModelType()))
+        );
+        return result;
     }
 
     /**
@@ -168,7 +170,7 @@ public class Model {
      * @param path full path
      * @return file meta info
      */
-    public Document writeFileToGrid(String path) {
+    public ModFile writeFileToGrid(String path) {
 
         File file = new File(path);
         if (!file.exists()) {
@@ -189,6 +191,21 @@ public class Model {
         return this.writeStreamToGrid(file.getName(), stream, contentType);
     }
 
+
+    public ModFile writeFileToGrid(Document meta) {
+
+        String name = meta.getString(Constant.PARAM_FILE_NAME);
+        String type = meta.getString(Constant.PARAM_FILE_TYPE);
+
+        try {
+            FileInputStream stream = new FileInputStream(new File(meta.getString(Constant.PARAM_FILE_PHYSICAL)));
+            return this.writeStreamToGrid(name, stream, type);
+        } catch (FileNotFoundException e) {
+            logger.error(e);
+            return null;
+        }
+    }
+
     /**
      * Writes a stream to GridFS
      *
@@ -197,7 +214,7 @@ public class Model {
      * @param contentType file content-type
      * @return file meta info
      */
-    public Document writeStreamToGrid(String name, InputStream stream, String contentType) {
+    public ModFile writeStreamToGrid(String name, InputStream stream, String contentType) {
 
         // create a gridFSBucket using the default bucket name "fs"
         GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
@@ -210,11 +227,13 @@ public class Model {
         ObjectId fileId = gridFSBucket.uploadFromStream(name, stream, options);
         GridFSFile fs = gridFSBucket.find(new Document("_id", fileId)).first();
 
-        meta.put("name", fs.getFilename());
-        meta.put("length", fs.getLength());
-        meta.put("fileId", fileId);
+        ModFile file = new ModFile();
+        file.setName(fs.getFilename());
+        file.setLength(fs.getLength());
+        file.setContentType(fs.getMetadata().getString("contentType"));
+        file.setFileId(fileId);
 
-        return meta;
+        return file;
     }
 
     /**
@@ -224,24 +243,24 @@ public class Model {
      * @param outputStream stream
      * @return file meta info
      */
-    public Document readStreamFromGrid(String fileId, OutputStream outputStream) {
+    public ModFile readStreamFromGrid(String fileId, OutputStream outputStream) {
         return this.readStreamFromGrid(new ObjectId(fileId), outputStream);
     }
 
-    public Document readStreamFromGrid(ObjectId fileId, OutputStream outputStream) {
+    public ModFile readStreamFromGrid(ObjectId fileId, OutputStream outputStream) {
 
         GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
 
         gridFSBucket.downloadToStream(fileId, outputStream);
         GridFSFile fs = gridFSBucket.find(new Document("_id", fileId)).first();
 
-        Document meta = new Document();
-        meta.put("name", fs.getFilename());
-        meta.put("length", fs.getLength());
-        meta.put("contentType", fs.getMetadata().get("contentType"));
-        meta.put("fileId", fileId);
+        ModFile file = new ModFile();
+        file.setName(fs.getFilename());
+        file.setLength(fs.getLength());
+        file.setContentType(fs.getMetadata().getString("contentType"));
+        file.setFileId(fileId);
 
-        return meta;
+        return file;
     }
 
     public void deleteFromGrid(ObjectId fileId) {

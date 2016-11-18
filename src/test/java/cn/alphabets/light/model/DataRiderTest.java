@@ -58,11 +58,11 @@ public class DataRiderTest {
 
         // add user
         handler.params.setData(user);
-        String result = rider.add(handler);
+        ModUser result = rider.add(handler);
         Assert.assertNotNull(result);
 
         // delete test user
-        handler.params.setId(result);
+        handler.params.setId(result.get_id());
         Long count = new Controller(handler, User.class).delete();
         Assert.assertTrue(1L == count);
     }

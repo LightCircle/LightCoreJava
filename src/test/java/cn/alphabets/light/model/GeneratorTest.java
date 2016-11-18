@@ -25,7 +25,20 @@ public class GeneratorTest {
 
         String pkg = Environment.instance().getPackages() + ".entity";
         List<String> target = Arrays.asList(
-                "board", "configuration", "i18n", "route", "structure", "tenant", "user", "validator"
+                "board", "configuration", "i18n", "route", "structure", "tenant", "validator",
+                "access",
+                "authority",
+                "role",
+                "user",
+                "group",
+                "category",
+                "file",
+                "code",
+                "form",
+                "place",
+                "function",
+                "setting",
+                "tag"
         );
 
         new Generator(pkg).generate(Constant.SYSTEM_DB, target);

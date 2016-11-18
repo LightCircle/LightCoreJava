@@ -11,6 +11,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 
 /**
  * ControllerTest
@@ -49,11 +51,12 @@ public class ControllerTest {
         Controller ctrl = new Controller(handler, "user");
 
         // add test user
-        String id = ctrl.add();
-        Assert.assertNotNull(id);
+        List<ModUser> users = ctrl.add();
+        Assert.assertNotNull(users);
+        Assert.assertTrue(users.size() > 0);
 
         // delete test user
-        handler.params.setId(id);
+        handler.params.setId(users.get(0).get_id());
         Long count = ctrl.delete();
         Assert.assertTrue(1L == count);
     }
