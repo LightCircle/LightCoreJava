@@ -1,6 +1,7 @@
 package cn.alphabets.light.model;
 
 import cn.alphabets.light.Environment;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.Assert;
@@ -48,10 +49,12 @@ public class ModBaseTest {
         son.setE(Arrays.asList(Arrays.asList("E", "F"), Arrays.asList("G", "H")));
         son.setF(Arrays.asList(Arrays.asList(daughter, daughter), Arrays.asList(daughter, daughter)));
         son.setG(Arrays.asList("I", daughter));
+        son.setI(true);
 
         Document doc = ModBase.toDocument(son);
         Assert.assertEquals(id, ((Document)doc.get("b")).get("k"));
         Assert.assertEquals("I", ((List)doc.get("g")).get(0));
+        Assert.assertTrue(doc.getBoolean("I"));
     }
 
     public static class ModSon extends ModBase {
@@ -62,6 +65,17 @@ public class ModBaseTest {
         private List<List<String>> e;
         private List<List<ModDaughter>> f;
         private List<Object> g;
+
+        @JsonProperty("I")
+        private Boolean i;
+
+        public Boolean getI() {
+            return i;
+        }
+
+        public void setI(Boolean i) {
+            this.i = i;
+        }
 
         public String getA() {
             return a;

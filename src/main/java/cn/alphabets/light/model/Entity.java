@@ -1,5 +1,6 @@
 package cn.alphabets.light.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
@@ -7,6 +8,7 @@ import org.bson.Document;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -95,7 +97,16 @@ public class Entity implements Serializable {
                     return;
                 }
 
-                properties.put(x.getName(), new PropertyDescriptor(x.getName(), clazz));
+                String key = x.getName();
+
+                // If there is an annontion definition, get the defined name
+                for (Annotation annotation : x.getDeclaredAnnotations()) {
+                    if (annotation instanceof JsonProperty) {
+                        key = ((JsonProperty) annotation).value();
+                    }
+                }
+
+                properties.put(key, new PropertyDescriptor(x.getName(), clazz));
             } catch (IntrospectionException e) {
 
                 // Ignore properties that do not have getter and setter methods
