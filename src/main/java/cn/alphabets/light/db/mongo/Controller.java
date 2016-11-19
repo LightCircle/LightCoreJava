@@ -133,7 +133,7 @@ public class Controller {
             condition.putAll(this.params.getCondition());
         }
 
-        assert condition.size() > 0 : "The delete condition can not be null";
+        assert condition.size() > 0 : "The delete condition can not be null.";
         return this.model.delete(condition);
     }
 
@@ -161,5 +161,9 @@ public class Controller {
         return this.params.getFiles().stream().map((document) ->
                 this.model.writeFileToGrid(document)
         ).collect(Collectors.toList());
+    }
+
+    public void deleteFromGrid() {
+        this.model.deleteFromGrid((ObjectId) this.params.getId());
     }
 }

@@ -2,9 +2,11 @@ package cn.alphabets.light.model;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
+import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import org.bson.Document;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class FileTest {
 
     private Context handler;
+    private static String id;
 
     @Before
     public void setUp() {
@@ -38,7 +41,17 @@ public class FileTest {
 
         files.add(file);
         handler.params.setFiles(files);
-        new File().add(handler);
+
+        Plural<ModFile> result = new File().add(handler);
+        Assert.assertTrue(result.getTotalItems() == 1);
+
+        id = result.getItems().get(0).get_id().toHexString();
+    }
+
+    @Test
+    public void testRemove() {
+        handler.params.setId(id);
+        new File().delete(handler);
     }
 
 }
