@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * Long Deserializer
- * Created by luohao on 2016/10/27.
+ * Created by lilin on 2016/10/27.
  */
 public class LongDeserializer extends JsonDeserializer<Long> {
 

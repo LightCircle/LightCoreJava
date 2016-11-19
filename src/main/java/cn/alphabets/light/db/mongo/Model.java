@@ -102,7 +102,7 @@ public class Model {
         // fetch and convert
         List<T> result = new ArrayList<>();
         projection.forEach((Block<? super Document>) document -> {
-            result.add((T) ModBase.fromDoc(document, this.getModelType()));
+            result.add((T) ModBase.fromDocument(document, this.getModelType()));
         });
         return result;
     }
@@ -133,7 +133,7 @@ public class Model {
         FindIterable<Document> projection = find.projection(Projections.include(fieldNames));
 
         Document document = find.first();
-        return (T) ModBase.fromDoc(document, this.getModelType());
+        return (T) ModBase.fromDocument(document, this.getModelType());
     }
 
     public Long remove(Document condition) {
@@ -159,7 +159,7 @@ public class Model {
 
         List<T> result = new ArrayList<>();
         document.forEach((x) ->
-                result.add((T) ModBase.fromDoc(x, this.getModelType()))
+                result.add((T) ModBase.fromDocument(x, this.getModelType()))
         );
         return result;
     }

@@ -88,8 +88,7 @@ public class Context {
     }
 
     public void setUser(ModBase user) {
-        String json = user.toJson();
-        ctx.session().put(Constant.SK_USER, json);
+        ctx.session().put(Constant.SK_USER, user);
     }
 
     public String getDomain() {

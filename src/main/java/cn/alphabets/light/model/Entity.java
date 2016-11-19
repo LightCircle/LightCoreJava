@@ -1,12 +1,16 @@
 package cn.alphabets.light.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +27,11 @@ import java.util.stream.Collectors;
  */
 public class Entity implements Serializable {
 
-    private static final Logger logger = LoggerFactory.getLogger(ModBase.class);
+    @JsonIgnore
+    private static final Logger logger = LoggerFactory.getLogger(Entity.class);
+
+    @JsonIgnore
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Converts list
@@ -116,6 +124,27 @@ public class Entity implements Serializable {
         // Including the parent class
         if (clazz.getSuperclass() != Object.class) {
             getProperties(clazz.getSuperclass(), properties);
+        }
+    }
+
+    /**
+     * Convert Document to a class
+     *
+     * @param document document
+     * @param clazz class type
+     * @param <T> Entity type
+     * @return class
+     */
+    public static <T extends ModBase> T fromDocument(Document document, Class<T> clazz) {
+        if (document == null) {
+            return null;
+        }
+
+        try {
+            return objectMapper.readValue(document.toJson(), clazz);
+        } catch (IOException e) {
+            logger.error(e);
+            throw new RuntimeException(e);
         }
     }
 }
