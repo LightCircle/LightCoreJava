@@ -16,7 +16,7 @@ import java.util.Date;
  * Created by luohao on 2016/10/27.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ModBase extends Entity {
+public class ModCommon extends Entity {
 
 
     private int valid;

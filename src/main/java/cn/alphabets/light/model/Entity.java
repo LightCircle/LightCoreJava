@@ -2,7 +2,6 @@ package cn.alphabets.light.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -135,7 +134,7 @@ public class Entity implements Serializable {
      * @param <T> Entity type
      * @return class
      */
-    public static <T extends ModBase> T fromDocument(Document document, Class<T> clazz) {
+    public static <T extends ModCommon> T fromDocument(Document document, Class<T> clazz) {
         if (document == null) {
             return null;
         }

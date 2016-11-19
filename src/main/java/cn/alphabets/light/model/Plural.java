@@ -6,7 +6,7 @@ import java.util.List;
  * PluralData
  * Created by lilin on 2016/11/13.
  */
-public class Plural<T extends ModBase> {
+public class Plural<T extends ModCommon> {
     public Plural(Long total, List<T> items) {
         this.totalItems = total;
         this.items = items;

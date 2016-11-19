@@ -16,7 +16,7 @@ import java.util.List;
  * ModBaseTest
  * Created by lilin on 2016/11/19.
  */
-public class ModBaseTest {
+public class ModCommonTest {
 
     @Before
     public void setUp() {
@@ -57,7 +57,7 @@ public class ModBaseTest {
         Assert.assertTrue(doc.getBoolean("I"));
     }
 
-    public static class ModSon extends ModBase {
+    public static class ModSon extends ModCommon {
         private String a;
         private ModDaughter b;
         private List<String> c;

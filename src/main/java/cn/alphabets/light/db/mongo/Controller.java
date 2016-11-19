@@ -4,7 +4,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.Entity;
-import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -39,7 +39,7 @@ public class Controller {
         this.uid = handler.uid();
     }
 
-    public <T extends ModBase> Plural<T> list() {
+    public <T extends ModCommon> Plural<T> list() {
 
         if (!this.params.getCondition().containsKey("valid")) {
             this.params.getCondition().put("valid", Constant.VALID);
@@ -60,7 +60,7 @@ public class Controller {
      * @param <T> ModBase
      * @return document
      */
-    public <T extends ModBase> List<T> add() {
+    public <T extends ModCommon> List<T> add() {
 
         List<Object> data;
         Object object = this.params.getData();
@@ -104,7 +104,7 @@ public class Controller {
         return this.model.count(this.params.getCondition());
     }
 
-    public <T extends ModBase> T get() {
+    public <T extends ModCommon> T get() {
 
         Document condition = new Document();
 

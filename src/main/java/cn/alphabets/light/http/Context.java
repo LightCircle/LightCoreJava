@@ -3,8 +3,7 @@ package cn.alphabets.light.http;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
-import cn.alphabets.light.model.Entity;
-import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.ModCommon;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.logging.Logger;
@@ -87,7 +86,7 @@ public class Context {
         return ctx.session().get(Constant.SK_USER);
     }
 
-    public void setUser(ModBase user) {
+    public void setUser(ModCommon user) {
         ctx.session().put(Constant.SK_USER, user);
     }
 
@@ -130,7 +129,7 @@ public class Context {
             return this.uid;
         }
 
-        ModBase user = (ModBase) this.user();
+        ModCommon user = (ModCommon) this.user();
         if (user == null) {
             return null;
         }
@@ -213,11 +212,11 @@ public class Context {
             return data;
         }
 
-        public void setData(ModBase data) {
+        public void setData(ModCommon data) {
             this.data = data.toDocument();
         }
 
-        public void setDataList(List<? extends ModBase> data) {
+        public void setDataList(List<? extends ModCommon> data) {
             this.data = data;
         }
 

@@ -4,7 +4,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.entity.ModFile;
-import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.ModCommon;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -67,20 +67,20 @@ public class Model {
         logger.info("table : " + table);
     }
 
-    public <T extends ModBase> List<T> list() {
+    public <T extends ModCommon> List<T> list() {
         return this.list(null);
     }
 
-    public <T extends ModBase> List<T> list(Document condition) {
+    public <T extends ModCommon> List<T> list(Document condition) {
         return this.list(condition, null);
     }
 
-    public <T extends ModBase> List<T> list(Document condition, List<String> fieldNames) {
+    public <T extends ModCommon> List<T> list(Document condition, List<String> fieldNames) {
         return this.list(condition, fieldNames, null, 0, Constant.DEFAULT_LIMIT);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ModBase> List<T> list(
+    public <T extends ModCommon> List<T> list(
             Document condition,
             List<String> fieldNames,
             List<String> sortField,
@@ -102,7 +102,7 @@ public class Model {
         // fetch and convert
         List<T> result = new ArrayList<>();
         projection.forEach((Block<? super Document>) document -> {
-            result.add((T) ModBase.fromDocument(document, this.getModelType()));
+            result.add((T) ModCommon.fromDocument(document, this.getModelType()));
         });
         return result;
     }
@@ -117,12 +117,12 @@ public class Model {
         return result;
     }
 
-    public <T extends ModBase> T get(Document condition) {
+    public <T extends ModCommon> T get(Document condition) {
         return this.get(condition, null);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ModBase> T get(Document condition, List<String> fieldNames) {
+    public <T extends ModCommon> T get(Document condition, List<String> fieldNames) {
 
         // default value
         condition = condition == null ? new Document() : condition;
@@ -133,7 +133,7 @@ public class Model {
         FindIterable<Document> projection = find.projection(Projections.include(fieldNames));
 
         Document document = find.first();
-        return (T) ModBase.fromDocument(document, this.getModelType());
+        return (T) ModCommon.fromDocument(document, this.getModelType());
     }
 
     public Long remove(Document condition) {
@@ -153,13 +153,13 @@ public class Model {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ModBase> List<T> add(List<Document> document) {
+    public <T extends ModCommon> List<T> add(List<Document> document) {
 
         this.collection.insertMany(document);
 
         List<T> result = new ArrayList<>();
         document.forEach((x) ->
-                result.add((T) ModBase.fromDocument(x, this.getModelType()))
+                result.add((T) ModCommon.fromDocument(x, this.getModelType()))
         );
         return result;
     }

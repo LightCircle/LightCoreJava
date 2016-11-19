@@ -47,7 +47,7 @@ public class DataRider {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ModBase> T add(Context handler) {
+    public <T extends ModCommon> T add(Context handler) {
         List<T> result = (List<T>) this.call(handler);
         if (result.size() > 0) {
             return result.get(0);
@@ -64,12 +64,12 @@ public class DataRider {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ModBase> Plural<T> list(Context handler) {
+    public <T extends ModCommon> Plural<T> list(Context handler) {
         return (Plural<T>) this.call(handler);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ModBase> T get(Context handler) {
+    public <T extends ModCommon> T get(Context handler) {
         return (T) this.call(handler);
     }
 
