@@ -1,5 +1,6 @@
 package cn.alphabets.light.entity;
 
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModBase;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.lang.Boolean;
@@ -95,7 +96,7 @@ public class ModForm extends ModBase {
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Items {
+  public static final class Items extends Entity {
     private String lineColor;
 
     private List selectOption;

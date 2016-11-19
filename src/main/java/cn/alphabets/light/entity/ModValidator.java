@@ -1,5 +1,6 @@
 package cn.alphabets.light.entity;
 
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModBase;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -125,7 +126,7 @@ public class ModValidator extends ModBase {
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Condition {
+  public static final class Condition extends Entity {
     private String operator;
 
     private String parameter;

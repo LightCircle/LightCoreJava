@@ -21,7 +21,7 @@ import java.util.List;
  * ModelTest
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ModelTest {
+public class EntityTest {
 
     private static ModFile document;
 

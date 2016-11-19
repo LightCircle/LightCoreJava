@@ -141,7 +141,7 @@ public class ModBaseTest {
         }
     }
 
-    public static class ModDaughter extends Model {
+    public static class ModDaughter extends Entity {
 
         private ObjectId k;
 

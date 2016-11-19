@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * Model
  * Created by lilin on 2016/11/19.
  */
-public class Model implements Serializable {
+public class Entity implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ModBase.class);
 
@@ -32,7 +32,7 @@ public class Model implements Serializable {
     public static List<?> parseList(List<?> list) {
 
         return list.stream().map((x) -> {
-            if (x instanceof Model) {
+            if (x instanceof Entity) {
                 return toDocument(x);
             }
 
@@ -65,7 +65,7 @@ public class Model implements Serializable {
                     val = parseList((List) val);
                 }
 
-                if (val instanceof Model) {
+                if (val instanceof Entity) {
                     val = toDocument(val);
                 }
 

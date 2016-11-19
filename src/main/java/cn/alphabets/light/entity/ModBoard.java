@@ -1,5 +1,6 @@
 package cn.alphabets.light.entity;
 
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModBase;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -146,7 +147,7 @@ public class ModBoard extends ModBase {
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Filters {
+  public static final class Filters extends Entity {
     @JsonProperty("default")
     private String default_;
 
@@ -212,7 +213,7 @@ public class ModBoard extends ModBase {
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Selects {
+  public static final class Selects extends Entity {
     private String key;
 
     private String link;
@@ -327,7 +328,7 @@ public class ModBoard extends ModBase {
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Sorts {
+  public static final class Sorts extends Entity {
     private String key;
 
     private String order;

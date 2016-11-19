@@ -100,6 +100,7 @@ public class Generator {
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(WordUtils.capitalize(name))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                .superclass(Entity.class)
                 .addAnnotation(annotation);
 
         items.entrySet().forEach(item -> this.subClass(builder, item.getKey(), (Document) item.getValue()));
