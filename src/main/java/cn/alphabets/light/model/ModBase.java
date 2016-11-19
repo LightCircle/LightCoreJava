@@ -15,16 +15,27 @@ import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * ModBase
  * Created by luohao on 2016/10/27.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ModBase implements Serializable {
+public class ModBase extends Model {
 
     @JsonIgnore
     private static final Logger logger = LoggerFactory.getLogger(ModBase.class);

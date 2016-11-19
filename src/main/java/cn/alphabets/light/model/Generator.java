@@ -16,6 +16,8 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Generator
@@ -162,40 +164,23 @@ public class Generator {
 
         type = type.toLowerCase().trim();
 
-        if ("string".equals(type)) {
-            return String.class;
-        }
-
-        if ("date".equals(type)) {
-            return Date.class;
-        }
-
-        if ("int".equals(type)) {
-            return Integer.class;
-        }
-
-        if ("number".equals(type)) {
-            return Long.class;
-        }
-
-        if ("array".equals(type)) {
-            return List.class;
-        }
-
-        if ("boolean".equals(type)) {
-            return Boolean.class;
-        }
-
-        if ("objectid".equals(type)) {
-            return ObjectId.class;
-        }
-
-        if ("object".equals(type)) {
-            return Object.class;
+        if (types.containsKey(type)) {
+            return types.get(type);
         }
 
         return String.class;
     }
+
+    private final static Map<String, Type> types = new ConcurrentHashMap<String, Type>() {{
+        put("string", String.class);
+        put("date", Date.class);
+        put("int", Integer.class);
+        put("number", Long.class);
+        put("array", List.class);
+        put("boolean", Boolean.class);
+        put("objectid", ObjectId.class);
+        put("object", Object.class);
+    }};
 
     private final static List<String> lightReserved = Arrays.asList(
             "_id",
