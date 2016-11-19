@@ -31,11 +31,11 @@ public class Entity implements Serializable {
      * @param list list
      * @return result
      */
-    public static List<?> parseList(List<?> list) {
+    private List<?> parseList(List<?> list) {
 
         return list.stream().map((x) -> {
             if (x instanceof Entity) {
-                return toDocument(x);
+                return ((Entity) x).toDocument();
             }
 
             if (x instanceof List) {
@@ -49,26 +49,25 @@ public class Entity implements Serializable {
     /**
      * Converts an object to a Document
      *
-     * @param object object
      * @return document
      */
-    public static Document toDocument(Object object) {
+    public Document toDocument() {
 
         Map<String, PropertyDescriptor> properties = new ConcurrentHashMap<>();
-        getProperties(object.getClass(), properties);
+        getProperties(this.getClass(), properties);
 
         Document documentt = new Document();
         properties.forEach((key, property) -> {
             try {
 
-                Object val = property.getReadMethod().invoke(object);
+                Object val = property.getReadMethod().invoke(this);
 
                 if (val instanceof List) {
                     val = parseList((List) val);
                 }
 
                 if (val instanceof Entity) {
-                    val = toDocument(val);
+                    val = ((Entity) val).toDocument();
                 }
 
                 documentt.put(key, val);
@@ -87,7 +86,7 @@ public class Entity implements Serializable {
      * @param clazz      class type
      * @param properties result
      */
-    public static void getProperties(Class clazz, Map<String, PropertyDescriptor> properties) {
+    private static void getProperties(Class clazz, Map<String, PropertyDescriptor> properties) {
 
         Arrays.stream(clazz.getDeclaredFields()).forEach((x) -> {
             try {

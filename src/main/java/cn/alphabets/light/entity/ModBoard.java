@@ -2,8 +2,10 @@ package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.deserializer.LongDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Boolean;
 import java.lang.Long;
 import java.lang.String;
@@ -19,8 +21,14 @@ public class ModBoard extends ModBase {
 
   private List<Filters> filters;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long kind;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long type;
 
   private List<Selects> selects;
@@ -234,6 +242,9 @@ public class ModBoard extends ModBase {
 
     private Boolean display;
 
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
     private Long reserved;
 
     public String getKey() {
@@ -335,6 +346,9 @@ public class ModBoard extends ModBase {
 
     private String dynamic;
 
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
     private Long index;
 
     public String getKey() {

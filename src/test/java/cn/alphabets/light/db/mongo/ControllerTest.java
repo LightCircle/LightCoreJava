@@ -45,7 +45,7 @@ public class ControllerTest {
         user.setName("test user");
 
         Document json = new Document();
-        json.putAll(user.toDoc());
+        json.putAll(user.toDocument());
 
         handler.params.setDataJson(json);
         Controller ctrl = new Controller(handler, "user");

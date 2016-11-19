@@ -3,6 +3,7 @@ package cn.alphabets.light.http;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModBase;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -214,7 +215,7 @@ public class Context {
         }
 
         public void setData(ModBase data) {
-            this.data = data.toDoc();
+            this.data = data.toDocument();
         }
 
         public void setDataList(List<? extends ModBase> data) {

@@ -3,12 +3,12 @@ package cn.alphabets.light.db.mongo;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModBase;
 import cn.alphabets.light.model.Plural;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,21 +67,21 @@ public class Controller {
 
         // Transforms a single object into a list
         if (object instanceof List) {
-            data = (List<Object>) object;
+            data = (List) object;
         } else {
             data = new ArrayList<>();
             data.add(object);
         }
 
-        List<Document> documents =  data.stream().map((x) -> {
+        List<Document> documents = data.stream().map((x) -> {
 
             Document document;
 
             // If ModBase, need to be converted to Document
-            if (x instanceof ModBase) {
-                document = ((ModBase)x).toDoc();
+            if (x instanceof Entity) {
+                document = ((Entity) x).toDocument();
             } else {
-                document = (Document)x;
+                document = (Document) x;
             }
 
             document.put("createAt", new Date());

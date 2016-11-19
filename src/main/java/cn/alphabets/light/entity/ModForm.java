@@ -2,7 +2,9 @@ package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.deserializer.LongDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Boolean;
 import java.lang.Long;
 import java.lang.Object;
@@ -25,6 +27,9 @@ public class ModForm extends ModBase {
 
   private String type;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long column;
 
   private String tag;
@@ -103,6 +108,9 @@ public class ModForm extends ModBase {
 
     private String selectStyle;
 
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
     private Long colSpan;
 
     private String description;
@@ -125,6 +133,9 @@ public class ModForm extends ModBase {
 
     private String textPlaceholder;
 
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
     private Long col;
 
     private String labelDecoration;
@@ -135,14 +146,23 @@ public class ModForm extends ModBase {
 
     private String title;
 
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
     private Long row;
 
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
     private Long rowSpan;
 
     private List addition;
 
     private String locale;
 
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
     private Long textRows;
 
     private String textMin;

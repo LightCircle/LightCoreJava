@@ -1,6 +1,9 @@
 package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.deserializer.LongDeserializer;
+import cn.alphabets.light.model.deserializer.ObjectIdDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Long;
 import java.lang.String;
 import org.bson.types.ObjectId;
@@ -11,6 +14,9 @@ import org.bson.types.ObjectId;
 public class ModFile extends ModBase {
   private String contentType;
 
+  @JsonDeserialize(
+      using = ObjectIdDeserializer.class
+  )
   private ObjectId fileId;
 
   private String path;
@@ -21,6 +27,9 @@ public class ModFile extends ModBase {
 
   private String description;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long length;
 
   public String getContentType() {

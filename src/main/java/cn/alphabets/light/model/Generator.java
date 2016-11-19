@@ -2,8 +2,11 @@ package cn.alphabets.light.model;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.db.mongo.Model;
+import cn.alphabets.light.model.deserializer.LongDeserializer;
+import cn.alphabets.light.model.deserializer.ObjectIdDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.squareup.javapoet.*;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bson.Document;
@@ -135,7 +138,18 @@ public class Generator {
                 .addModifiers(Modifier.PRIVATE);
 
         if (reserved.contains(name)) {
-            builder.addAnnotation(AnnotationSpec.builder(JsonProperty.class).addMember("value", "$S", name).build());
+            builder.addAnnotation(AnnotationSpec.builder(JsonProperty.class)
+                    .addMember("value", "$S", name).build());
+        }
+
+        if (type.equals(TypeName.get(Long.class))) {
+            builder.addAnnotation(AnnotationSpec.builder(JsonDeserialize.class)
+                    .addMember("using", "$T.$L", LongDeserializer.class, "class").build());
+        }
+
+        if (type.equals(TypeName.get(ObjectId.class))) {
+            builder.addAnnotation(AnnotationSpec.builder(JsonDeserialize.class)
+                    .addMember("using", "$T.$L", ObjectIdDeserializer.class, "class").build());
         }
 
         return builder.build();

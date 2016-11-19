@@ -1,6 +1,8 @@
 package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.deserializer.LongDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Long;
 import java.lang.Object;
 import java.lang.String;
@@ -12,6 +14,9 @@ import java.util.List;
 public class ModConfiguration extends ModBase {
   private String description;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long displayType;
 
   private List options;

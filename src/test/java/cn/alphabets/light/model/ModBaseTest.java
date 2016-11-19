@@ -32,14 +32,14 @@ public class ModBaseTest {
         ModDaughter daughter = new ModDaughter();
         daughter.setK(id);
 
-        Assert.assertEquals(id, ModBase.toDocument(daughter).getObjectId("k"));
+        Assert.assertEquals(id, daughter.toDocument().getObjectId("k"));
 
         ModGrandson grandson = new ModGrandson();
         grandson.setA("A");
         grandson.setH(10L);
         grandson.setJ(new Date());
 
-        Assert.assertEquals("A", ModBase.toDocument(grandson).getString("a"));
+        Assert.assertEquals("A", grandson.toDocument().getString("a"));
 
         ModSon son = new ModSon();
         son.setA("B");
@@ -51,7 +51,7 @@ public class ModBaseTest {
         son.setG(Arrays.asList("I", daughter));
         son.setI(true);
 
-        Document doc = ModBase.toDocument(son);
+        Document doc = son.toDocument();
         Assert.assertEquals(id, ((Document)doc.get("b")).get("k"));
         Assert.assertEquals("I", ((List)doc.get("g")).get(0));
         Assert.assertTrue(doc.getBoolean("I"));

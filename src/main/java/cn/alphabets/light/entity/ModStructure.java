@@ -1,7 +1,9 @@
 package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.ModBase;
+import cn.alphabets.light.model.deserializer.LongDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Long;
 import java.lang.Object;
 import java.lang.String;
@@ -12,10 +14,16 @@ import java.lang.String;
 public class ModStructure extends ModBase {
   private String description;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long lock;
 
   private String schema;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long tenant;
 
   private String version;
@@ -24,11 +32,20 @@ public class ModStructure extends ModBase {
 
   private Object items;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long kind;
 
   @JsonProperty("public")
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long public_;
 
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
   private Long type;
 
   public String getDescription() {

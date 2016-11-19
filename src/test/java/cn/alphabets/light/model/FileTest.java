@@ -5,6 +5,8 @@ import cn.alphabets.light.Environment;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import org.bson.Document;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +17,16 @@ import java.util.List;
  */
 public class FileTest {
 
-    Context handler;
+    private Context handler;
 
-//    @Before
+    @Before
     public void setUp() {
         Environment.clean();
         Environment.instance().args.local = true;
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
-//    @Test
+    @Test
     public void testAdd() {
 
         List<Document> files = new ArrayList<>();

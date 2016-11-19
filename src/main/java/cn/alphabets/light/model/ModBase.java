@@ -126,14 +126,4 @@ public class ModBase extends Entity {
         }
         return null;
     }
-
-    public Document toDoc() {
-        try {
-            // TODO:自己写转换方法？
-            return Document.parse(objectMapper.writeValueAsString(this));
-        } catch (JsonProcessingException e) {
-            logger.error("error fromDoc", e);
-        }
-        return null;
-    }
 }
