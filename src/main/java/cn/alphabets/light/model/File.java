@@ -3,8 +3,13 @@ package cn.alphabets.light.model;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.entity.ModFile;
+import cn.alphabets.light.exception.BadRequestException;
+import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.Context;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,13 +56,23 @@ public class File {
         ctrl.deleteFromGrid();
     }
 
-    public Plural<ModFile> image(Context handler) {
+    public Plural<ModFile> image(Context handler) throws LightException {
 
         Controller ctrl = new Controller(handler, Constant.SYSTEM_DB_FILE);
         ModFile file = ctrl.get();
 
+        if (file == null) {
+            throw new BadRequestException("File Not Exist.");
+        }
+
+        OutputStream stream = new ByteArrayOutputStream();
+
         handler.params.setId(file.getFileId());
-        return ctrl.readStreamFromGrid();
+        handler.params.setStream(stream);
+
+        return new Plural<>(1L, new ArrayList<ModFile>() {{
+            add(file);
+        }}, stream);
     }
 
 }

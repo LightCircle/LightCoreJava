@@ -41,7 +41,7 @@ public class Helper {
     public static final SimpleDateFormat ISO_FORMATTER;
 
     static {
-        ISO_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS zzz");
+        ISO_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         ISO_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 

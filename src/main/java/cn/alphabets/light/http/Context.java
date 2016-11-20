@@ -15,6 +15,7 @@ import io.vertx.ext.web.Session;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -134,7 +135,11 @@ public class Context {
             return null;
         }
 
-        return user.get_id().toString();
+        if (user.get_id() == null) {
+            return null;
+        }
+
+        return user.get_id().toHexString();
     }
 
     public void setUid(String uid) {
@@ -276,6 +281,14 @@ public class Context {
             this.limit = limit;
         }
 
+        public OutputStream getStream() {
+            return stream;
+        }
+
+        public void setStream(OutputStream stream) {
+            this.stream = stream;
+        }
+
         private Document json;
         private Document condition;
         private Object data;
@@ -285,6 +298,7 @@ public class Context {
         private List<Document> files;
         private int skip;
         private int limit;
+        private OutputStream stream;
     }
 
 }

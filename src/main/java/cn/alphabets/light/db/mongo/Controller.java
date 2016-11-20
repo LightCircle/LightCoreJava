@@ -6,12 +6,9 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -168,14 +165,8 @@ public class Controller {
         return new Plural<>((long) files.size(), files);
     }
 
-    public Plural<ModFile> readStreamFromGrid() {
-
-        OutputStream stream = new ByteArrayOutputStream();
-
-        ModFile file = this.model.readStreamFromGrid((ObjectId) this.params.getId(), stream);
-        return new Plural<>(1L, new ArrayList<ModFile>() {{
-            add(file);
-        }}, stream);
+    public ModFile readStreamFromGrid() {
+        return this.model.readStreamFromGrid((ObjectId) this.params.getId(), this.params.getStream());
     }
 
     public void deleteFromGrid() {

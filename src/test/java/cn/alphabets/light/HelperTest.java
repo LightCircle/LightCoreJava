@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * HelperTest
  */
 public class HelperTest {
+
+    @Test
+    public void testToUTCString() {
+        String utc = Helper.toUTCString(new Date());
+        Assert.assertTrue(utc.length() == 24);
+        Assert.assertEquals("T", utc.substring(10, 11));
+        Assert.assertEquals("Z", utc.substring(23));
+    }
 
     @Test
     public void testGetMimeType() throws FileNotFoundException {

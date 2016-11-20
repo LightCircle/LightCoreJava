@@ -122,11 +122,17 @@ public class Dispatcher {
                 Object data = null;
                 Context handler = new Context(ctx);
 
-                // Try lookup controller class
                 String className = board.getClass_(), actionName = board.getAction();
                 if (className != null && actionName != null) {
 
+                    // Try lookup controller class
                     Method method = resolve(className, actionName);
+
+                    // Try lookup light model class
+                    if (method == null) {
+                        method = resolve(className, actionName, Constant.DEFAULT_PACKAGE_NAME + ".model");
+                    }
+
                     if (method != null) {
                         try {
                             data = method.invoke(method.getDeclaringClass().newInstance(), handler);
@@ -139,10 +145,9 @@ public class Dispatcher {
                         }
 
                         new Result(data).send(ctx);
+                        return;
                     }
                 }
-
-                // TODO: Try lookup light model class
 
                 // Try lookup rider class
                 data = new DataRider(className).call(handler, actionName);
@@ -241,8 +246,12 @@ public class Dispatcher {
     }
 
     private Method resolve(String className, String methodName) {
+        return this.resolve(className, methodName, Environment.instance().getPackages() + ".controller");
+    }
 
-        String fullName = Environment.instance().getPackages() + ".controller." + WordUtils.capitalize(className);
+    private Method resolve(String className, String methodName, String packages) {
+
+        String fullName = packages + "." + WordUtils.capitalize(className);
         String key = String.format("%s#%s", fullName, methodName);
 
         if (!methods.containsKey(key)) {
