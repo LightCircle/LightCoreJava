@@ -21,14 +21,13 @@ public class File {
      */
     public Plural<ModFile> add(Context handler) {
 
-        List<ModFile> files = new Controller(handler).writeFileToGrid();
+        Plural<ModFile> files = new Controller(handler).writeFileToGrid();
 
-        handler.params.setDataList(files);
+        handler.params.setDataList(files.getItems());
         List<ModFile> result = new Controller(handler, Constant.SYSTEM_DB_FILE).add();
 
         return new Plural<>((long) result.size(), result);
     }
-
 
     /**
      * Physically delete the file, and also delete the GridFS file
@@ -51,4 +50,14 @@ public class File {
         handler.params.setId(file.getFileId());
         ctrl.deleteFromGrid();
     }
+
+    public Plural<ModFile> image(Context handler) {
+
+        Controller ctrl = new Controller(handler, Constant.SYSTEM_DB_FILE);
+        ModFile file = ctrl.get();
+
+        handler.params.setId(file.getFileId());
+        return ctrl.readStreamFromGrid();
+    }
+
 }

@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -35,6 +37,25 @@ import java.util.regex.Pattern;
  * Helper
  */
 public class Helper {
+
+    public static final SimpleDateFormat ISO_FORMATTER;
+
+    static {
+        ISO_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS zzz");
+        ISO_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
+    public static String toUTCString(Date date) {
+        return ISO_FORMATTER.format(date);
+    }
+
+    public static Date fromUTCString(String date) {
+        try {
+            return ISO_FORMATTER.parse(date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Speculate Content-Type from a file

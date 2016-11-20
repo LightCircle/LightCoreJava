@@ -1,15 +1,26 @@
 package cn.alphabets.light.http;
 
+import cn.alphabets.light.Helper;
+import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.model.Error;
+import cn.alphabets.light.model.Plural;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.http.impl.HttpUtils;
 import io.vertx.ext.web.RoutingContext;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.tika.io.IOUtils;
 
-import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
+import java.io.*;
+
+import static io.vertx.core.http.HttpHeaders.*;
 
 /**
  * Result
@@ -51,9 +62,32 @@ public class Result {
     }
 
     public void send(RoutingContext context) {
+
+        if (this.data instanceof Plural) {
+            if (((Plural) this.data).getStream() != null) {
+                sendStream(context, (Plural<ModFile>) this.data);
+                return;
+            }
+        }
+
         HttpServerResponse response = context.response();
         response.putHeader(CONTENT_TYPE, "application/json; charset=utf-8");
         response.end(this.json());
+    }
+
+    public void sendStream(RoutingContext context, Plural<ModFile> plural) {
+        OutputStream stream = plural.getStream();
+        ModFile meta = plural.getItems().get(0);
+        HttpServerResponse response = context.response();
+
+        response.putHeader(CONTENT_TYPE, meta.getContentType());
+        response.putHeader(CONTENT_LENGTH, String.valueOf(meta.getLength()));
+        response.putHeader(LAST_MODIFIED, Helper.toUTCString(meta.getUpdateAt()));
+        response.putHeader(ACCEPT_RANGES, "bytes");
+        response.putHeader(CACHE_CONTROL, "public, max-age=34560000");
+
+        response.write(Buffer.buffer(((ByteArrayOutputStream) stream).toByteArray()));
+        response.end();
     }
 
     public static void redirect(RoutingContext context, String path) {

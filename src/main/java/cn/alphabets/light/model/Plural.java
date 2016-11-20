@@ -1,5 +1,8 @@
 package cn.alphabets.light.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -8,8 +11,13 @@ import java.util.List;
  */
 public class Plural<T extends ModCommon> {
     public Plural(Long total, List<T> items) {
+        this(total, items, null);
+    }
+
+    public Plural(Long total, List<T> items, OutputStream stream) {
         this.totalItems = total;
         this.items = items;
+        this.stream = stream;
     }
 
     public Long getTotalItems() {
@@ -20,6 +28,12 @@ public class Plural<T extends ModCommon> {
         return items;
     }
 
+    public OutputStream getStream() {
+        return this.stream;
+    }
+
+    @JsonIgnore
+    private OutputStream stream;
     private Long totalItems;
     private List<T> items;
 }

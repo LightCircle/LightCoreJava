@@ -1,5 +1,6 @@
 package cn.alphabets.light.model.deserializer;
 
+import cn.alphabets.light.Helper;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -10,10 +11,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * DateDeserializer
@@ -21,20 +19,13 @@ import java.util.TimeZone;
  */
 public class DateDeserializer extends JsonDeserializer<Date> {
 
-    private static SimpleDateFormat formatter;
-
-    static {
-        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-    }
-
     /**
      * Json turn Date
      * eg:
      * "2015-07-01T06:55:42.696Z" -> Date
      * "{"$date":1471507601964}"  -> Date
      *
-     * @param p parser
+     * @param p   parser
      * @param ctx context
      * @return date
      * @throws IOException error
@@ -46,11 +37,7 @@ public class DateDeserializer extends JsonDeserializer<Date> {
             return null;
         }
         if (node instanceof TextNode) {
-            try {
-                return formatter.parse(node.asText());
-            } catch (ParseException e) {
-                throw new JsonParseException(p, node.asText(), e);
-            }
+            return Helper.fromUTCString(node.asText());
         }
         if (node instanceof ObjectNode) {
             long timestamp = node.get("$date").asLong();
