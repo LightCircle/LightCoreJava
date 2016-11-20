@@ -56,6 +56,13 @@ public class File {
         ctrl.deleteFromGrid();
     }
 
+    /**
+     * Picture download
+     *
+     * @param handler context
+     * @return meta & stream
+     * @throws LightException file not found
+     */
     public Plural<ModFile> image(Context handler) throws LightException {
 
         Controller ctrl = new Controller(handler, Constant.SYSTEM_DB_FILE);
@@ -75,4 +82,9 @@ public class File {
         }}, stream);
     }
 
+    // TODO: update
+
+    // TODO: download
+    // TODO: zip
+    // TODO: PDF
 }

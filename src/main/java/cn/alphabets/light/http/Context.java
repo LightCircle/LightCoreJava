@@ -67,6 +67,8 @@ public class Context {
             parameter.put(Constant.PARAM_FILES, files);
         }
 
+        // TODO: type convert
+
         log.debug(parameter.toJson());
         this.params = new Params(parameter);
     }
