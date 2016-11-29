@@ -1,6 +1,8 @@
 package cn.alphabets.light.model;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.Environment;
+import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.ModCategory;
 import cn.alphabets.light.entity.ModFile;
@@ -20,10 +22,7 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -65,6 +64,20 @@ public class Generator {
 
             this.write(builder.build());
         });
+    }
+
+    /**
+     * Generates a POJO source for current app
+     *
+     */
+    public void generate() {
+        List<String> schemas = new ArrayList<>();
+        CacheManager.INSTANCE.getStructures().forEach(structure -> {
+            if (structure.getKind() != 2) {
+                schemas.add(structure.getSchema());
+            }
+        });
+        generate(Environment.instance().getAppName(), schemas);
     }
 
     private void write(TypeSpec type) {

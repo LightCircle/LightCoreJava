@@ -8,6 +8,7 @@ import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.TimeoutHandler;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
 import cn.alphabets.light.http.session.SessionHandlerImpl;
+import cn.alphabets.light.model.Generator;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServer;
@@ -88,5 +89,13 @@ public class App {
         // Start the web server
         server.requestHandler(router::accept).listen(env.getAppPort());
         logger.info(String.format("Running on http://%s:%s/", "127.0.0.1", env.getAppPort()));
+    }
+
+    public void generate() {
+        Environment env = Environment.instance();
+        CacheManager.INSTANCE.setUp(env.getAppName());
+        String pkg = Environment.instance().getPackages() + ".entity";
+        new Generator(pkg).generate();
+        logger.info("Generation done");
     }
 }
