@@ -2,8 +2,9 @@ package cn.alphabets.light;
 
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.entity.ModI18n;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class I18N {
 
-    private static final Logger logger = LogManager.getLogger(I18N.class);
+    private static final Logger logger = LoggerFactory.getLogger(I18N.class);
 
     public static String i(String lang, String message) {
 

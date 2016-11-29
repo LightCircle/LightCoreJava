@@ -15,9 +15,9 @@ import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import com.mongodb.client.model.Projections;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.text.WordUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -35,7 +35,7 @@ import static com.mongodb.client.model.Indexes.descending;
  */
 public class Model {
 
-    private static final Logger logger = LogManager.getLogger(Model.class);
+    private static final Logger logger = LoggerFactory.getLogger(Model.class);
 
     private MongoDatabase db;
     private MongoCollection<Document> collection;

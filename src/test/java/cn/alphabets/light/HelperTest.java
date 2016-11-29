@@ -34,7 +34,7 @@ public class HelperTest {
         inputStream = classLoader.getResourceAsStream("tmp/logo.png");
         Assert.assertEquals("image/png", Helper.getContentType(inputStream));
 
-        inputStream = classLoader.getResourceAsStream("view/accounts.html");
+        inputStream = classLoader.getResourceAsStream("views/accounts.html");
         Assert.assertEquals("text/html", Helper.getContentType(inputStream));
 
         inputStream = classLoader.getResourceAsStream("config.yml");
@@ -97,7 +97,7 @@ public class HelperTest {
             put("state", Boolean.TRUE);
         }};
 
-        String result = Helper.loadTemplate("view/accounts.html", map, Arrays.asList(dynamic, i));
+        String result = Helper.loadTemplate("views/accounts.html", map, Arrays.asList(dynamic, i));
         Assert.assertTrue(result.contains("Host : 127.0.0.1"));
         Assert.assertTrue(result.contains("Hello : dynamic"));
         Assert.assertTrue(result.contains("Sub"));

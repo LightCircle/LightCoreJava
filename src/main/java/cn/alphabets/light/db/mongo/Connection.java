@@ -3,8 +3,9 @@ package cn.alphabets.light.db.mongo;
 import cn.alphabets.light.Environment;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+
 
 /**
  * Connection
@@ -12,7 +13,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class Connection {
 
-    private static final Logger logger = LogManager.getLogger(Connection.class);
+    private static final Logger logger = LoggerFactory.getLogger(Connection.class);
     private static MongoClient instance;
 
     private Connection() {

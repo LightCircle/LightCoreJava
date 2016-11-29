@@ -214,7 +214,7 @@ public class Dispatcher {
                 }
 
                 // Execute the rendering
-                String name = "view/" + template;
+                String name = "views/" + template;
                 String html = Helper.loadTemplate(name, model, Arrays.asList(dynamic, i, catalog));
                 ctx.response().putHeader(CONTENT_TYPE, TEXT_HTML).end(html);
 
@@ -287,6 +287,7 @@ public class Dispatcher {
                 return;
             }
 
+            //print stack trace via response if dev is on
             if (Environment.instance().app.isDev()) {
                 StringWriter stringWriter = new StringWriter();
                 error.printStackTrace(new PrintWriter(stringWriter));

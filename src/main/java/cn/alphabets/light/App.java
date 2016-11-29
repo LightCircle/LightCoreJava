@@ -11,10 +11,11 @@ import cn.alphabets.light.http.session.SessionHandlerImpl;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 /**
  * App
@@ -22,13 +23,17 @@ import org.apache.logging.log4j.Logger;
  */
 public class App {
 
-    private static final Logger logger = LogManager.getLogger(App.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     private Vertx vertx;
     private HttpServer server;
     private Router router;
 
     public App() {
+
+        // use slf4j logging
+        System.setProperty(LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME, "io.vertx.core.logging.SLF4JLogDelegateFactory");
 
         vertx = Vertx.vertx(new VertxOptions());
         router = Router.router(vertx);
@@ -69,12 +74,11 @@ public class App {
         router.route().handler(BodyHandler.create());
 
         // Handle login
-        boolean isDevUnit = (env.app.isDev() && Helper.isJUnitTest());
-        if (!isDevUnit) {
+        if (!Helper.isJUnitTest()) {
             router.route().handler(AuthHandler.create());
         }
 
-        // The 'x-response-time' on the headband is used to indicate the server response time
+        // use http header 'x-response-time' to indicate the server response time
         router.route().handler(ResponseTimeHandler.create());
 
         // Route the Web request

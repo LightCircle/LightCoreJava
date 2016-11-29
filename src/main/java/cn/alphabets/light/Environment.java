@@ -1,7 +1,8 @@
 package cn.alphabets.light;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class Environment {
 
-    private static final Logger logger = LogManager.getLogger(Environment.class);
+    private static final Logger logger = LoggerFactory.getLogger(Environment.class);
     private static Environment instance;
     public final Args args = new Args();
 
