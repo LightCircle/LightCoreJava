@@ -5,7 +5,6 @@ import cn.alphabets.light.entity.ModI18n;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

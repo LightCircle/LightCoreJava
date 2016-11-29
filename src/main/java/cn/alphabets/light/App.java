@@ -23,7 +23,6 @@ import io.vertx.ext.web.handler.*;
  */
 public class App {
 
-
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     private Vertx vertx;
@@ -31,10 +30,6 @@ public class App {
     private Router router;
 
     public App() {
-
-        // use slf4j logging
-        System.setProperty(LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME, "io.vertx.core.logging.SLF4JLogDelegateFactory");
-
         vertx = Vertx.vertx(new VertxOptions());
         router = Router.router(vertx);
         server = vertx.createHttpServer();
@@ -59,16 +54,16 @@ public class App {
         router.route().handler(CookieHandler.create());
 
         // Handle session, overtime 30 days
-        long sessionTimeoute = 1000L * 60 * 60 * ConfigManager.INSTANCE.getAppSessionTimeout();
+        long sessionTimeout = 1000L * 60 * 60 * ConfigManager.INSTANCE.getAppSessionTimeout();
         router.route().handler(SessionHandlerImpl
                 .create(new MongoSessionStoreImpl(env.getAppName(), vertx))
                 .setNagHttps(false)
-                .setSessionTimeout(sessionTimeoute));
+                .setSessionTimeout(sessionTimeout));
 
         // Handle CSRF token, overtime = session timeout
         router.route().handler(CSRFHandler
                 .create(ConfigManager.INSTANCE.getString("app.hmackey"))
-                .setTimeout(sessionTimeoute));
+                .setTimeout(sessionTimeout));
 
         // Handle body
         router.route().handler(BodyHandler.create());

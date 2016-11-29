@@ -2,7 +2,6 @@ package cn.alphabets.light;
 
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -15,6 +14,12 @@ import java.util.List;
  * User application configuration file
  */
 public class Environment {
+
+
+    //using 'SLF4JLogDelegateFactory' for logging
+    static {
+        System.setProperty(LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME, "io.vertx.core.logging.SLF4JLogDelegateFactory");
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(Environment.class);
     private static Environment instance;

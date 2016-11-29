@@ -4,8 +4,6 @@ import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.deserializer.LongDeserializer;
 import cn.alphabets.light.model.deserializer.ObjectIdDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.lang.Long;
-import java.lang.String;
 import org.bson.types.ObjectId;
 
 /**
