@@ -32,6 +32,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * Helper
  */
@@ -259,7 +260,7 @@ public class Helper {
                 .and()
                 .build();
 
-        Environment environment = new EnvironmentFactory().create(configuration);
+        org.jtwig.environment.Environment environment = new EnvironmentFactory().create(configuration);
         ResourceReference resource = new ResourceReference(ResourceReference.CLASSPATH, name);
 
         return new JtwigTemplate(environment, resource).render(JtwigModel.newModel(model));
