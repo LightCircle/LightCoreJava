@@ -50,6 +50,9 @@ public class App {
         // Handle static resources
         router.route("/static/*").handler(StaticHandler.create().setWebRoot("static"));
 
+        // Handle favicon, the "favicon.ico" file must be under static folder
+        router.route().handler(FaviconHandler.create("static/favicon.ico"));
+
         // Handle cookie
         router.route().handler(CookieHandler.create());
 
