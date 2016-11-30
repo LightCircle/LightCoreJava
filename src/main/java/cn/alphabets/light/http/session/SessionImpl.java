@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SessionImpl implements Session, ClusterSerializable, Shareable {
 
-    private static final Logger log = LoggerFactory.getLogger(SessionImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SessionImpl.class);
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     private static final byte TYPE_LONG = 1;
