@@ -12,6 +12,7 @@ import cn.alphabets.light.model.deserializer.DateDeserializer;
 import cn.alphabets.light.model.deserializer.LongDeserializer;
 import cn.alphabets.light.model.deserializer.ObjectIdDeserializer;
 import cn.alphabets.light.model.serializer.DateSerializer;
+import cn.alphabets.light.model.serializer.ObjectIdSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -169,6 +170,8 @@ public class Generator {
         if (type.equals(TypeName.get(ObjectId.class))) {
             builder.addAnnotation(AnnotationSpec.builder(JsonDeserialize.class)
                     .addMember("using", "$T.$L", ObjectIdDeserializer.class, "class").build());
+            builder.addAnnotation(AnnotationSpec.builder(JsonSerialize.class)
+                    .addMember("using", "$T.$L", ObjectIdSerializer.class, "class").build());
         }
         if (type.equals(TypeName.get(Date.class))) {
             builder.addAnnotation(AnnotationSpec.builder(JsonDeserialize.class)

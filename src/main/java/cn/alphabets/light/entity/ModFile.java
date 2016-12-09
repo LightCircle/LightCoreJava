@@ -3,7 +3,11 @@ package cn.alphabets.light.entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.deserializer.LongDeserializer;
 import cn.alphabets.light.model.deserializer.ObjectIdDeserializer;
+import cn.alphabets.light.model.serializer.ObjectIdSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.lang.Long;
+import java.lang.String;
 import org.bson.types.ObjectId;
 
 /**
@@ -14,6 +18,9 @@ public class ModFile extends ModCommon {
 
   @JsonDeserialize(
       using = ObjectIdDeserializer.class
+  )
+  @JsonSerialize(
+      using = ObjectIdSerializer.class
   )
   private ObjectId fileId;
 

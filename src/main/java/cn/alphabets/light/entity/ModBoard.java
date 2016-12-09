@@ -6,7 +6,9 @@ import cn.alphabets.light.model.deserializer.LongDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
+import java.lang.Boolean;
+import java.lang.Long;
+import java.lang.String;
 import java.util.List;
 
 /**

@@ -1,7 +1,8 @@
 package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.ModCommon;
-
+import java.lang.Object;
+import java.lang.String;
 import java.util.List;
 
 /**
