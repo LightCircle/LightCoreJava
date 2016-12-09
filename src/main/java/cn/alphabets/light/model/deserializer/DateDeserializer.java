@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * DateDeserializer
@@ -22,6 +23,7 @@ public class DateDeserializer extends JsonDeserializer<Date> {
     /**
      * Json turn Date
      * eg:
+     * "2015/05/08 13:33:32.333"  -> Date
      * "2015-07-01T06:55:42.696Z" -> Date
      * "{"$date":1471507601964}"  -> Date
      *
@@ -32,12 +34,25 @@ public class DateDeserializer extends JsonDeserializer<Date> {
      */
     @Override
     public Date deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+
+
         JsonNode node = p.readValueAsTree();
         if (node instanceof NullNode) {
             return null;
         }
         if (node instanceof TextNode) {
-            return Helper.fromUTCString(node.asText());
+
+            String dateStr = node.asText();
+
+            try {
+                if (dateStr.endsWith("Z")) {
+                    return Helper.fromUTCString(dateStr);
+                } else {
+                    TimeZone timeZone = getTimeZone(ctx);
+                    return Helper.fromSupportedString(dateStr, timeZone);
+                }
+            } catch (Exception e) {
+            }
         }
         if (node instanceof ObjectNode) {
             long timestamp = node.get("$date").asLong();
@@ -45,4 +60,11 @@ public class DateDeserializer extends JsonDeserializer<Date> {
         }
         throw new JsonParseException(p, "can not deserialize node to Date: " + node);
     }
+
+
+    private TimeZone getTimeZone(DeserializationContext ctx) {
+        return ctx.getTimeZone();
+    }
+
+
 }

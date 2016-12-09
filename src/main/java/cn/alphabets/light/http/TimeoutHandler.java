@@ -55,7 +55,7 @@ public interface TimeoutHandler extends Handler<RoutingContext> {
 
                 // We send a error response after timeout
                 long tid = ctx.vertx().setTimer(timeout, t -> {
-                    log.error("Request Timeout : " + path);
+                    log.error("Request timeout : " + path);
                     ctx.response().setStatusCode(errorStatus.code()).end(errorStatus.reasonPhrase());
                 });
                 ctx.addBodyEndHandler(v -> ctx.vertx().cancelTimer(tid));

@@ -2,6 +2,7 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Environment;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -22,9 +23,7 @@ public class Connection {
     public static MongoClient instance(Environment env) {
         if (instance == null) {
             MongoClientURI uri = new MongoClientURI(
-                    String.format("mongodb://%s:%s@%s:%s/?authMechanism=%s&authSource=%s",
-                            env.getMongoUser(),
-                            env.getMongoPass(),
+                    String.format("mongodb://%s:%s/",
                             env.getMongoHost(),
                             env.getMongoPort(),
                             env.getMongoAuth(),

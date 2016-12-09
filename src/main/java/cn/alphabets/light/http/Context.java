@@ -18,6 +18,7 @@ import org.bson.Document;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  */
 public class Context {
 
-    private static final Logger log = LoggerFactory.getLogger(Context.class);
+    private static final Logger logger = LoggerFactory.getLogger(Context.class);
 
     private RoutingContext ctx;
 
@@ -43,8 +44,13 @@ public class Context {
 
         Document parameter = new Document();
 
+        // path params
+        if (ctx.pathParams().size() > 0) {
+            parameter.putAll(ctx.pathParams());
+        }
+
         // query
-        if (ctx.request().params().size() > 0) {
+        if (ctx.request().uri().indexOf('?') > 0) {
             parameter.putAll(Helper.unParam(ctx.request().uri()));
         }
 
@@ -53,7 +59,6 @@ public class Context {
             parameter.putAll(Document.parse(ctx.getBodyAsString()));
         }
 
-        // TODO: url path params
 
         // file
         if (ctx.fileUploads().size() > 0) {
@@ -69,7 +74,7 @@ public class Context {
 
         // TODO: type convert
 
-        log.debug(parameter.toJson());
+        logger.debug(parameter.toJson());
         this.params = new Params(parameter);
     }
 
@@ -148,6 +153,11 @@ public class Context {
         this.uid = uid;
     }
 
+    public TimeZone getTimeZone() {
+        //TODO get timezone from config
+        return TimeZone.getTimeZone("GMT+8");
+    }
+
     public String getLang() {
 
         // The cookie takes precedence
@@ -179,7 +189,7 @@ public class Context {
             this.data = json.get(Constant.PARAM_DATA);
             this.skip = 0;
             this.limit = Constant.DEFAULT_LIMIT;
-            this.files = (List<Document>)json.get(Constant.PARAM_FILES);
+            this.files = (List<Document>) json.get(Constant.PARAM_FILES);
 
             String skip = json.getString(Constant.PARAM_SKIP);
             if (StringUtils.isNotEmpty(skip)) {
@@ -301,6 +311,14 @@ public class Context {
         private int skip;
         private int limit;
         private OutputStream stream;
+
+        public Document getJson() {
+            return json;
+        }
+
+        public void setJson(Document json) {
+            this.json = json;
+        }
     }
 
 }

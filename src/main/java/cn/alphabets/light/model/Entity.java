@@ -1,5 +1,6 @@
 package cn.alphabets.light.model;
 
+import cn.alphabets.light.http.Context;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -25,12 +27,17 @@ import java.util.stream.Collectors;
  * Created by lilin on 2016/11/19.
  */
 public class Entity implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     @JsonIgnore
     private static final Logger logger = LoggerFactory.getLogger(Entity.class);
 
     @JsonIgnore
     private static ObjectMapper objectMapper = new ObjectMapper();
+
+    //ObjectMapper for different timezone
+    @JsonIgnore
+    private static ConcurrentHashMap<TimeZone, ObjectMapper> objectMappers = new ConcurrentHashMap<>();
+
 
     /**
      * Converts list
@@ -59,11 +66,15 @@ public class Entity implements Serializable {
      * @return document
      */
     public Document toDocument() {
+        return toDocument(false);
+    }
+
+    public Document toDocument(boolean ignoreNullValue) {
 
         Map<String, PropertyDescriptor> properties = new ConcurrentHashMap<>();
         getProperties(this.getClass(), properties);
 
-        Document documentt = new Document();
+        Document document = new Document();
         properties.forEach((key, property) -> {
             try {
 
@@ -77,14 +88,16 @@ public class Entity implements Serializable {
                     val = ((Entity) val).toDocument();
                 }
 
-                documentt.put(key, val);
+                if (!ignoreNullValue || val != null) {
+                    document.put(key, val);
+                }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 logger.error(e);
                 throw new RuntimeException(e);
             }
         });
 
-        return documentt;
+        return document;
     }
 
     /**
@@ -130,8 +143,8 @@ public class Entity implements Serializable {
      * Convert Document to a class
      *
      * @param document document
-     * @param clazz class type
-     * @param <T> Entity type
+     * @param clazz    class type
+     * @param <T>      Entity type
      * @return class
      */
     public static <T extends ModCommon> T fromDocument(Document document, Class<T> clazz) {
@@ -142,7 +155,25 @@ public class Entity implements Serializable {
         try {
             return objectMapper.readValue(document.toJson(), clazz);
         } catch (IOException e) {
-            logger.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T extends ModCommon> T fromDocument(Document document, Class<T> clazz, Context handler) {
+        if (document == null) {
+            return null;
+        }
+
+        try {
+            TimeZone tz = handler.getTimeZone();
+            ObjectMapper mapper = objectMappers.get(tz);
+            if (mapper == null) {
+                mapper = new ObjectMapper();
+                mapper.setTimeZone(tz);
+                objectMappers.put(tz, mapper);
+            }
+            return mapper.readValue(document.toJson(), clazz);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

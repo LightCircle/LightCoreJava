@@ -28,11 +28,12 @@ public class Result {
     private Error error;
 
     public Result(Object data) {
-        this.data = data;
-    }
-
-    public Result(LightException exception) {
-        this.error = new Error(exception.getCode(), exception.getMessage());
+        if (data instanceof LightException) {
+            LightException error = (LightException) data;
+            this.error = new Error(error.getCode(), error.getMessage());
+        } else {
+            this.data = data;
+        }
     }
 
     public String getApiVersion() {

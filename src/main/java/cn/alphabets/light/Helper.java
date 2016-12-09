@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,6 +56,36 @@ public class Helper {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Date fromSupportedString(String date, TimeZone timeZone) throws Exception {
+
+        HashMap<Pattern, DateFormat> patternFormatMap = new LinkedHashMap<Pattern, DateFormat>() {
+            {
+                put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2}$")
+                        , new SimpleDateFormat("yyyy/MM/dd"));
+
+                put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}:\\d{2}$")
+                        , new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"));
+
+                put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$")
+                        , new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS"));
+            }
+        };
+        Iterator<Map.Entry<Pattern, DateFormat>> iterator = patternFormatMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Pattern, DateFormat> entry = iterator.next();
+            if (entry.getKey().matcher(date).find()) {
+                DateFormat format = entry.getValue();
+                format.setTimeZone(timeZone);
+                try {
+                    return format.parse(date);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        throw new RuntimeException("time format is unsupported");
     }
 
     /**
@@ -208,7 +239,11 @@ public class Helper {
         Pattern pattern = Pattern.compile("\\[([^\\]]*)\\]");
 
         try {
-            url = url.contains("?") ? url.substring(url.indexOf("?") + 1) : url;
+            if (url.contains("?")) {
+                url = url.substring(url.indexOf("?") + 1);
+            } else {
+                return new Document();
+            }
             decoded = URLDecoder.decode(url, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);

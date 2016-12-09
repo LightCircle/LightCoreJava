@@ -8,10 +8,11 @@ import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModRoute;
+import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
-import cn.alphabets.light.http.exception.RenderException;
-import cn.alphabets.light.model.DataRider;
+import cn.alphabets.light.model.datarider2.DBParams;
+import cn.alphabets.light.model.datarider2.DataRider2;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -21,8 +22,6 @@ import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -87,15 +86,13 @@ public class Dispatcher {
                 try {
                     data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
                 } catch (InvocationTargetException e) {
-                    logger.error(e.getTargetException());
 
                     // is LightException send error to client
 
                     // 500 错误
 
-                    throw new ProcessingException(e);
+                    throw new ProcessingException(e.getTargetException());
                 } catch (IllegalAccessException | InstantiationException e) {
-                    logger.error(e);
                     throw new ProcessingException(e);
                 }
 
@@ -111,7 +108,7 @@ public class Dispatcher {
      */
     public void routeDataAPI(Router router) {
         this.boards.forEach(board -> {
-            if (!Constant.KIND_BOARD_DATA_API.equals(board.getKind())) {
+            if (!Constant.KIND_BOARD_SYSTEM_DATA_API.equals(board.getKind()) && !Constant.KIND_BOARD_DATA_API.equals(board.getKind())) {
                 return;
             }
 
@@ -137,10 +134,8 @@ public class Dispatcher {
                         try {
                             data = method.invoke(method.getDeclaringClass().newInstance(), handler);
                         } catch (InvocationTargetException e) {
-                            logger.error(e.getTargetException());
-                            throw new ProcessingException(e);
+                            throw new ProcessingException(e.getTargetException());
                         } catch (IllegalAccessException | InstantiationException e) {
-                            logger.error(e);
                             throw new ProcessingException(e);
                         }
 
@@ -150,7 +145,8 @@ public class Dispatcher {
                 }
 
                 // Try lookup rider class
-                data = new DataRider(className).call(handler, actionName);
+                data = DataRider2.For(board).call(new DBParams(handler, true));
+
                 new Result(data).send(ctx);
             }, false);
         });
@@ -172,7 +168,14 @@ public class Dispatcher {
                 final Context handler = new Context(ctx);
 
                 // Try lookup controller class
-                final Object customized = invoke(route, handler);
+                Object customized;
+                try {
+                    customized = invoke(route, handler);
+                } catch (InvocationTargetException e) {
+                    throw new ProcessingException(e.getTargetException());
+                } catch (IllegalAccessException | InstantiationException e) {
+                    throw new ProcessingException(e);
+                }
 
                 // Define multiple template functions
                 Helper.StringFunction i = new Helper.StringFunction("i", (args) -> {
@@ -222,7 +225,7 @@ public class Dispatcher {
         });
     }
 
-    private Object invoke(ModRoute route, Context handler) {
+    private Object invoke(ModRoute route, Context handler) throws IllegalAccessException, InstantiationException, InvocationTargetException {
 
         String className = route.getClass_(), actionName = route.getAction();
         if (className == null || actionName == null) {
@@ -234,15 +237,7 @@ public class Dispatcher {
             return null;
         }
 
-        try {
-            return method.invoke(method.getDeclaringClass().newInstance(), handler);
-        } catch (InvocationTargetException e) {
-            logger.error(e.getTargetException());
-            throw new RenderException(e);
-        } catch (IllegalAccessException | InstantiationException e) {
-            logger.error(e);
-            throw new RenderException(e);
-        }
+        return method.invoke(method.getDeclaringClass().newInstance(), handler);
     }
 
     private Method resolve(String className, String methodName) {
@@ -268,7 +263,11 @@ public class Dispatcher {
     private Handler<RoutingContext> getFailureHandler() {
         return ctx -> {
             Throwable error = ctx.failure();
-            logger.error(error);
+            logger.error("Error occurred : ", error);
+
+            if (ctx.response().ended()) {
+                return;
+            }
 
             HttpResponseStatus status = INTERNAL_SERVER_ERROR;
             if (error instanceof MethodNotFoundException) {
@@ -277,24 +276,21 @@ public class Dispatcher {
 
             if (error instanceof ProcessingException) {
                 status = INTERNAL_SERVER_ERROR;
+                Throwable inner = error.getCause();
+                if (inner != null) {
+                    if (inner instanceof LightException) {
+                        Result result = new Result(inner);
+                        status = new HttpResponseStatus(INTERNAL_SERVER_ERROR.code(), result.json());
+                    }
+                }
             }
 
             if (error instanceof IllegalStateException) {
                 status = INTERNAL_SERVER_ERROR;
             }
 
-            if (ctx.response().ended()) {
-                return;
-            }
 
-            //print stack trace via response if dev is on
-            if (Environment.instance().app.isDev()) {
-                StringWriter stringWriter = new StringWriter();
-                error.printStackTrace(new PrintWriter(stringWriter));
-                ctx.response().setStatusCode(status.code()).end(stringWriter.toString());
-            } else {
-                ctx.response().setStatusCode(status.code()).end(status.reasonPhrase());
-            }
+            ctx.response().setStatusCode(status.code()).end(status.reasonPhrase());
         };
     }
 

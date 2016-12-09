@@ -18,8 +18,9 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ModCommon extends Entity {
 
+    private static final long serialVersionUID = 1L;
 
-    private int valid;
+    private Integer valid;
     private String createBy;
     private String updateBy;
 
@@ -55,15 +56,12 @@ public class ModCommon extends Entity {
         return updateAt;
     }
 
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
-    }
 
     public int getValid() {
         return valid;
     }
 
-    public void setValid(int valid) {
+    public void setValid(Integer valid) {
         this.valid = valid;
     }
 

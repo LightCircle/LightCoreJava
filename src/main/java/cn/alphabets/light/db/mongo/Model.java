@@ -15,6 +15,8 @@ import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.text.WordUtils;
@@ -40,6 +42,7 @@ public class Model {
     private MongoDatabase db;
     private MongoCollection<Document> collection;
     private String name;
+    private Class<? extends ModCommon> clazz;
 
     private Model() {
     }
@@ -54,6 +57,26 @@ public class Model {
 
         this.db = client.getDatabase(domain);
         this.name = table;
+
+        if (table != null) {
+            table = English.plural(table);
+            if (!Constant.SYSTEM_DB.equals(domain)) {
+                table = code + '.' + table;
+            }
+
+            this.collection = this.db.getCollection(table);
+        }
+
+        logger.info("table : " + table);
+    }
+
+    public Model(String domain, String code, String table, Class<? extends ModCommon> clazz) {
+
+        MongoClient client = Connection.instance(Environment.instance());
+
+        this.db = client.getDatabase(domain);
+        this.name = table;
+        this.clazz = clazz;
 
         if (table != null) {
             table = English.plural(table);
@@ -107,6 +130,25 @@ public class Model {
         return result;
     }
 
+    public <T extends ModCommon> List<T> list(
+            Document condition,
+            Document select,
+            Document sort,
+            int skip,
+            int limit) {
+
+        // set fetch options
+        FindIterable<Document> find = this.collection.find(condition).projection(select).sort(sort).skip(skip).limit(limit);
+
+        // fetch and convert
+        List<T> result = new ArrayList<>();
+        find.forEach((Block<? super Document>) document -> {
+            result.add((T) ModCommon.fromDocument(document, this.getModelType()));
+        });
+        return result;
+
+    }
+
     public List<Document> document(Document condition, List<String> fieldNames) {
 
         FindIterable<Document> find = this.collection.find(condition);
@@ -118,7 +160,7 @@ public class Model {
     }
 
     public <T extends ModCommon> T get(Document condition) {
-        return this.get(condition, null);
+        return this.get(condition, (List<String>) null);
     }
 
     @SuppressWarnings("unchecked")
@@ -136,6 +178,15 @@ public class Model {
         return (T) ModCommon.fromDocument(document, this.getModelType());
     }
 
+    public <T extends ModCommon> T get(Document condition, Document select) {
+
+        // set fetch condition
+        FindIterable<Document> find = this.collection.find(condition);
+
+        Document document = find.first();
+        return (T) ModCommon.fromDocument(document, this.getModelType());
+    }
+
     public Long remove(Document condition) {
         return this.update(condition, new Document("valid", Constant.INVALID));
     }
@@ -145,7 +196,7 @@ public class Model {
     }
 
     public Long update(Document condition, Document data) {
-        return this.collection.updateMany(condition, data).getModifiedCount();
+        return this.collection.updateMany(condition,new Document("$set",data)).getModifiedCount();
     }
 
     public Long count(Document condition) {
@@ -162,6 +213,11 @@ public class Model {
                 result.add((T) ModCommon.fromDocument(x, this.getModelType()))
         );
         return result;
+    }
+
+    public <T extends ModCommon> T add(Document document) {
+        this.collection.insertOne(document);
+        return (T) ModCommon.fromDocument(document, this.getModelType());
     }
 
     /**
@@ -269,6 +325,9 @@ public class Model {
 
     private Class getModelType() {
 
+        if(this.clazz != null){
+            return  this.clazz;
+        }
         String className = Constant.MODEL_PREFIX + WordUtils.capitalize(this.name);
         String packageName = reserved.contains(this.name)
                 ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
@@ -285,7 +344,7 @@ public class Model {
         }
     }
 
-    private List<String> reserved = Arrays.asList(
+    public static List<String> reserved = Arrays.asList(
             Constant.SYSTEM_DB_BOARD,
             Constant.SYSTEM_DB_CONFIG,
             Constant.SYSTEM_DB_VALIDATOR,

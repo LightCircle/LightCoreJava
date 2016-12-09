@@ -8,11 +8,14 @@ import cn.alphabets.light.entity.ModCategory;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.entity.ModGroup;
 import cn.alphabets.light.entity.ModUser;
+import cn.alphabets.light.model.deserializer.DateDeserializer;
 import cn.alphabets.light.model.deserializer.LongDeserializer;
 import cn.alphabets.light.model.deserializer.ObjectIdDeserializer;
+import cn.alphabets.light.model.serializer.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.squareup.javapoet.*;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bson.Document;
@@ -68,7 +71,6 @@ public class Generator {
 
     /**
      * Generates a POJO source for current app
-     *
      */
     public void generate() {
         List<String> schemas = new ArrayList<>();
@@ -167,6 +169,12 @@ public class Generator {
         if (type.equals(TypeName.get(ObjectId.class))) {
             builder.addAnnotation(AnnotationSpec.builder(JsonDeserialize.class)
                     .addMember("using", "$T.$L", ObjectIdDeserializer.class, "class").build());
+        }
+        if (type.equals(TypeName.get(Date.class))) {
+            builder.addAnnotation(AnnotationSpec.builder(JsonDeserialize.class)
+                    .addMember("using", "$T.$L", DateDeserializer.class, "class").build());
+            builder.addAnnotation(AnnotationSpec.builder(JsonSerialize.class)
+                    .addMember("using", "$T.$L", DateSerializer.class, "class").build());
         }
 
         return builder.build();

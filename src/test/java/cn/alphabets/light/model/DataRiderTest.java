@@ -7,6 +7,8 @@ import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.entity.ModUser;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
+import cn.alphabets.light.model.datarider2.DataRider2;
+import cn.alphabets.light.model.datarider2.DBParams;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
@@ -65,13 +67,18 @@ public class DataRiderTest {
         handler.params.setId(result.get_id());
         Long count = new Controller(handler, User.class).delete();
         Assert.assertTrue(1L == count);
+
+//
+//        ModUser user22 = DataRider2.For(ModUser.class).Add(new DBParams());
+//        Plural<ModUser> user33 = DataRider2.For(ModUser.class).List(new DBParams());
+//        Plural<ModUser> user44 = DataRider2.For(ModUser.class,"list_test").List(new DBParams());
     }
 
     @Test
     public void testCall() {
 
         handler.params.setCondition(new Document("id", "admin"));
-        ModUser user = (ModUser)new DataRider(User.class).call(handler, "get");
+        ModUser user = (ModUser) new DataRider(User.class).call(handler, "get");
 
         Assert.assertEquals("admin", user.getName());
     }
