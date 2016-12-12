@@ -43,7 +43,10 @@ public class App {
         ConfigManager.INSTANCE.setUp();
 
         // set timeout
-        router.route().handler(TimeoutHandler.create(ConfigManager.INSTANCE.getAppTimeout() * 1000));
+        // if app is debug run , ignore all timeout
+        if (!Helper.isIdeDebug()) {
+            router.route().handler(TimeoutHandler.create(ConfigManager.INSTANCE.getAppTimeout() * 1000));
+        }
 
         // Print each request
         router.route().handler(LoggerHandler.create(LoggerFormat.SHORT));

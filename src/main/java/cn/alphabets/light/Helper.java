@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.text.DateFormat;
@@ -213,6 +214,23 @@ public class Helper {
             }
         }
         return false;
+    }
+
+    /**
+     * Determines whether is debug run
+     *
+     * @return true is JUnit
+     */
+    public static boolean isIdeDebug() {
+        List<String> args = ManagementFactory.getRuntimeMXBean().getInputArguments();
+        boolean isDebug = false;
+        for (String arg : args) {
+            if (arg.startsWith("-Xrunjdwp") || arg.startsWith("-agentlib:jdwp")) {
+                isDebug = true;
+                break;
+            }
+        }
+        return isDebug;
     }
 
     /**
