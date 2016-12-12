@@ -1,175 +1,114 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
-import cn.alphabets.light.entity.ModFile;
+import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
+import cn.alphabets.light.model.datarider2.DBParams;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller
  */
 public class Controller {
+    private static final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(Controller.class);
 
+    private DBParams params;
     private Model model;
-    private Context.Params params;
     private String uid;
 
-    public Controller(Context handler) {
-        this.model = new Model(handler.getDomain(), handler.getCode());
-        this.params = handler.params;
-        this.uid = handler.uid();
-    }
 
-    public Controller(Context handler, Class table) {
-        this(handler, table.getSimpleName().toLowerCase());
-    }
-
-    public Controller(Context handler, String table) {
-        this.model = new Model(handler.getDomain(), handler.getCode(), table);
-        this.params = handler.params;
-        this.uid = handler.uid();
+    public Controller(DBParams params) {
+        this.params = params;
+        this.model = new Model(params.getDomain(), params.getCode(), params.getTable(), params.getClazz());
+        this.uid = params.getUid();
     }
 
     public <T extends ModCommon> Plural<T> list() {
-
-        if (!this.params.getCondition().containsKey("valid")) {
-            this.params.getCondition().put("valid", Constant.VALID);
-        }
-
-        List<T> items = this.model.list(this.params.getCondition(),
-                this.params.getSelect(),
-                this.params.getSort(),
-                this.params.getSkip(),
-                this.params.getLimit());
+        logger.debug("[LIST] DB params : " + params.toString());
+        List<T> items = this.model.list(params.getCondition(),
+                params.getSelect(),
+                params.getSort(),
+                params.getSkip(),
+                params.getLimit());
 
         return new Plural<>(this.count(), items);
     }
 
-    /**
-     * Add document
-     *
-     * @param <T> ModBase
-     * @return document
-     */
-    public <T extends ModCommon> List<T> add() {
+    public <T extends ModCommon> T get() {
+        logger.debug("[get] DB params : " + params.toString());
 
-        List<Object> data;
-        Object object = this.params.getData();
-
-        // Transforms a single object into a list
-        if (object instanceof List) {
-            data = (List) object;
-        } else {
-            data = new ArrayList<>();
-            data.add(object);
+        Document condition = params.getCondition();
+        if (condition == null || condition.size() == 0) {
+            throw DataRiderException.ParameterUnsatisfied("Get condition can not be empty.");
         }
+        return this.model.get(condition, params.getSelect());
+    }
 
-        List<Document> documents = data.stream().map((x) -> {
 
-            Document document;
+    public <T extends ModCommon> T add() {
+        logger.debug("[ADD] DB params : " + params.toString());
+        Document document = params.getData();
+        document.put("createAt", new Date());
+        document.put("updateAt", new Date());
+        document.put("createBy", this.uid);
+        document.put("updateBy", this.uid);
+        document.put("valid", Constant.VALID);
+        document.put("_id", new ObjectId());
+        Document confirmed = Entity.fromDocument(document, params.getClazz(), params.getHandler()).toDocument();
+        return this.model.add(confirmed);
+    }
 
-            // If ModBase, need to be converted to Document
-            if (x instanceof Entity) {
-                document = ((Entity) x).toDocument();
-            } else {
-                document = (Document) x;
-            }
 
-            document.put("createAt", new Date());
-            document.put("updateAt", new Date());
-            document.put("createBy", this.uid);
-            document.put("updateBy", this.uid);
-            document.put("valid", Constant.VALID);
-            document.remove("_id");
-            return document;
-        }).collect(Collectors.toList());
+    public Long update() {
+        logger.debug("[UPDATE] DB params : " + params.toString());
+        Document document = params.getData();
+        document.put("updateAt", new Date());
+        document.put("updateBy", this.uid);
+        Document confirmed = Entity.fromDocument(document, params.getClazz(), params.getHandler()).toDocument(true);
 
-        return this.model.add(documents);
+        Document condition = params.getCondition();
+        if (condition == null || condition.size() == 0) {
+            throw DataRiderException.ParameterUnsatisfied("Update condition can not be empty.");
+        }
+        return this.model.update(condition, confirmed);
+    }
+
+
+    public Long remove() {
+        logger.debug("[REMOVE] DB params : " + params.toString());
+        Document condition = params.getCondition();
+        if (condition == null || condition.size() == 0) {
+            throw DataRiderException.ParameterUnsatisfied("Remove condition can not be empty.");
+        }
+        return this.model.remove(params.getCondition());
     }
 
     public Long count() {
-        if (!this.params.getCondition().containsKey("valid")) {
-            this.params.getCondition().put("valid", Constant.VALID);
-        }
-
         return this.model.count(this.params.getCondition());
     }
 
-    public <T extends ModCommon> T get() {
 
-        Document condition = new Document();
-
-        if (this.params.getId() != null) {
-            Object id = this.params.getId();
-            condition.put("_id", (id instanceof String) ? new ObjectId((String) id) : id);
-        } else {
-            condition.putAll(this.params.getCondition());
-        }
-
-        if (!this.params.getCondition().containsKey("valid")) {
-            condition.put("valid", Constant.VALID);
-        }
-        return this.model.get(condition);
+    public ByteArrayOutputStream readStreamFromGrid() {
+        return this.model.readStreamFromGrid(params.getCondition().getObjectId("_id"));
     }
 
-
-    public Long delete() {
-
-        Document condition = new Document();
-
-        if (this.params.getId() != null) {
-            Object id = this.params.getId();
-            condition.put("_id", (id instanceof String) ? new ObjectId((String) id) : id);
-        } else {
-            condition.putAll(this.params.getCondition());
-        }
-
-        assert condition.size() > 0 : "The delete condition can not be null.";
-        return this.model.delete(condition);
-    }
-
-    public Long remove() {
-
-        Document condition = new Document();
-
-        if (this.params.getId() != null) {
-            Object id = this.params.getId();
-            condition.put("_id", (id instanceof String) ? new ObjectId((String) id) : id);
-        } else {
-            condition.putAll(this.params.getCondition());
-        }
-
-        if (!this.params.getCondition().containsKey("valid")) {
-            condition.put("valid", Constant.VALID);
-        }
-
-        assert condition.size() > 0 : "The remove condition can not be null";
-        return this.model.remove(condition);
-    }
-
-    public Plural<ModFile> writeFileToGrid() {
-
-        List<ModFile> files = this.params.getFiles().stream().map((document) ->
-                this.model.writeFileToGrid(document)
-        ).collect(Collectors.toList());
-
-        return new Plural<>((long) files.size(), files);
-    }
-
-    public ModFile readStreamFromGrid() {
-        return this.model.readStreamFromGrid((ObjectId) this.params.getId(), this.params.getStream());
+    public GridFSFile writeFileToGrid(Context.RequestFile file) {
+        return this.model.writeFileToGrid(file);
     }
 
     public void deleteFromGrid() {
-        this.model.deleteFromGrid((ObjectId) this.params.getId());
+        this.model.deleteFromGrid(params.getCondition().getObjectId("_id"));
     }
+
+
 }

@@ -17,28 +17,28 @@ public class User {
 
     public static void verify(Context handler) throws LightException {
 
-        handler.params.setCondition(new Document("id", handler.params.getId()));
-        handler.params.setId(null);
-        ModUser user = new DataRider(ModUser.class).get(handler);
-
-        if (user == null) {
-            throw new BadRequestException("User Not Exist.");
-        }
-
-        String password = handler.params.getString("password");
-        String hmackey = handler.params.getString("hmackey");
-
-        if (hmackey == null) {
-            hmackey = ConfigManager.INSTANCE.getString("app.hmackey");
-        }
-
-        if (!user.getPassword().equals(Crypto.sha256(password, hmackey))) {
-            throw new BadRequestException("Password Not Correct.");
-        }
-
-        handler.session().put(Constant.SK_USER, user);
-        handler.session().put(Constant.SK_CODE, handler.getCode());
-        handler.session().put(Constant.SK_DOMAIN, handler.getDomain());
+//        handler.params.setCondition(new Document("id", handler.params.getId()));
+//        handler.params.setId(null);
+//        ModUser user = new DataRider(ModUser.class).get(handler);
+//
+//        if (user == null) {
+//            throw new BadRequestException("User Not Exist.");
+//        }
+//
+//        String password = handler.params.getString("password");
+//        String hmackey = handler.params.getString("hmackey");
+//
+//        if (hmackey == null) {
+//            hmackey = ConfigManager.INSTANCE.getString("app.hmackey");
+//        }
+//
+//        if (!user.getPassword().equals(Crypto.sha256(password, hmackey))) {
+//            throw new BadRequestException("Password Not Correct.");
+//        }
+//
+//        handler.session().put(Constant.SK_USER, user);
+//        handler.session().put(Constant.SK_CODE, handler.getCode());
+//        handler.session().put(Constant.SK_DOMAIN, handler.getDomain());
     }
 
 }

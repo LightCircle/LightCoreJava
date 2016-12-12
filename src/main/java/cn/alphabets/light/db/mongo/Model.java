@@ -15,8 +15,6 @@ import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import com.mongodb.client.model.Projections;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.model.Updates;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.text.WordUtils;
@@ -187,19 +185,19 @@ public class Model {
         return (T) ModCommon.fromDocument(document, this.getModelType());
     }
 
-    public Long remove(Document condition) {
+    public long remove(Document condition) {
         return this.update(condition, new Document("valid", Constant.INVALID));
     }
 
-    public Long delete(Document condition) {
+    public long delete(Document condition) {
         return this.collection.deleteMany(condition).getDeletedCount();
     }
 
-    public Long update(Document condition, Document data) {
-        return this.collection.updateMany(condition,new Document("$set",data)).getModifiedCount();
+    public long update(Document condition, Document data) {
+        return this.collection.updateMany(condition, new Document("$set", data)).getModifiedCount();
     }
 
-    public Long count(Document condition) {
+    public long count(Document condition) {
         return this.collection.count(condition);
     }
 
@@ -226,7 +224,7 @@ public class Model {
      * @param path full path
      * @return file meta info
      */
-    public ModFile writeFileToGrid(String path) {
+    public GridFSFile writeFileToGrid(String path) {
 
         File file = new File(path);
         if (!file.exists()) {
@@ -248,7 +246,7 @@ public class Model {
     }
 
 
-    public ModFile writeFileToGrid(Document meta) {
+    public GridFSFile writeFileToGrid(Document meta) {
 
         String name = meta.getString(Constant.PARAM_FILE_NAME);
         String type = meta.getString(Constant.PARAM_FILE_TYPE);
@@ -270,7 +268,7 @@ public class Model {
      * @param contentType file content-type
      * @return file meta info
      */
-    public ModFile writeStreamToGrid(String name, InputStream stream, String contentType) {
+    public GridFSFile writeStreamToGrid(String name, InputStream stream, String contentType) {
 
         // create a gridFSBucket using the default bucket name "fs"
         GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
@@ -282,14 +280,7 @@ public class Model {
         // upload stream
         ObjectId fileId = gridFSBucket.uploadFromStream(name, stream, options);
         GridFSFile fs = gridFSBucket.find(new Document("_id", fileId)).first();
-
-        ModFile file = new ModFile();
-        file.setName(fs.getFilename());
-        file.setLength(fs.getLength());
-        file.setContentType(fs.getMetadata().getString("contentType"));
-        file.setFileId(fileId);
-
-        return file;
+        return fs;
     }
 
     /**
@@ -301,6 +292,16 @@ public class Model {
      */
     public ModFile readStreamFromGrid(String fileId, OutputStream outputStream) {
         return this.readStreamFromGrid(new ObjectId(fileId), outputStream);
+    }
+
+
+    public ByteArrayOutputStream readStreamFromGrid(ObjectId fileId) {
+
+        GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        gridFSBucket.downloadToStream(fileId, outputStream);
+        return outputStream;
     }
 
     public ModFile readStreamFromGrid(ObjectId fileId, OutputStream outputStream) {
@@ -325,8 +326,8 @@ public class Model {
 
     private Class getModelType() {
 
-        if(this.clazz != null){
-            return  this.clazz;
+        if (this.clazz != null) {
+            return this.clazz;
         }
         String className = Constant.MODEL_PREFIX + WordUtils.capitalize(this.name);
         String packageName = reserved.contains(this.name)
@@ -352,6 +353,7 @@ public class Model {
             Constant.SYSTEM_DB_STRUCTURE,
             Constant.SYSTEM_DB_BOARD,
             Constant.SYSTEM_DB_ROUTE,
-            Constant.SYSTEM_DB_TENANT
+            Constant.SYSTEM_DB_TENANT,
+            Constant.SYSTEM_DB_FILE
     );
 }

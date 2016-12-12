@@ -12,11 +12,10 @@ import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
-import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
-import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
@@ -59,23 +58,21 @@ public class Context {
             parameter.putAll(Document.parse(ctx.getBodyAsString()));
         }
 
-
         // file
         if (ctx.fileUploads().size() > 0) {
             Set<FileUpload> uploads = ctx.fileUploads();
-            List<Document> files = uploads.stream().map((x) -> {
-                Document file = new Document(Constant.PARAM_FILE_NAME, x.fileName());
+            List<RequestFile> files = uploads.stream().map((x) -> {
+                RequestFile file = new RequestFile(Constant.PARAM_FILE_NAME, x.fileName());
                 file.put(Constant.PARAM_FILE_TYPE, x.contentType());
                 file.put(Constant.PARAM_FILE_PHYSICAL, x.uploadedFileName());
                 return file;
             }).collect(Collectors.toList());
-            parameter.put(Constant.PARAM_FILES, files);
+            this.params = new Params(parameter, files);
+        } else {
+            this.params = new Params(parameter);
         }
 
-        // TODO: type convert
-
-        logger.debug(parameter.toJson());
-        this.params = new Params(parameter);
+        logger.debug("req params : " + this.params.toString());
     }
 
     public HttpServerResponse res() {
@@ -84,6 +81,10 @@ public class Context {
 
     public HttpServerRequest req() {
         return this.ctx.request();
+    }
+
+    public RoutingContext ctx() {
+        return this.ctx;
     }
 
     public Session session() {
@@ -179,31 +180,43 @@ public class Context {
     private String code;
     private String uid;
 
+
+    public static class RequestFile extends Document {
+        public RequestFile() {
+        }
+
+        public RequestFile(String key, Object value) {
+            super(key, value);
+        }
+
+        public RequestFile(Map<String, Object> map) {
+            super(map);
+        }
+
+        public String getFilePath() {
+            return this.getString(Constant.PARAM_FILE_PHYSICAL);
+        }
+
+        public String getContentType() {
+            return this.getString(Constant.PARAM_FILE_TYPE);
+        }
+
+        public String getFileName() {
+            return this.getString(Constant.PARAM_FILE_NAME);
+        }
+    }
+
     public static class Params {
+        private Document json;
+        private List<RequestFile> files;
 
-        @SuppressWarnings("unchecked")
         public Params(Document json) {
+            this(json, null);
+        }
+
+        public Params(Document json, List<RequestFile> files) {
             this.json = json;
-            this.condition = (Document) json.get(Constant.PARAM_CONDITION);
-            this.id = json.getString(Constant.PARAM_ID);
-            this.data = json.get(Constant.PARAM_DATA);
-            this.skip = 0;
-            this.limit = Constant.DEFAULT_LIMIT;
-            this.files = (List<Document>) json.get(Constant.PARAM_FILES);
-
-            String skip = json.getString(Constant.PARAM_SKIP);
-            if (StringUtils.isNotEmpty(skip)) {
-                this.skip = Integer.parseInt(skip);
-            }
-
-            String limit = json.getString(Constant.PARAM_LIMIT);
-            if (StringUtils.isNotEmpty(limit)) {
-                this.limit = Integer.parseInt(limit);
-            }
-
-            // TODO
-            //select;
-            //sort;
+            this.files = files;
         }
 
         public String getString(String key) {
@@ -214,111 +227,23 @@ public class Context {
             this.json.put(key, val);
         }
 
-        public Document getCondition() {
-            if (this.condition == null) {
-                this.condition = new Document();
-            }
-            return this.condition;
-        }
-
-        public void setCondition(Document condition) {
-            this.condition = condition;
-        }
-
-        public Object getData() {
-            return data;
-        }
-
-        public void setData(ModCommon data) {
-            this.data = data.toDocument();
-        }
-
-        public void setDataList(List<? extends ModCommon> data) {
-            this.data = data;
-        }
-
-        public void setDataJson(Document data) {
-            this.data = data;
-        }
-
-        public void setDataJsonList(List<Document> data) {
-            this.data = data;
-        }
-
-        public Object getId() {
-            return id;
-        }
-
-        public void setId(Object id) {
-            this.id = id;
-        }
-
-        public List<String> getSelect() {
-            return select;
-        }
-
-        public void setSelect(List<String> select) {
-            this.select = select;
-        }
-
-        public List<String> getSort() {
-            return sort;
-        }
-
-        public void setSort(List<String> sort) {
-            this.sort = sort;
-        }
-
-        public List<Document> getFiles() {
+        public List<RequestFile> getFiles() {
             return files;
         }
 
-        public void setFiles(List<Document> files) {
-            this.files = files;
-        }
-
-        public int getSkip() {
-            return skip;
-        }
-
-        public void setSkip(int skip) {
-            this.skip = skip;
-        }
-
-        public int getLimit() {
-            return limit;
-        }
-
-        public void setLimit(int limit) {
-            this.limit = limit;
-        }
-
-        public OutputStream getStream() {
-            return stream;
-        }
-
-        public void setStream(OutputStream stream) {
-            this.stream = stream;
-        }
-
-        private Document json;
-        private Document condition;
-        private Object data;
-        private Object id;
-        private List<String> select;
-        private List<String> sort;
-        private List<Document> files;
-        private int skip;
-        private int limit;
-        private OutputStream stream;
 
         public Document getJson() {
             return json;
         }
 
-        public void setJson(Document json) {
-            this.json = json;
+        @Override
+        public String toString() {
+            return "\n{" +
+                    "\n\tparams = " + json.toJson() +
+                    "\n\tfiles = " + (files == null ? "null" : "\n\t\t" + files.stream().map(file -> file.toString()).collect(Collectors.joining("\n\t\t"))) +
+                    "\n}";
         }
+
     }
 
 }

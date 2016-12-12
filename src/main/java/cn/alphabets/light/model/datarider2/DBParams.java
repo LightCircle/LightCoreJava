@@ -1,13 +1,17 @@
 package cn.alphabets.light.model.datarider2;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.cache.CacheManager;
+import cn.alphabets.light.entity.ModBoard;
+import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.ModCommon;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static cn.alphabets.light.Constant.*;
 
@@ -70,23 +74,28 @@ public class DBParams {
         }
     }
 
-    public DBParams Condition(Document condition) {
+    public DBParams condition(Document condition) {
         this.condition = condition;
         return this;
     }
 
-    public DBParams Select(Document select) {
-        this.condition = condition;
+    public DBParams select(Document select) {
+        this.select = select;
         return this;
     }
 
-    public DBParams Sort(Document sort) {
-        this.condition = condition;
+    public DBParams sort(Document sort) {
+        this.sort = sort;
         return this;
     }
 
-    public DBParams Data(Document data) {
-        this.condition = condition;
+    public DBParams data(Document data) {
+        this.data = data;
+        return this;
+    }
+
+    public DBParams data(ModCommon data) {
+        this.data = data.toDocument();
         return this;
     }
 
@@ -97,48 +106,24 @@ public class DBParams {
         return condition;
     }
 
-    public void setCondition(Document condition) {
-        this.condition = condition;
-    }
-
     public Document getSelect() {
         return select;
-    }
-
-    public void setSelect(Document select) {
-        this.select = select;
     }
 
     public Document getSort() {
         return sort;
     }
 
-    public void setSort(Document sort) {
-        this.sort = sort;
-    }
-
     public Document getData() {
         return data;
-    }
-
-    public void setData(Document data) {
-        this.data = data;
     }
 
     public int getSkip() {
         return skip;
     }
 
-    public void setSkip(int skip) {
-        this.skip = skip;
-    }
-
     public int getLimit() {
         return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
     }
 
     public String getDomain() {
@@ -171,6 +156,119 @@ public class DBParams {
 
     public Context getHandler() {
         return handler;
+    }
+
+
+    public DBParams adaptToBoard(DataRider rider, ModBoard board) {
+
+        ModStructure structure = CacheManager.INSTANCE.getStructures().stream().filter(s -> s.getSchema().equals(board.getSchema())).findFirst().get();
+
+
+        //todo build select
+
+
+        //build condition
+        if (condition == null) {
+            condition = new Document();
+        } else if (condition.containsKey("free")) {
+            condition = (Document) condition.get("free");
+        } else if (condition.containsKey("_id")) {
+            condition = new Document()
+                    .append("_id", condition.get("_id"))
+                    .append("valid", VALID);
+        } else {
+
+            TypeConvertor convertor = new TypeConvertor(this);
+            List<Document> conditionOr = new ArrayList<>();
+
+            //group condition by filter group
+            Map<String, List<ModBoard.Filters>> grouped = board.getFilters().stream().collect(Collectors.groupingBy(ModBoard.Filters::getGroup));
+
+            //build group condition
+            grouped.forEach((s, filters) -> {
+
+                Document section = new Document();
+                filters.forEach(filter -> {
+
+                    String parameter = filter.getKey();
+                    String key = filter.getParameter();
+
+                    //build reserved
+                    Object reservedValue = reserved(key);
+                    if (reservedValue != null) {
+                        section.put(parameter, reservedValue);
+                    } else if (condition.containsKey(key)) {
+                        Object value = condition.get(key);
+                        String valueType = ((HashMap<String, HashMap>) structure.getItems()).get(parameter).get("type").toString().trim().toLowerCase();
+                        if (section.containsKey(parameter)) {
+                            ((Document) section.get(parameter)).put(filter.getOperator(), convertor.Convert(valueType, value));
+                        } else {
+                            section.put(parameter, new Document(filter.getOperator(), convertor.Convert(valueType, value)));
+                        }
+                    }
+
+                });
+
+                //is section is not empty,add to conditionOr
+                if (section.size() > 0) {
+                    conditionOr.add(section);
+                }
+            });
+
+            condition = new Document();
+
+            if (conditionOr.size() == 1) {
+                condition = conditionOr.get(0);
+            } else if (conditionOr.size() > 1) {
+                condition.put("$or", conditionOr);
+            }
+
+            condition.put("valid", VALID);
+        }
+
+
+        //todo build sort
+
+
+        //change table name for extended structure
+        HashMap<Long, String> extendType = new HashMap<Long, String>() {{
+            put(1L, "user");
+            put(2L, "group");
+            put(3L, "file");
+            put(4L, "category");
+        }};
+        if (structure.getKind() == 1) {
+            table = extendType.get(structure.getType());
+            condition.append("type", structure.getSchema());
+        } else {
+            table = rider.getClazz().getSimpleName().replace(MODEL_PREFIX, "").toLowerCase();
+        }
+
+        //set clazz
+        clazz = rider.getClazz();
+
+        return this;
+    }
+
+    private Object reserved(String keyword) {
+
+        if ("$uid".equals(keyword)) {
+            return this.getUid();
+        }
+
+        if ("$corp".equals(keyword)) {
+            return this.getCode();
+        }
+
+        if ("$sysdate".equals(keyword)) {
+            return new Date();
+        }
+
+        if ("$systime".equals(keyword)) {
+            return new Date();
+        }
+
+        return null;
     }
 
     @Override

@@ -12,7 +12,7 @@ import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.model.datarider2.DBParams;
-import cn.alphabets.light.model.datarider2.DataRider2;
+import cn.alphabets.light.model.datarider2.DataRider;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
@@ -71,7 +71,7 @@ public class Dispatcher {
             r.failureHandler(getFailureHandler());
             r.blockingHandler(ctx -> {
 
-                Object data = null;
+                Object data;
 
                 String className = board.getClass_(), actionName = board.getAction();
                 if (className == null || actionName == null) {
@@ -86,17 +86,14 @@ public class Dispatcher {
                 try {
                     data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
                 } catch (InvocationTargetException e) {
-
-                    // is LightException send error to client
-
-                    // 500 错误
-
                     throw new ProcessingException(e.getTargetException());
                 } catch (IllegalAccessException | InstantiationException e) {
                     throw new ProcessingException(e);
                 }
-
-                new Result(data).send(ctx);
+                //if controller method return type is void ,do nothing
+                if (!method.getReturnType().equals(Void.TYPE)) {
+                    new Result(data).send(ctx);
+                }
             }, false);
         });
     }
@@ -116,7 +113,7 @@ public class Dispatcher {
             r.failureHandler(getFailureHandler());
             r.blockingHandler(ctx -> {
 
-                Object data = null;
+                Object data;
                 Context handler = new Context(ctx);
 
                 String className = board.getClass_(), actionName = board.getAction();
@@ -139,13 +136,16 @@ public class Dispatcher {
                             throw new ProcessingException(e);
                         }
 
-                        new Result(data).send(ctx);
+                        //if controller method return type is void ,do nothing
+                        if (!method.getReturnType().equals(Void.TYPE)) {
+                            new Result(data).send(ctx);
+                        }
                         return;
                     }
                 }
 
                 // Try lookup rider class
-                data = DataRider2.For(board).call(new DBParams(handler, true));
+                data = DataRider.ride(board).call(new DBParams(handler, true));
 
                 new Result(data).send(ctx);
             }, false);
