@@ -186,11 +186,30 @@ public class DBParams {
 
         ModStructure structure = CacheManager.INSTANCE.getStructures().stream().filter(s -> s.getSchema().equals(board.getSchema())).findFirst().get();
 
+        //part1. build select
+        buildSelect(board);
 
-        //todo build select
+        //part2. build condition
+        buildCondition(board, structure);
 
+        //todo build sort
+        //part3. build sort
 
-        //build condition
+        //part4. change table name for extended structure
+        if (structure.getKind() == 1) {
+            table = extendType.get(structure.getType());
+            condition.append("type", structure.getSchema());
+        } else {
+            table = rider.getClazz().getSimpleName().replace(MODEL_PREFIX, "").toLowerCase();
+        }
+
+        //part5. set clazz
+        clazz = rider.getClazz();
+
+        return this;
+    }
+
+    private void buildCondition(ModBoard board, ModStructure structure) {
         if (condition == null) {
             condition = new Document();
         } else if (condition.containsKey("free")) {
@@ -248,24 +267,38 @@ public class DBParams {
 
             condition.put("valid", VALID);
         }
+    }
 
+    /**
+     * build select
+     * <p>
+     * if select is passed from client, use the passed select
+     * or use the select get from board
+     * <p>
+     * select passed from client should be below
+     * {"field1":1,"field2":1}
+     *
+     * @param board
+     */
+    private void buildSelect(ModBoard board) {
 
-        //todo build sort
-
-
-        //change table name for extended structure
-
-        if (structure.getKind() == 1) {
-            table = extendType.get(structure.getType());
-            condition.append("type", structure.getSchema());
+        //passed from client
+        if (select != null) {
+            // {field1:'1',field2:'1'}  ->  {field1:1,field2:1}
+            Document confirmed = new Document();
+            select.forEach((s, o) -> confirmed.put(s, o instanceof String ? Integer.parseInt((String) o) : o));
+            select = confirmed;
         } else {
-            table = rider.getClazz().getSimpleName().replace(MODEL_PREFIX, "").toLowerCase();
+            //get from board
+            select = new Document();
+            board.getSelects().forEach(s -> {
+                if (s.getSelect()) {
+                    select.put(s.getKey(), 1);
+                }
+            });
         }
 
-        //set clazz
-        clazz = rider.getClazz();
 
-        return this;
     }
 
     private Object reserved(String keyword) {

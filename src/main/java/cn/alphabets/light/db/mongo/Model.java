@@ -186,7 +186,7 @@ public class Model {
     public <T extends ModCommon> T get(Document condition, Document select) {
 
         // set fetch condition
-        FindIterable<Document> find = this.collection.find(condition);
+        FindIterable<Document> find = this.collection.find(condition).projection(select);
 
         Document document = find.first();
         return (T) ModCommon.fromDocument(document, this.getModelType());
