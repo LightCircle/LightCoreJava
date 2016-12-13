@@ -61,7 +61,7 @@ public class Context {
         // file
         if (ctx.fileUploads().size() > 0) {
             Set<FileUpload> uploads = ctx.fileUploads();
-            List<RequestFile> files = uploads.stream().map((x) -> {
+            List<RequestFile> files = uploads.stream().map(x -> {
                 RequestFile file = new RequestFile(Constant.PARAM_FILE_NAME, x.fileName());
                 file.put(Constant.PARAM_FILE_TYPE, x.contentType());
                 file.put(Constant.PARAM_FILE_PHYSICAL, x.uploadedFileName());

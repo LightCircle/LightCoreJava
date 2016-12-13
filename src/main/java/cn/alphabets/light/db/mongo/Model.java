@@ -20,6 +20,7 @@ import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.text.WordUtils;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.io.*;
@@ -27,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static com.mongodb.client.model.Indexes.descending;
 
 /**
  * Model
@@ -92,48 +91,56 @@ public class Model {
         return this.list(null);
     }
 
-    public <T extends ModCommon> List<T> list(Document condition) {
+    public <T extends ModCommon> List<T> list(Bson condition) {
         return this.list(condition, null);
     }
 
-    public <T extends ModCommon> List<T> list(Document condition, List<String> fieldNames) {
-        return this.list(condition, fieldNames, null, 0, Constant.DEFAULT_LIMIT);
+    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames) {
+        return this.list(condition, fieldNames, null);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ModCommon> List<T> list(
-            Document condition,
-            List<String> fieldNames,
-            List<String> sortField,
-            int skipCount,
-            int limitCount) {
-
-        // default value
-        condition = condition == null ? new Document() : condition;
-        fieldNames = fieldNames == null ? Collections.emptyList() : fieldNames;
-        sortField = sortField == null ? Collections.emptyList() : sortField;
-
-        // set fetch condition
-        FindIterable<Document> find = this.collection.find(condition);
-        FindIterable<Document> skip = find.skip(skipCount);
-        FindIterable<Document> limit = skip.limit(limitCount);
-        FindIterable<Document> sort = limit.sort(descending(sortField));
-        FindIterable<Document> projection = sort.projection(Projections.include(fieldNames));
-
-        // fetch and convert
-        List<T> result = new ArrayList<>();
-        projection.forEach((Block<? super Document>) document -> {
-            result.add((T) ModCommon.fromDocument(document, this.getModelType()));
-        });
-        return result;
+    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames, Bson sort) {
+        return this.list(condition, fieldNames, sort, 0);
     }
 
-    public <T extends ModCommon> List<T> list(
-            Document condition,
-            Document select,
-            Document sort,
-            int skip,
-            int limit) {
+    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames, Bson sort, int skip) {
+        return this.list(condition, fieldNames, sort, skip, Constant.DEFAULT_LIMIT);
+    }
+
+    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames, Bson sort, int skip, int limit) {
+        return this.list(condition, Projections.include(fieldNames), sort, skip, limit);
+    }
+
+
+    //    @SuppressWarnings("unchecked")
+//    public <T extends ModCommon> List<T> list(
+//            Document condition,
+//            List<String> fieldNames,
+//            List<String> sortField,
+//            int skipCount,
+//            int limitCount) {
+//
+//        // default value
+//        condition = condition == null ? new Document() : condition;
+//        fieldNames = fieldNames == null ? Collections.emptyList() : fieldNames;
+//        sortField = sortField == null ? Collections.emptyList() : sortField;
+//
+//        // set fetch condition
+//        FindIterable<Document> find = this.collection.find(condition);
+//        FindIterable<Document> skip = find.skip(skipCount);
+//        FindIterable<Document> limit = skip.limit(limitCount);
+//        FindIterable<Document> sort = limit.sort(descending(sortField));
+//        FindIterable<Document> projection = sort.projection(Projections.include(fieldNames));
+//
+//        // fetch and convert
+//        List<T> result = new ArrayList<>();
+//        projection.forEach((Block<? super Document>) document -> {
+//            result.add((T) ModCommon.fromDocument(document, this.getModelType()));
+//        });
+//        return result;
+//    }
+//
+    public <T extends ModCommon> List<T> list(Bson condition, Bson select, Bson sort, int skip, int limit) {
 
         // set fetch options
         FindIterable<Document> find = this.collection.find(condition).projection(select).sort(sort).skip(skip).limit(limit);

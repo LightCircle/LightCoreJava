@@ -6,7 +6,7 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
-import cn.alphabets.light.model.datarider2.DBParams;
+import cn.alphabets.light.model.datarider.DBParams;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
@@ -45,7 +45,7 @@ public class Controller {
     }
 
     public <T extends ModCommon> T get() {
-        logger.debug("[get] DB params : " + params.toString());
+        logger.debug("[GET] DB params : " + params.toString());
 
         Document condition = params.getCondition();
         if (condition == null || condition.size() == 0) {

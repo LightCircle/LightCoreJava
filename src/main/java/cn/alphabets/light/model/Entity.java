@@ -3,6 +3,7 @@ package cn.alphabets.light.model;
 import cn.alphabets.light.http.Context;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
  * Model
  * Created by lilin on 2016/11/19.
  */
+@JsonPropertyOrder(alphabetic = true)
 public class Entity implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonIgnore
@@ -118,10 +120,15 @@ public class Entity implements Serializable {
 
                 String key = x.getName();
 
-                // If there is an annontion definition, get the defined name
+
                 for (Annotation annotation : x.getDeclaredAnnotations()) {
+                    // If there is an "JsonProperty" annotation definition, get the defined name
                     if (annotation instanceof JsonProperty) {
-                        key = ((JsonProperty) annotation).value();
+                        JsonProperty jp = ((JsonProperty) annotation);
+                        if (jp.access() == JsonProperty.Access.READ_ONLY) {
+                            return;
+                        }
+                        key = jp.value();
                     }
                 }
 

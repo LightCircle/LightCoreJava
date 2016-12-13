@@ -5,11 +5,14 @@ import cn.alphabets.light.model.deserializer.ObjectIdDeserializer;
 import cn.alphabets.light.model.serializer.DateSerializer;
 import cn.alphabets.light.model.serializer.ObjectIdSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.bson.types.ObjectId;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * ModBase
@@ -19,6 +22,14 @@ import java.util.Date;
 public class ModCommon extends Entity {
 
     private static final long serialVersionUID = 1L;
+
+
+    //Use JsonView annotation to filter out this field
+    @JsonView(Views.OptionsView.class)
+    //Use JsonProperty access = READ_ONLY to ignore this field during deserialization
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private HashMap<String, HashMap<String, ? extends ModCommon>> options;
+
 
     private Integer valid;
     private String createBy;
@@ -83,4 +94,13 @@ public class ModCommon extends Entity {
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
     }
+
+    public HashMap<String, HashMap<String, ? extends ModCommon>> getOptions() {
+        return options;
+    }
+
+    public void setOptions(HashMap<String, HashMap<String, ? extends ModCommon>> options) {
+        this.options = options;
+    }
+
 }

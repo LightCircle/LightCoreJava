@@ -1,4 +1,4 @@
-package cn.alphabets.light.model.datarider2;
+package cn.alphabets.light.model.datarider;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.cache.CacheManager;
@@ -6,6 +6,8 @@ import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.ModCommon;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -19,6 +21,16 @@ import static cn.alphabets.light.Constant.*;
  * Created by luohao on 2016/11/30.
  */
 public class DBParams {
+
+    private static final Logger logger = LoggerFactory.getLogger(DBParams.class);
+
+    public static HashMap<Long, String> extendType = new HashMap<Long, String>() {{
+        put(1L, "user");
+        put(2L, "group");
+        put(3L, "file");
+        put(4L, "category");
+    }};
+
     private Document condition;
     private Document select;
     private Document sort;
@@ -63,13 +75,24 @@ public class DBParams {
             //skip
             String skip = json.getString(Constant.PARAM_SKIP);
             if (StringUtils.isNotEmpty(skip)) {
-                this.skip = Integer.parseInt(skip);
+
+                try {
+                    this.skip = Integer.parseInt(skip);
+                } catch (NumberFormatException e) {
+                    logger.warn("error get [skip] ,use default 0", e);
+                    this.skip = 0;
+                }
             }
 
             //limit
             String limit = json.getString(Constant.PARAM_LIMIT);
             if (StringUtils.isNotEmpty(limit)) {
-                this.limit = Integer.parseInt(limit);
+                try {
+                    this.limit = Integer.parseInt(limit);
+                } catch (NumberFormatException e) {
+                    logger.warn("error get [limit] ,use default 0", e);
+                    this.limit = 0;
+                }
             }
         }
     }
@@ -201,9 +224,9 @@ public class DBParams {
                         Object value = condition.get(key);
                         String valueType = ((HashMap<String, HashMap>) structure.getItems()).get(parameter).get("type").toString().trim().toLowerCase();
                         if (section.containsKey(parameter)) {
-                            ((Document) section.get(parameter)).put(filter.getOperator(), convertor.Convert(valueType, value));
+                            ((Document) section.get(parameter)).put(filter.getOperator(), convertor.convert(valueType, value));
                         } else {
-                            section.put(parameter, new Document(filter.getOperator(), convertor.Convert(valueType, value)));
+                            section.put(parameter, new Document(filter.getOperator(), convertor.convert(valueType, value)));
                         }
                     }
 
@@ -231,12 +254,7 @@ public class DBParams {
 
 
         //change table name for extended structure
-        HashMap<Long, String> extendType = new HashMap<Long, String>() {{
-            put(1L, "user");
-            put(2L, "group");
-            put(3L, "file");
-            put(4L, "category");
-        }};
+
         if (structure.getKind() == 1) {
             table = extendType.get(structure.getType());
             condition.append("type", structure.getSchema());

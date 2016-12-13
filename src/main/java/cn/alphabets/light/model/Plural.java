@@ -1,23 +1,26 @@
 package cn.alphabets.light.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * PluralData
  * Created by lilin on 2016/11/13.
  */
+@JsonPropertyOrder(alphabetic = true)
 public class Plural<T extends ModCommon> {
-    public Plural(Long total, List<T> items) {
-        this(total, items, null);
+
+
+    public Plural(Long totalItems, List<T> items) {
+        this(totalItems, items, null);
     }
 
-    public Plural(Long total, List<T> items, OutputStream stream) {
-        this.totalItems = total;
+    public Plural(Long totalItems, List<T> items, HashMap<String, HashMap<String, ? extends ModCommon>> options) {
+        this.totalItems = totalItems;
         this.items = items;
-        this.stream = stream;
+        this.options = options;
     }
 
     public Long getTotalItems() {
@@ -28,12 +31,15 @@ public class Plural<T extends ModCommon> {
         return items;
     }
 
-    public OutputStream getStream() {
-        return this.stream;
+    public HashMap<String, HashMap<String, ? extends ModCommon>> getOptions() {
+        return options;
     }
 
-    @JsonIgnore
-    private OutputStream stream;
+    public void setOptions(HashMap<String, HashMap<String, ? extends ModCommon>> options) {
+        this.options = options;
+    }
+
     private Long totalItems;
     private List<T> items;
+    private HashMap<String, HashMap<String, ? extends ModCommon>> options;
 }

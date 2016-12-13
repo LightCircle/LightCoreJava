@@ -239,7 +239,8 @@ public class Generator {
             "updateAt",
             "createBy",
             "updateBy",
-            "valid"
+            "valid",
+            "options"
     );
 
     private final static List<String> reserved = Arrays.asList(

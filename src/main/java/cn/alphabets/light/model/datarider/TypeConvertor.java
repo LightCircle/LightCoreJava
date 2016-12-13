@@ -1,15 +1,18 @@
-package cn.alphabets.light.model.datarider2;
+package cn.alphabets.light.model.datarider;
 
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.exception.DataRiderException;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 
-import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by luohao on 2016/12/3.
@@ -109,6 +112,9 @@ public class TypeConvertor {
             }
 
             if (o instanceof String) {
+                if (StringUtils.isEmpty((String) o)) {
+                    return null;
+                }
                 return new ObjectId((String) o);
             }
 
@@ -124,7 +130,14 @@ public class TypeConvertor {
         this.params = params;
     }
 
-    public Object Convert(String valueType, Object value) {
+    public Object convert(String valueType, Object value) {
+
+        if (Arrays.asList("string", "boolean", "number", "date", "objectid")
+                .contains(valueType)
+                && value instanceof List) {
+            return ((List) value).stream().map(item -> convert(valueType, item)).collect(Collectors.toList());
+        }
+
         return this.typeConverts.get(valueType).apply(value);
     }
 }
