@@ -192,8 +192,8 @@ public class DBParams {
         //part2. build condition
         buildCondition(board, structure);
 
-        //todo build sort
         //part3. build sort
+        buildSort(board);
 
         //part4. change table name for extended structure
         if (structure.getKind() == 1) {
@@ -278,7 +278,7 @@ public class DBParams {
      * select passed from client should be below
      * {"field1":1,"field2":1}
      *
-     * @param board
+     * @param board board info
      */
     private void buildSelect(ModBoard board) {
 
@@ -299,6 +299,33 @@ public class DBParams {
         }
 
 
+    }
+
+    /**
+     * build sort
+     * <p>
+     * if sort is passed from client, use the passed sort
+     * or use the sort get from board
+     * <p>
+     * sort passed from client should be below
+     * {"field1":-1,"field2":1}
+     *
+     * @param board board info
+     */
+    private void buildSort(ModBoard board) {
+        //passed from client
+        if (sort != null) {
+            // {field1:'1',field2:'-1'}  ->  {field1:1,field2:-1}
+            Document confirmed = new Document();
+            sort.forEach((s, o) -> confirmed.put(s, o instanceof String ? Integer.parseInt((String) o) : o));
+            sort = confirmed;
+        } else {
+            //get from board
+            sort = new Document();
+            board.getSorts().forEach(s -> {
+                sort.put(s.getKey(), "desc".equals(s.getOrder()) ? -1 : 1);
+            });
+        }
     }
 
     private Object reserved(String keyword) {
