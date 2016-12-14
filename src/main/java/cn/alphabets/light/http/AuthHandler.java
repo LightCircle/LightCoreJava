@@ -53,7 +53,7 @@ public interface AuthHandler extends Handler<RoutingContext> {
 
                 if (Helper.isBrowser(ctx.request())) {
                     Result.redirect(ctx, ConfigManager.INSTANCE.getString("app.home"));
-                } else  {
+                } else {
                     // TODO: move err to Result class
                     ctx.response().setStatusCode(errorStatus.code()).end(errorStatus.reasonPhrase());
                 }

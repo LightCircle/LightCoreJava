@@ -140,7 +140,7 @@ public class DataRider {
     }
 
     public <T extends ModCommon> Plural<T> search(DBParams params) {
-        //todo
+        //TODO: search method
         throw new UnsupportedOperationException("rider search");
     }
 

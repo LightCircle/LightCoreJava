@@ -155,7 +155,7 @@ public class Context {
     }
 
     public TimeZone getTimeZone() {
-        //TODO get timezone from config
+        //TODO: get timezone from session user or config
         return TimeZone.getTimeZone("GMT+8");
     }
 
