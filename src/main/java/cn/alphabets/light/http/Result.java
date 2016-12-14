@@ -32,6 +32,8 @@ public class Result {
         if (data instanceof LightException) {
             LightException error = (LightException) data;
             this.error = new Error(error.getCode(), error.getMessage());
+        } else if (data instanceof Error) {
+            this.error = (Error) data;
         } else {
             this.data = data;
         }

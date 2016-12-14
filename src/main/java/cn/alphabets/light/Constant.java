@@ -66,4 +66,6 @@ public class Constant {
     public static final String PARAM_DATA = "data";
     public static final String PARAM_SKIP = "skip";
     public static final String PARAM_LIMIT = "limit";
+
+    public static final int GLOBAL_ERROR_STATUS_CODE = 520;
 }

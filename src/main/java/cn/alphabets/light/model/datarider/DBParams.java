@@ -4,6 +4,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModStructure;
+import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.ModCommon;
 import io.vertx.core.logging.Logger;
@@ -48,51 +49,56 @@ public class DBParams {
     public DBParams(Context aHandler, boolean attach) {
         handler = aHandler;
         if (attach) {
-            Document json = handler.params.getJson();
-            //condition from handler
-            if (json.containsKey(PARAM_FREE)) {
-                this.condition = new Document(PARAM_FREE, json.get(PARAM_FREE));
-            } else {
 
-                Document condition = new Document();
-                if (json.containsKey(PARAM_ID)) {
-                    condition.append("_id", new ObjectId(json.getString(PARAM_ID)));
+            try {
+                Document json = handler.params.getJson();
+                //condition from handler
+                if (json.containsKey(PARAM_FREE)) {
+                    this.condition = new Document(PARAM_FREE, json.get(PARAM_FREE));
+                } else {
+
+                    Document condition = new Document();
+                    if (json.containsKey(PARAM_ID)) {
+                        condition.append("_id", new ObjectId(json.getString(PARAM_ID)));
+                    }
+                    if (json.containsKey(PARAM_CONDITION)) {
+                        condition.putAll((Document) json.get(PARAM_CONDITION));
+                    }
+                    this.condition = condition;
                 }
-                if (json.containsKey(PARAM_CONDITION)) {
-                    condition.putAll((Document) json.get(PARAM_CONDITION));
+
+
+                //select from handler
+                this.select = (Document) json.get(PARAM_SELECT);
+                //sort from handler
+                this.sort = (Document) json.get(PARAM_SORT);
+                //data from handler
+                this.data = (Document) json.get(PARAM_DATA);
+
+                //skip
+                String skip = json.getString(Constant.PARAM_SKIP);
+                if (StringUtils.isNotEmpty(skip)) {
+
+                    try {
+                        this.skip = Integer.parseInt(skip);
+                    } catch (NumberFormatException e) {
+                        logger.warn("error get [skip] ,use default 0", e);
+                        this.skip = 0;
+                    }
                 }
-                this.condition = condition;
-            }
 
-
-            //select from handler
-            this.select = (Document) json.get(PARAM_SELECT);
-            //sort from handler
-            this.sort = (Document) json.get(PARAM_SORT);
-            //data from handler
-            this.data = (Document) json.get(PARAM_DATA);
-
-            //skip
-            String skip = json.getString(Constant.PARAM_SKIP);
-            if (StringUtils.isNotEmpty(skip)) {
-
-                try {
-                    this.skip = Integer.parseInt(skip);
-                } catch (NumberFormatException e) {
-                    logger.warn("error get [skip] ,use default 0", e);
-                    this.skip = 0;
+                //limit
+                String limit = json.getString(Constant.PARAM_LIMIT);
+                if (StringUtils.isNotEmpty(limit)) {
+                    try {
+                        this.limit = Integer.parseInt(limit);
+                    } catch (NumberFormatException e) {
+                        logger.warn("error get [limit] ,use default 0", e);
+                        this.limit = 0;
+                    }
                 }
-            }
-
-            //limit
-            String limit = json.getString(Constant.PARAM_LIMIT);
-            if (StringUtils.isNotEmpty(limit)) {
-                try {
-                    this.limit = Integer.parseInt(limit);
-                } catch (NumberFormatException e) {
-                    logger.warn("error get [limit] ,use default 0", e);
-                    this.limit = 0;
-                }
+            } catch (Exception e) {
+                throw DataRiderException.ParameterUnsatisfied("[Handler]", e);
             }
         }
     }

@@ -8,12 +8,13 @@ import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModRoute;
+import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
+import cn.alphabets.light.model.Error;
 import cn.alphabets.light.model.datarider.DBParams;
 import cn.alphabets.light.model.datarider.DataRider;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -25,12 +26,12 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
-import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
-import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
 import static io.vertx.core.http.HttpHeaders.TEXT_HTML;
 
@@ -269,29 +270,73 @@ public class Dispatcher {
                 return;
             }
 
-            HttpResponseStatus status = INTERNAL_SERVER_ERROR;
-            if (error instanceof MethodNotFoundException) {
-                status = NOT_FOUND;
-            }
+            processException(ctx, error);
 
-            if (error instanceof ProcessingException) {
-                status = INTERNAL_SERVER_ERROR;
-                Throwable inner = error.getCause();
-                if (inner != null) {
-                    if (inner instanceof LightException) {
-                        Result result = new Result(inner);
-                        status = new HttpResponseStatus(INTERNAL_SERVER_ERROR.code(), result.json());
-                    }
-                }
-            }
-
-            if (error instanceof IllegalStateException) {
-                status = INTERNAL_SERVER_ERROR;
-            }
-
-
-            ctx.response().setStatusCode(status.code()).end(status.reasonPhrase());
         };
+    }
+
+    private LinkedHashMap<Class, BiConsumer<RoutingContext, Throwable>> errorProcessMap = new LinkedHashMap<Class, BiConsumer<RoutingContext, Throwable>>() {{
+
+        put(MethodNotFoundException.class, (ctx, e) -> {
+            Error error = new Error("100", e.getMessage());
+            ctx.response()
+                    .putHeader(CONTENT_TYPE, "application/json; charset=utf-8")
+                    .setStatusCode(Constant.GLOBAL_ERROR_STATUS_CODE)
+                    .end(new Result(error).json());
+        });
+        put(IllegalStateException.class, (ctx, e) -> {
+
+            Error error = new Error("101", e.getMessage());
+            ctx.response()
+                    .putHeader(CONTENT_TYPE, "application/json; charset=utf-8")
+                    .setStatusCode(Constant.GLOBAL_ERROR_STATUS_CODE)
+                    .end(new Result(error).json());
+        });
+
+        put(LightException.class, (ctx, e) -> {
+            Result result = new Result(e);
+            ctx.response()
+                    .putHeader(CONTENT_TYPE, "application/json; charset=utf-8")
+                    .setStatusCode(Constant.GLOBAL_ERROR_STATUS_CODE)
+                    .end(result.json());
+        });
+        put(DataRiderException.class, (ctx, e) -> {
+            Error error = new Error("103", e.getMessage());
+            ctx.response()
+                    .setStatusCode(Constant.GLOBAL_ERROR_STATUS_CODE)
+                    .putHeader(CONTENT_TYPE, "application/json; charset=utf-8")
+                    .end(new Result(error).json());
+        });
+        put(ProcessingException.class, (ctx, e) -> {
+
+            Throwable cause = e.getCause();
+            if (cause == null) {
+                errorProcessMap.get(Throwable.class).accept(ctx, null);
+                return;
+            }
+            processException(ctx, cause);
+        });
+        //default
+        put(Throwable.class, (ctx, e) -> {
+            Error error = new Error("000", e != null ? e.getMessage() : "Unknown error.");
+            ctx.response()
+                    .setStatusCode(Constant.GLOBAL_ERROR_STATUS_CODE)
+                    .putHeader(CONTENT_TYPE, "application/json; charset=utf-8")
+                    .end(new Result(error).json());
+        });
+    }};
+
+    private void processException(RoutingContext ctx, Throwable error) {
+
+        errorProcessMap.keySet().forEach(aClass -> {
+            if (aClass.isAssignableFrom(error.getClass())) {
+                if (ctx.response().ended()) {
+                    return;
+                }
+                errorProcessMap.get(aClass).accept(ctx, error);
+            }
+        });
+
     }
 
 }
