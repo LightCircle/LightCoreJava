@@ -30,6 +30,7 @@ public class File {
      *
      * @param handler context
      * @return meta
+     * @throws BadRequestException add error
      */
     public Plural<ModFile> add(Context handler) throws BadRequestException {
 
