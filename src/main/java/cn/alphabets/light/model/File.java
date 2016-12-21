@@ -64,6 +64,8 @@ public class File {
      * Physically delete the file, and also delete the GridFS file
      *
      * @param handler context
+     * @return
+     * @throws LightException
      */
     public long remove(Context handler) throws LightException {
 
@@ -92,8 +94,7 @@ public class File {
     /**
      * Picture download
      *
-     * @param handler context
-     * @return meta & stream
+     * @param handler
      * @throws LightException file not found
      */
     public void image(Context handler) throws LightException {

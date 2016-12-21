@@ -21,8 +21,8 @@ public class ObjectIdDeserializer extends JsonDeserializer<ObjectId> {
     /**
      * Json turn ObjectId
      * eg:
-     * "55530a8a522b337520746efa" -> ObjectId
-     * "{"$oid":"57b56c919e0fbd0500572e84"}"  -> ObjectId
+     * "55530a8a522b337520746efa" to ObjectId
+     * "{"$oid":"57b56c919e0fbd0500572e84"}" to ObjectId
      *
      * @param p p
      * @param ctxt context
