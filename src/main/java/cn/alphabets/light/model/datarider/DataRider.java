@@ -1,6 +1,7 @@
 package cn.alphabets.light.model.datarider;
 
 
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.Controller;
@@ -62,7 +63,11 @@ public class DataRider {
         dataRider.board = board;
 
         String className = MODEL_PREFIX + WordUtils.capitalize(board.getSchema());
-        String packageName = Model.reserved.contains(board.getSchema())
+
+        boolean usingLightEntity = Model.reserved.contains(board.getSchema())
+                || Constant.KIND_BOARD_SYSTEM_DATA_API.equals(board.getKind());
+
+        String packageName = usingLightEntity
                 ? DEFAULT_PACKAGE_NAME + ".entity"
                 : Environment.instance().getPackages() + ".entity";
 
