@@ -12,6 +12,9 @@ import java.util.List;
 @JsonPropertyOrder(alphabetic = true)
 public class Plural<T extends ModCommon> {
 
+    public Plural(List<T> items) {
+        this((long) items.size(), items, null);
+    }
 
     public Plural(Long totalItems, List<T> items) {
         this(totalItems, items, null);
