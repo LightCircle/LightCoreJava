@@ -17,6 +17,7 @@ import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import com.mongodb.client.model.Projections;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
@@ -57,7 +58,7 @@ public class Model {
 
         if (table != null) {
             table = English.plural(table);
-            if (!Constant.SYSTEM_DB.equals(domain)) {
+            if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
                 table = code + '.' + table;
             }
 

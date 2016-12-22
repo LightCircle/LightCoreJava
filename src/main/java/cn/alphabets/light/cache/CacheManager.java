@@ -72,8 +72,9 @@ public enum CacheManager {
                 .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
         // tenant
+        // tenant table name has no prefix,so code here pass null
         select = Arrays.asList("code", "name");
-        tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT)
+        tenants = new Model(domain, null, Constant.SYSTEM_DB_TENANT)
                 .list(valid, select, null, 0, Constant.MAX_LIMIT);
     }
 
