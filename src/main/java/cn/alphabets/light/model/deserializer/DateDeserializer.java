@@ -23,9 +23,9 @@ public class DateDeserializer extends JsonDeserializer<Date> {
     /**
      * Json turn Date
      * eg:
-     * "2015/05/08 13:33:32.333"  -> Date
-     * "2015-07-01T06:55:42.696Z" -> Date
-     * "{"$date":1471507601964}"  -> Date
+     * "2015/05/08 13:33:32.333"  to Date
+     * "2015-07-01T06:55:42.696Z" to Date
+     * "{"$date":1471507601964}"  to Date
      *
      * @param p   parser
      * @param ctx context

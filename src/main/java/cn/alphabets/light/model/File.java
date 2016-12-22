@@ -30,6 +30,7 @@ public class File {
      *
      * @param handler context
      * @return meta
+     * @throws BadRequestException add error
      */
     public Plural<ModFile> add(Context handler) throws BadRequestException {
 
@@ -64,6 +65,8 @@ public class File {
      * Physically delete the file, and also delete the GridFS file
      *
      * @param handler context
+     * @return removed db record count
+     * @throws LightException remove error
      */
     public long remove(Context handler) throws LightException {
 
@@ -93,7 +96,6 @@ public class File {
      * Picture download
      *
      * @param handler context
-     * @return meta & stream
      * @throws LightException file not found
      */
     public void image(Context handler) throws LightException {
