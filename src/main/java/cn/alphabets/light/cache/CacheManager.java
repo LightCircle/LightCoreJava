@@ -23,6 +23,7 @@ public enum CacheManager {
     private List<ModStructure> structures;
     private List<ModBoard> boards;
     private List<ModRoute> routes;
+    private List<ModFunction> functions;
 
     /**
      * 初始化
@@ -65,6 +66,11 @@ public enum CacheManager {
         routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE)
                 .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
+        // function
+        select = Arrays.asList("order", "description", "menu", "reserved", "status", "type", "url", "icon", "kind", "parent");
+        functions = new Model(domain, code, Constant.SYSTEM_DB_FUNCTION)
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+
         // tenant
         select = Arrays.asList("code", "name");
         tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT)
@@ -97,5 +103,9 @@ public enum CacheManager {
 
     public List<ModRoute> getRoutes() {
         return routes;
+    }
+
+    public List<ModFunction> getFunctions() {
+        return functions;
     }
 }
