@@ -254,7 +254,6 @@ public class Dispatcher {
             try {
                 this.methods.put(key, Class.forName(fullName).getMethod(methodName, Context.class));
             } catch (NoSuchMethodException | ClassNotFoundException e) {
-                logger.warn("Class Method : " + key + " not found", e);
                 return null;
             }
         }

@@ -128,6 +128,16 @@ public class DBParams {
         return this;
     }
 
+    public DBParams skip(int skip) {
+        this.skip = skip;
+        return this;
+    }
+
+    public DBParams limit(int limit) {
+        this.limit = limit;
+        return this;
+    }
+
     public Document getCondition() {
         if (condition == null) {
             return new Document();

@@ -78,7 +78,7 @@ public class Model {
 
         if (table != null) {
             table = English.plural(table);
-            if (!Constant.SYSTEM_DB.equals(domain)) {
+            if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
                 table = code + '.' + table;
             }
 
@@ -348,7 +348,7 @@ public class Model {
             try {
                 return Class.forName(Constant.DEFAULT_PACKAGE_NAME + ".entity." + className);
             } catch (ClassNotFoundException e1) {
-                throw new RuntimeException();
+                throw new RuntimeException(e1);
             }
         }
     }
