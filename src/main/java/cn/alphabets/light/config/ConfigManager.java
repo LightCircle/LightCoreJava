@@ -47,7 +47,11 @@ public enum ConfigManager {
     }
 
     public String getString(String key) {
-        return String.valueOf(map.get(key));
+        if (map.get(key) != null) {
+            return String.valueOf(map.get(key));
+        } else {
+            return null;
+        }
     }
 
     public long getLong(String key) {

@@ -3,6 +3,8 @@ package cn.alphabets.light.http;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
+import cn.alphabets.light.config.ConfigManager;
+import cn.alphabets.light.entity.ModUser;
 import cn.alphabets.light.model.ModCommon;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -12,6 +14,7 @@ import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
 import java.util.List;
@@ -155,8 +158,16 @@ public class Context {
     }
 
     public TimeZone getTimeZone() {
-        //TODO: get timezone from session user or config
-        return TimeZone.getTimeZone("GMT+8");
+
+        ModUser user = (ModUser) this.user();
+        if (user != null && StringUtils.isNotEmpty(user.getTimezone())) {
+            return TimeZone.getTimeZone(user.getTimezone());
+        }
+        String conftz = ConfigManager.INSTANCE.getString(Constant.CFK_TIMEZONE);
+        if (conftz != null) {
+            return TimeZone.getTimeZone(conftz);
+        }
+        return TimeZone.getDefault();
     }
 
     public String getLang() {

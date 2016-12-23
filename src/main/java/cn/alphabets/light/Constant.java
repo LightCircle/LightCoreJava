@@ -10,6 +10,7 @@ public class Constant {
     public static final String CFK_REQUEST_IGNORE_TIMEOUT = "ignore.timeout";   // 请求超时例外设定
     public static final String CFK_SESSION_TIMEOUT = "app.sessionTimeout";      // session有效期设定
     public static final String CFK_IGNORE_AUTH = "ignore.auth";                 // 不需要登录能访问url
+    public static final String CFK_TIMEZONE = "app.timezone";
 
     public static final String SK_USER = "_sk_user";                            // 当前用户 session key, SK 打头为Session中的key
     public static final String SK_DOMAIN = "cn.alphabets.light.sk_domain";      // domain key
