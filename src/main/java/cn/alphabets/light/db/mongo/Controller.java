@@ -69,7 +69,7 @@ public class Controller {
     }
 
 
-    public Long update() {
+    public <T extends ModCommon> T update() {
         logger.debug("[UPDATE] DB params : " + params.toString());
         Document document = params.getData();
         document.put("updateAt", new Date());
@@ -80,7 +80,9 @@ public class Controller {
         if (condition == null || condition.size() == 0) {
             throw DataRiderException.ParameterUnsatisfied("Update condition can not be empty.");
         }
-        return this.model.update(condition, confirmed);
+        this.model.update(condition, confirmed);
+        //TODO: multi document updated ,return what?
+        return this.model.get(condition, params.getSelect());
     }
 
 
