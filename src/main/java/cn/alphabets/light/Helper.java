@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,29 +62,48 @@ public class Helper {
 
     public static Date fromSupportedString(String date, TimeZone timeZone) throws Exception {
 
-        HashMap<Pattern, DateFormat> patternFormatMap = new LinkedHashMap<Pattern, DateFormat>() {
+        HashMap<Pattern, BiFunction<String, TimeZone, Date>> patternFormatMap = new LinkedHashMap<Pattern, BiFunction<String, TimeZone, Date>>() {
             {
                 put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2}$")
-                        , new SimpleDateFormat("yyyy/MM/dd"));
+                        , (s, tz) -> {
+                            DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+                            format.setTimeZone(tz);
+                            try {
+                                return format.parse(s);
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
 
                 put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}:\\d{2}$")
-                        , new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"));
+                        , (s, tz) -> {
+                            DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            format.setTimeZone(tz);
+                            try {
+                                return format.parse(s);
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
 
                 put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$")
-                        , new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS"));
+                        , (s, tz) -> {
+                            DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+                            format.setTimeZone(tz);
+                            try {
+                                return format.parse(s);
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
             }
         };
-        Iterator<Map.Entry<Pattern, DateFormat>> iterator = patternFormatMap.entrySet().iterator();
+
+        Iterator<Map.Entry<Pattern, BiFunction<String, TimeZone, Date>>> iterator = patternFormatMap.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Pattern, DateFormat> entry = iterator.next();
+            Map.Entry<Pattern, BiFunction<String, TimeZone, Date>> entry = iterator.next();
             if (entry.getKey().matcher(date).find()) {
-                DateFormat format = entry.getValue();
-                format.setTimeZone(timeZone);
-                try {
-                    return format.parse(date);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                return entry.getValue().apply(date, timeZone);
             }
         }
         throw new RuntimeException("time format is unsupported");

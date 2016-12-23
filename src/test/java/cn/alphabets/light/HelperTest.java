@@ -1,5 +1,6 @@
 package cn.alphabets.light;
 
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -25,6 +27,18 @@ public class HelperTest {
         Assert.assertEquals("Z", utc.substring(23));
     }
 
+    @Test
+    public void testFromSupportedString() throws Exception {
+        String case1 = "2016/12/23";
+        String case2 = "2015/12/23 09:32:33";
+        String case3 = "2015/12/23 09:32:33.111";
+        Date date1 = Helper.fromSupportedString(case1, TimeZone.getTimeZone("GMT+8"));
+        Date date2 = Helper.fromSupportedString(case2, TimeZone.getTimeZone("GMT+8"));
+        Date date3 = Helper.fromSupportedString(case3, TimeZone.getTimeZone("GMT+9"));
+        Assert.assertEquals("Fri Dec 23 00:00:00 CST 2016",date1.toString());
+        Assert.assertEquals("Wed Dec 23 09:32:33 CST 2015",date2.toString());
+        Assert.assertEquals("Wed Dec 23 08:32:33 CST 2015",date3.toString());
+    }
     @Test
     public void testGetMimeType() throws FileNotFoundException {
 
