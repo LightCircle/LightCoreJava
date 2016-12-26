@@ -69,8 +69,6 @@ public class Model {
 
             this.collection = this.db.getCollection(table);
         }
-
-        logger.debug("table : " + table);
     }
 
     public <T extends ModCommon> List<T> list() {
