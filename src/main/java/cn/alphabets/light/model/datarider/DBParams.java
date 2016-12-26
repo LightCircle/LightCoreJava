@@ -145,7 +145,8 @@ public class DBParams {
 
     public Document getCondition() {
         if (condition == null) {
-            return new Document();
+            condition = new Document();
+            return condition;
         }
         return condition;
     }
