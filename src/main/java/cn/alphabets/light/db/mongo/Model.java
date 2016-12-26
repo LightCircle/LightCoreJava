@@ -14,7 +14,7 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
-import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.*;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -50,22 +50,7 @@ public class Model {
     }
 
     public Model(String domain, String code, String table) {
-
-        MongoClient client = Connection.instance(Environment.instance());
-
-        this.db = client.getDatabase(domain);
-        this.name = table;
-
-        if (table != null) {
-            table = English.plural(table);
-            if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
-                table = code + '.' + table;
-            }
-
-            this.collection = this.db.getCollection(table);
-        }
-
-        logger.info("table : " + table);
+        this(domain, code, table, null);
     }
 
     public Model(String domain, String code, String table, Class<? extends ModCommon> clazz) {
@@ -85,7 +70,7 @@ public class Model {
             this.collection = this.db.getCollection(table);
         }
 
-        logger.info("table : " + table);
+        logger.debug("table : " + table);
     }
 
     public <T extends ModCommon> List<T> list() {
@@ -224,6 +209,13 @@ public class Model {
     public <T extends ModCommon> T add(Document document) {
         this.collection.insertOne(document);
         return (T) ModCommon.fromDocument(document, this.getModelType());
+    }
+
+    public long increase(String type) {
+        Document document = this.collection.findOneAndUpdate(Filters.eq("type", type),
+                Updates.inc("sequence", 1L),
+                new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER));
+        return document.getLong("sequence");
     }
 
     /**
