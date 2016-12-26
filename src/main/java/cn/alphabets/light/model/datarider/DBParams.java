@@ -227,7 +227,7 @@ public class DBParams {
 
     private void buildCondition(ModBoard board, ModStructure structure) {
         if (condition == null) {
-            condition = new Document();
+            condition = new Document("valid", VALID);
         } else if (condition.containsKey("free")) {
             condition = (Document) condition.get("free");
         } else if (condition.containsKey("_id")) {
