@@ -24,6 +24,7 @@ public enum CacheManager {
     private List<ModBoard> boards;
     private List<ModRoute> routes;
     private List<ModFunction> functions;
+    private List<ModJob> jobs;
 
     /**
      * 初始化
@@ -71,6 +72,11 @@ public enum CacheManager {
         functions = new Model(domain, code, Constant.SYSTEM_DB_FUNCTION)
                 .list(valid, select, null, 0, Constant.MAX_LIMIT);
 
+        // job
+        select = Arrays.asList("name", "run", "schedule", "limit", "status", "count", "last", "start", "description", "extend", "step");
+        jobs = new Model(domain, code, Constant.SYSTEM_DB_JOB)
+                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+
         // tenant
         // tenant table name has no prefix,so code here pass null
         select = Arrays.asList("code", "name");
@@ -108,5 +114,9 @@ public enum CacheManager {
 
     public List<ModFunction> getFunctions() {
         return functions;
+    }
+
+    public List<ModJob> getJobs() {
+        return jobs;
     }
 }

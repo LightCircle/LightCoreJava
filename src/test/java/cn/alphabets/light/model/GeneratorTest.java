@@ -25,7 +25,13 @@ public class GeneratorTest {
 
         String pkg = Environment.instance().getPackages() + ".entity";
         List<String> target = Arrays.asList(
-                "board", "configuration", "i18n", "route", "structure", "tenant", "validator",
+                "board",
+                "configuration",
+                "i18n",
+                "route",
+                "structure",
+                "tenant",
+                "validator",
                 "access",
                 "authority",
                 "role",
@@ -38,10 +44,11 @@ public class GeneratorTest {
                 "place",
                 "function",
                 "setting",
-                "tag"
+                "tag",
+                "job"
         );
 
-        new Generator(pkg).generate(Constant.SYSTEM_DB, target);
+        new Generator(pkg).generate(Environment.instance().getAppName(), target);
     }
 
 }

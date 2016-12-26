@@ -8,6 +8,7 @@ import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.TimeoutHandler;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
 import cn.alphabets.light.http.session.SessionHandlerImpl;
+import cn.alphabets.light.job.JobManager;
 import cn.alphabets.light.model.Generator;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
@@ -91,6 +92,9 @@ public class App {
 
         // Start the web server
         server.requestHandler(router::accept).listen(env.getAppPort());
+
+        // Start job
+        JobManager.start();
         logger.info(String.format("Running on http://%s:%s/", "127.0.0.1", env.getAppPort()));
     }
 

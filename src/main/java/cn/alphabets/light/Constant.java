@@ -39,10 +39,14 @@ public class Constant {
     public static final String SYSTEM_DB_TENANT = "tenant";
     public static final String SYSTEM_DB_FUNCTION = "function";
     public static final String SYSTEM_DB_FILE = "file";
+    public static final String SYSTEM_DB_JOB = "job";
+
 
     public static final String MODEL_PREFIX = "Mod";
     public static final String DEFAULT_TENANT = "Default";
     public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
+    public static final String DEFAULT_JOB_USER_ID = "000000000000000000000000";
+    public static final String DEFAULT_JOB_USER_LANG = "zh";
     public static final Integer DEFAULT_LIMIT = 0;                              // 一次允许获取的数据库记录数
     public static final Integer MAX_LIMIT = 10000;                              // 数据库记录的最大值数, 超过这个应该使用Cursor
     public static final Integer VALID = 1;                                      // 有效数据库记录
@@ -56,7 +60,6 @@ public class Constant {
     public static final String COOKIE_KEY_LANG = "light.lang";
     public static final String COOKIE_KEY_ACCEPT_LANGUAGE = "Accept-Language";
 
-    public static final String PARAM_FILES = "files";
     public static final String PARAM_FILE_NAME = "filename";
     public static final String PARAM_FILE_TYPE = "content_type";
     public static final String PARAM_FILE_PHYSICAL = "file";

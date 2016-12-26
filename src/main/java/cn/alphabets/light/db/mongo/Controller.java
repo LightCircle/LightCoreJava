@@ -2,7 +2,7 @@ package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.exception.DataRiderException;
-import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
@@ -104,7 +104,7 @@ public class Controller {
         return this.model.readStreamFromGrid(params.getCondition().getObjectId("_id"));
     }
 
-    public GridFSFile writeFileToGrid(Context.RequestFile file) {
+    public GridFSFile writeFileToGrid(RequestFile file) {
         return this.model.writeFileToGrid(file);
     }
 

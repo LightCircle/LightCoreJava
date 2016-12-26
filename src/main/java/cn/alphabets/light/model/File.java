@@ -5,6 +5,7 @@ import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.http.Result;
 import cn.alphabets.light.model.datarider.DBParams;
 import cn.alphabets.light.model.datarider.DataRider;
@@ -35,7 +36,7 @@ public class File {
     public Plural<ModFile> add(Context handler) throws BadRequestException {
 
 
-        List<Context.RequestFile> files = handler.params.getFiles();
+        List<RequestFile> files = handler.params.getFiles();
         if (files == null) {
             throw new BadRequestException("No file content found.");
         }

@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
@@ -31,9 +30,16 @@ public class Context {
 
     private static final Logger logger = LoggerFactory.getLogger(Context.class);
 
-    private RoutingContext ctx;
-
     public final Params params;
+
+    protected RoutingContext ctx;
+    protected String domain;
+    protected String code;
+    protected String uid;
+
+    protected Context() {
+        params = null;
+    }
 
     public Context(RoutingContext ctx) {
         this(ctx, null, null);
@@ -159,9 +165,13 @@ public class Context {
 
     public TimeZone getTimeZone() {
 
-        ModUser user = (ModUser) this.user();
-        if (user != null && StringUtils.isNotEmpty(user.getTimezone())) {
-            return TimeZone.getTimeZone(user.getTimezone());
+        try {
+            ModUser user = (ModUser) this.user();
+            if (user != null && StringUtils.isNotEmpty(user.getTimezone())) {
+                return TimeZone.getTimeZone(user.getTimezone());
+            }
+        } catch (Exception e) {
+            logger.warn("Error get user timezone , use system config timezone instead:", e);
         }
         String conftz = ConfigManager.INSTANCE.getString(Constant.CFK_TIMEZONE);
         if (conftz != null) {
@@ -187,74 +197,5 @@ public class Context {
         return "zh";
     }
 
-    private String domain;
-    private String code;
-    private String uid;
-
-
-    public static class RequestFile extends Document {
-        public RequestFile() {
-        }
-
-        public RequestFile(String key, Object value) {
-            super(key, value);
-        }
-
-        public RequestFile(Map<String, Object> map) {
-            super(map);
-        }
-
-        public String getFilePath() {
-            return this.getString(Constant.PARAM_FILE_PHYSICAL);
-        }
-
-        public String getContentType() {
-            return this.getString(Constant.PARAM_FILE_TYPE);
-        }
-
-        public String getFileName() {
-            return this.getString(Constant.PARAM_FILE_NAME);
-        }
-    }
-
-    public static class Params {
-        private Document json;
-        private List<RequestFile> files;
-
-        public Params(Document json) {
-            this(json, null);
-        }
-
-        public Params(Document json, List<RequestFile> files) {
-            this.json = json;
-            this.files = files;
-        }
-
-        public String getString(String key) {
-            return this.json.getString(key);
-        }
-
-        public void set(String key, Object val) {
-            this.json.put(key, val);
-        }
-
-        public List<RequestFile> getFiles() {
-            return files;
-        }
-
-
-        public Document getJson() {
-            return json;
-        }
-
-        @Override
-        public String toString() {
-            return "\n{" +
-                    "\n\tparams = " + json.toJson() +
-                    "\n\tfiles = " + (files == null ? "null" : "\n\t\t" + files.stream().map(file -> file.toString()).collect(Collectors.joining("\n\t\t"))) +
-                    "\n}";
-        }
-
-    }
 
 }

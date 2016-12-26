@@ -6,6 +6,7 @@ import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.job.JobContext;
 import cn.alphabets.light.model.ModCommon;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -49,6 +50,10 @@ public class DBParams {
     public DBParams(Context aHandler, boolean attach) {
         handler = aHandler;
         if (attach) {
+
+            if (aHandler instanceof JobContext) {
+                throw DataRiderException.ParameterUnsatisfied("[JobContext can not be attach to DBParams]");
+            }
 
             try {
                 Document json = handler.params.getJson();
