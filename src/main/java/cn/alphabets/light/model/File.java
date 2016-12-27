@@ -52,8 +52,10 @@ public class File {
 
             ModFile saved = DataRider.ride(ModFile.class).add(new DBParams(handler).data(info));
 
-            //delete tmp file after upload to grid fs
-            new java.io.File(file.getFilePath()).delete();
+            // delete tmp file after upload to grid fs
+            if (!file.isKeep()) {
+                new java.io.File(file.getFilePath()).delete();
+            }
 
             logger.debug("file upload done : " + saved.toDocument().toJson());
             result.add(saved);

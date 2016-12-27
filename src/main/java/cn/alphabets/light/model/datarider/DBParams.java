@@ -144,10 +144,10 @@ public class DBParams {
     }
 
     public Document getCondition() {
-        if (condition == null) {
-            return new Document();
+        if (this.condition == null) {
+            this.condition = new Document();
         }
-        return condition;
+        return this.condition;
     }
 
     public Document getSelect() {
@@ -159,7 +159,10 @@ public class DBParams {
     }
 
     public Document getData() {
-        return data;
+        if (this.data == null) {
+            this.data = new Document();
+        }
+        return this.data;
     }
 
     public int getSkip() {

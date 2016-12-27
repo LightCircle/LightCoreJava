@@ -105,4 +105,8 @@ public class App {
         new Generator(pkg).generate();
         logger.info("Generation done");
     }
+
+    public void push() throws Exception {
+        new Push().exec();
+    }
 }

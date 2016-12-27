@@ -61,6 +61,7 @@ public class Constant {
     public static final String COOKIE_KEY_LANG = "light.lang";
     public static final String COOKIE_KEY_ACCEPT_LANGUAGE = "Accept-Language";
 
+    public static final String PARAM_FILE_KEEP = "keep_physical_file";
     public static final String PARAM_FILE_NAME = "filename";
     public static final String PARAM_FILE_TYPE = "content_type";
     public static final String PARAM_FILE_PHYSICAL = "file";

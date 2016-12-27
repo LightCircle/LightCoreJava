@@ -2,6 +2,8 @@ package cn.alphabets.light;
 
 import io.vertx.core.http.HttpServerRequest;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -9,6 +11,7 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.bson.Document;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
@@ -19,9 +22,7 @@ import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.resource.reference.ResourceReference;
 import org.xml.sax.SAXException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
@@ -46,6 +47,15 @@ public class Helper {
     static {
         ISO_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         ISO_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
+    public static Model getPOM(String path) {
+        try {
+            MavenXpp3Reader reader = new MavenXpp3Reader();
+            return reader.read(new FileReader(path));
+        } catch (XmlPullParserException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String toUTCString(Date date) {

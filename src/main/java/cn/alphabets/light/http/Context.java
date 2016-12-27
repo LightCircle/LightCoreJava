@@ -41,6 +41,13 @@ public class Context {
         params = null;
     }
 
+    public Context(Params params, String domain, String code, String uid) {
+        this.params = params;
+        this.domain = domain;
+        this.code = code;
+        this.uid = uid;
+    }
+
     public Context(RoutingContext ctx) {
         this(ctx, null, null);
     }
@@ -101,6 +108,9 @@ public class Context {
     }
 
     public Object user() {
+        if (ctx == null) {
+            return null;
+        }
         return ctx.session().get(Constant.SK_USER);
     }
 
