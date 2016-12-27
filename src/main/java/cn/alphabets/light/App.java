@@ -43,6 +43,20 @@ public class App {
         CacheManager.INSTANCE.setUp(env.getAppName());
         ConfigManager.INSTANCE.setUp();
 
+        // Used to generate a Mod file.
+        // command line argument : -generate
+        if (env.args.generate) {
+            this.generate();
+            return;
+        }
+
+        // Used to upload jar files to the Light platform.
+        // command line argument : -push
+        if (env.args.push) {
+            this.push();
+            return;
+        }
+
         // set timeout
         // if app is debug run , ignore all timeout
         if (!Helper.isIdeDebug()) {
@@ -98,15 +112,13 @@ public class App {
         logger.info(String.format("Running on http://%s:%s/", "127.0.0.1", env.getAppPort()));
     }
 
-    public void generate() {
-        Environment env = Environment.instance();
-        CacheManager.INSTANCE.setUp(env.getAppName());
+    private void generate() {
         String pkg = Environment.instance().getPackages() + ".entity";
         new Generator(pkg).generate();
         logger.info("Generation done");
     }
 
-    public void push() throws Exception {
+    private void push() {
         new Push().exec();
     }
 }

@@ -16,8 +16,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.maven.model.Model;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,14 +33,7 @@ class Push {
     void exec() {
 
         // Confirm the pom file
-        String path = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        String home;
-        try {
-            home = URLDecoder.decode(path, "UTF-8").replace("/target/classes/", "");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Unable to read POM file.");
-        }
-
+        String home = System.getProperty("user.dir");
         String pomFile = home + "/pom.xml";
         if (!new java.io.File(pomFile).exists()) {
             logger.error("The pom file does not exist.");

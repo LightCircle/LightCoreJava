@@ -64,12 +64,14 @@ public class Environment {
             this.push = list.contains("-push");
             this.dump = list.contains("-dump");
             this.restore = list.contains("-restore");
+            this.generate = list.contains("-generate");
         }
 
         public boolean local;
         public boolean push;
         public boolean dump;
         public boolean restore;
+        public boolean generate;
     }
 
     public String getAppName() {
