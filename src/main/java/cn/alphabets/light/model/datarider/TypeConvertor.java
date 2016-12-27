@@ -94,8 +94,9 @@ public class TypeConvertor {
 
             if (o instanceof String) {
                 try {
-
-                    if (((String) o).endsWith("Z")) {
+                    if (StringUtils.isBlank((String) o)) {
+                        return null;
+                    } else if (((String) o).endsWith("Z")) {
                         return Helper.fromUTCString((String) o);
                     } else {
                         return Helper.fromSupportedString((String) o, params.getHandler().getTimeZone());

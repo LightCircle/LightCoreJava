@@ -20,7 +20,7 @@ public class Plural<T extends ModCommon> {
         this(totalItems, items, null);
     }
 
-    public Plural(Long totalItems, List<T> items, HashMap<String, HashMap<String, ? extends ModCommon>> options) {
+    public Plural(Long totalItems, List<T> items, HashMap<String, HashMap<String, ? super ModCommon>> options) {
         this.totalItems = totalItems;
         this.items = items;
         this.options = options;
@@ -34,15 +34,15 @@ public class Plural<T extends ModCommon> {
         return items;
     }
 
-    public HashMap<String, HashMap<String, ? extends ModCommon>> getOptions() {
+    public HashMap<String, HashMap<String, ? super ModCommon>> getOptions() {
         return options;
     }
 
-    public void setOptions(HashMap<String, HashMap<String, ? extends ModCommon>> options) {
+    public void setOptions(HashMap<String, HashMap<String, ? super ModCommon>> options) {
         this.options = options;
     }
 
     private Long totalItems;
     private List<T> items;
-    private HashMap<String, HashMap<String, ? extends ModCommon>> options;
+    private HashMap<String, HashMap<String, ? super ModCommon>> options;
 }
