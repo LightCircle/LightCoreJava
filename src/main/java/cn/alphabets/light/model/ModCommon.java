@@ -28,7 +28,7 @@ public class ModCommon extends Entity {
     @JsonView(Views.OptionsView.class)
     //Use JsonProperty access = READ_ONLY to ignore this field during deserialization
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private HashMap<String, HashMap<String, ? super ModCommon>> options;
+    private HashMap<String, HashMap<String, ModCommon>> options;
 
 
     private Integer valid;
@@ -95,11 +95,11 @@ public class ModCommon extends Entity {
         this.updateAt = updateAt;
     }
 
-    public HashMap<String, HashMap<String, ? super ModCommon>> getOptions() {
+    public HashMap<String, HashMap<String, ModCommon>> getOptions() {
         return options;
     }
 
-    public void setOptions(HashMap<String, HashMap<String, ? super ModCommon>> options) {
+    public void setOptions(HashMap<String, HashMap<String, ModCommon>> options) {
         this.options = options;
     }
 

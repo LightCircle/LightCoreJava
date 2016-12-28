@@ -209,7 +209,7 @@ public class DataRider {
                 }
             });
 
-            HashMap<String, HashMap<String, ? super ModCommon>> options = new HashMap<>();
+            HashMap<String, HashMap<String, ModCommon>> options = new HashMap<>();
 
             optionsBuilders.stream()
                     .collect(Collectors.groupingBy(OptionsBuilder::getStructure))
