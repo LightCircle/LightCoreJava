@@ -1,6 +1,7 @@
 package cn.alphabets.light.db.mongo;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.Entity;
@@ -13,6 +14,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -102,6 +104,10 @@ public class Controller {
 
     public ByteArrayOutputStream readStreamFromGrid() {
         return this.model.readStreamFromGrid(params.getCondition().getObjectId("_id"));
+    }
+
+    public ModFile readStreamFromGrid(OutputStream outputStream) {
+        return this.model.readStreamFromGrid(params.getCondition().getObjectId("_id"), outputStream);
     }
 
     public GridFSFile writeFileToGrid(RequestFile file) {

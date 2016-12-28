@@ -16,6 +16,8 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +114,19 @@ public class File {
         }
     }
 
+    public void saveFile(Context handler, ModFile file) {
+
+        Controller ctrl = new Controller(new DBParams(handler).condition(new Document("_id", file.getFileId())));
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file.getPath());
+            ctrl.readStreamFromGrid(outputStream);
+            outputStream.close();
+        } catch (IOException e) {
+            logger.error("error read file : ", e);
+            throw new RuntimeException("File not exist.");
+        }
+    }
 
     public ByteArrayOutputStream streamForFile(Context handler, ModFile file) {
         Controller ctrl = new Controller(new DBParams(handler).condition(new Document("_id", file.getFileId())));
