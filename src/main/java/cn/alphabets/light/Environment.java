@@ -32,6 +32,17 @@ public class Environment {
     private Environment() {
     }
 
+    public static Environment initialize(String[] args) {
+        Environment environment = new Environment();
+        environment.args.initArgs(args);
+        if (environment.args.local) {
+            instance = new Yaml().loadAs(ClassLoader.getSystemResourceAsStream("config.yml"), Environment.class);
+        } else {
+            instance = environment;
+        }
+        return instance;
+    }
+
     public static Environment instance() {
         if (instance == null) {
             instance = new Yaml().loadAs(ClassLoader.getSystemResourceAsStream("config.yml"), Environment.class);
@@ -85,7 +96,11 @@ public class Environment {
         if (this.args.local) {
             return this.app.getPort();
         }
-        return Integer.parseInt(System.getenv(Constant.ENV_LIGHT_APP_PORT));
+        String port = System.getenv(Constant.ENV_LIGHT_APP_PORT);
+        if (port == null) {
+            return 7000;
+        }
+        return Integer.parseInt(port);
     }
 
     public String getMongoHost() {
@@ -99,7 +114,11 @@ public class Environment {
         if (this.args.local) {
             return String.valueOf(this.mongodb.getPort());
         }
-        return System.getenv(Constant.ENV_LIGHT_MONGO_PORT);
+        String port = System.getenv(Constant.ENV_LIGHT_MONGO_PORT);
+        if (port == null) {
+            return "57017";
+        }
+        return port;
     }
 
     public String getMongoUser() {
@@ -120,7 +139,11 @@ public class Environment {
         if (this.args.local) {
             return this.mongodb.getAuth();
         }
-        return System.getenv(Constant.ENV_LIGHT_MONGO_AUTH);
+        String auth = System.getenv(Constant.ENV_LIGHT_MONGO_AUTH);
+        if (auth == null) {
+            return "SCRAM-SHA-1";
+        }
+        return auth;
     }
 
     public String getPackages() {
