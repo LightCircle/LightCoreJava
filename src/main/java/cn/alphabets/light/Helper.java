@@ -26,6 +26,7 @@ import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -331,6 +332,12 @@ public class Helper {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
+                .render()
+                .withOutputCharset(Charset.forName("UTF-8"))
+                .and()
+                .resources()
+                .withDefaultInputCharset(Charset.forName("UTF-8"))
+                .and()
                 .functions()
                 .add(function)
                 .and()
