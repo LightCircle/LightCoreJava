@@ -341,6 +341,7 @@ public class DataRider {
 
             Bson condition;
             String table;
+            Class clazz;
             if (modStructure.getKind() == 1) {
                 table = DBParams.extendType.get(modStructure.getType());
                 condition = Filters.and(Filters.in(link, fieldValues), Filters.eq("type", structure));
@@ -348,9 +349,10 @@ public class DataRider {
                 table = structure;
                 condition = Filters.in(link, fieldValues);
             }
+            clazz = Model.getModelType(structure);
 
 
-            Model model = new Model(handler.getDomain(), handler.getCode(), table);
+            Model model = new Model(handler.getDomain(), handler.getCode(), table, clazz);
 
             model.list(condition, field).forEach(item -> {
                 option.put(item.toDocument(true).get(link).toString(), item);

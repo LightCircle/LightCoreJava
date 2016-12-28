@@ -322,13 +322,9 @@ public class Model {
         GridFSBuckets.create(this.db).delete(fileId);
     }
 
-    private Class getModelType() {
-
-        if (this.clazz != null) {
-            return this.clazz;
-        }
-        String className = Constant.MODEL_PREFIX + WordUtils.capitalize(this.name);
-        String packageName = reserved.contains(this.name)
+    public static Class getModelType(String structure) {
+        String className = Constant.MODEL_PREFIX + WordUtils.capitalize(structure);
+        String packageName = reserved.contains(structure)
                 ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
                 : Environment.instance().getPackages() + ".entity";
 
@@ -341,6 +337,15 @@ public class Model {
                 throw new RuntimeException(e1);
             }
         }
+    }
+
+    private Class getModelType() {
+
+        if (this.clazz != null) {
+            return this.clazz;
+        }
+
+        return getModelType(this.name);
     }
 
     public static List<String> reserved = Arrays.asList(
