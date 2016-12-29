@@ -4,7 +4,6 @@ import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.lang.Object;
 import java.lang.String;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class ModValidator extends ModCommon {
 
   private String action;
 
-  private Object condition;
+  private Condition condition;
 
   private String group;
 
@@ -67,11 +66,11 @@ public class ModValidator extends ModCommon {
     this.action = action;
   }
 
-  public Object getCondition() {
+  public Condition getCondition() {
     return this.condition;
   }
 
-  public void setCondition(Object condition) {
+  public void setCondition(Condition condition) {
     this.condition = condition;
   }
 
