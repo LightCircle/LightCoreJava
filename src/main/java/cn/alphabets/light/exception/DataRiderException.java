@@ -27,6 +27,10 @@ public class DataRiderException extends RuntimeException {
         return new DataRiderException(String.format("Controller method call failed, method: %s", methodName), throwable);
     }
 
+    public static DataRiderException GridFSError(String msg, Throwable throwable) {
+        return new DataRiderException(String.format("Error occurs while GridFS operation, %s : ", msg), throwable);
+    }
+
     private DataRiderException(String message) {
         super(message);
     }

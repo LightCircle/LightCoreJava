@@ -68,20 +68,6 @@ public class Result {
     }
 
 
-    public static void sendFile(RoutingContext context, ModFile file, ByteArrayOutputStream stream) {
-
-        HttpServerResponse response = context.response();
-
-        response.putHeader(CONTENT_TYPE, file.getContentType());
-        response.putHeader(CONTENT_LENGTH, String.valueOf(file.getLength()));
-        response.putHeader(LAST_MODIFIED, Helper.toUTCString(file.getUpdateAt()));
-        response.putHeader(ACCEPT_RANGES, "none");
-        response.putHeader(CACHE_CONTROL, "public, max-age=34560000");
-
-        response.write(Buffer.buffer(stream.toByteArray()));
-        response.end();
-    }
-
 
     public static void redirect(RoutingContext context, String path) {
         HttpServerResponse response = context.response();

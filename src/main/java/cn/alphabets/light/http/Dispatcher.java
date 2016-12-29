@@ -263,12 +263,17 @@ public class Dispatcher {
 
     private Handler<RoutingContext> getFailureHandler() {
         return ctx -> {
-            Throwable error = ctx.failure();
-            logger.error("Error occurred : ", error);
-
             if (ctx.response().ended()) {
                 return;
             }
+
+            Throwable error = ctx.failure();
+            if (error == null && !ctx.response().ended()) {
+                ctx.response().end();
+            }
+
+            logger.error("Error occurred : ", error);
+
 
             processException(ctx, error);
 

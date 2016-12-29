@@ -14,6 +14,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
@@ -104,6 +105,15 @@ public class Controller {
 
     public ByteArrayOutputStream readStreamFromGrid() {
         return this.model.readStreamFromGrid(params.getCondition().getObjectId("_id"));
+    }
+
+    public ByteArrayOutputStream readStreamFromGrid(long offset, long length) {
+
+        try {
+            return this.model.readStreamFromGrid(params.getCondition().getObjectId("_id"), offset, length);
+        } catch (IOException e) {
+            throw DataRiderException.GridFSError("Read file error", e);
+        }
     }
 
     public ModFile readStreamFromGrid(OutputStream outputStream) {

@@ -12,11 +12,13 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import com.mongodb.client.model.*;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.atteo.evo.inflector.English;
@@ -299,6 +301,21 @@ public class Model {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         gridFSBucket.downloadToStream(fileId, outputStream);
+        return outputStream;
+    }
+
+    public ByteArrayOutputStream readStreamFromGrid(ObjectId fileId, long offset, long length) throws IOException {
+
+        GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
+        GridFSDownloadStream gridFSDownloadStream = gridFSBucket.openDownloadStream(fileId);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        if (IOUtils.copyLarge(gridFSDownloadStream, outputStream, offset, length) != length) {
+            gridFSDownloadStream.close();
+            throw new EOFException(String.format("GridFSDownloadStream unsatisfied offset : %d ,length : %d", offset, length));
+        }
+        gridFSDownloadStream.close();
+
         return outputStream;
     }
 
