@@ -1,5 +1,7 @@
 package cn.alphabets.light.http;
 
+import cn.alphabets.light.exception.BadRequestException;
+import cn.alphabets.light.exception.LightException;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.logging.Logger;
@@ -151,7 +153,7 @@ public interface CSRFHandler extends Handler<RoutingContext> {
                     if (validateToken(value)) {
                         ctx.next();
                     } else {
-                        ctx.fail(403);
+                        ctx.fail(new BadRequestException("CSRF error."));
                     }
                     break;
                 default:
