@@ -114,6 +114,11 @@ public class File {
         }
     }
 
+    /**
+     * Save file to specific path - file.getPath()
+     * @param handler context
+     * @param file ModFile instance
+     */
     public void saveFile(Context handler, ModFile file) {
 
         Controller ctrl = new Controller(new DBParams(handler).condition(new Document("_id", file.getFileId())));
