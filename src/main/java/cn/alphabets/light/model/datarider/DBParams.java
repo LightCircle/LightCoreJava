@@ -265,7 +265,7 @@ public class DBParams {
                         section.put(parameter, reservedValue);
                     } else if (condition.containsKey(key)) {
                         Object value = condition.get(key);
-                        String valueType = ((HashMap<String, HashMap>) structure.getItems()).get(parameter).get("type").toString().trim().toLowerCase();
+                        String valueType = detectValueType(structure, parameter);
                         if (section.containsKey(parameter)) {
                             ((Document) section.get(parameter)).put(filter.getOperator(), convertor.convert(valueType, value));
                         } else {
@@ -290,6 +290,16 @@ public class DBParams {
             }
 
             condition.put("valid", VALID);
+        }
+    }
+
+    private String detectValueType(ModStructure structure, String parameter) {
+        if (parameter.contains(".")) {
+            String[] array = parameter.split("\\.");
+            HashMap<String, HashMap> subTypeInfo = (HashMap<String, HashMap>) ((HashMap<String, HashMap>) structure.getItems()).get(array[0]).get("contents");
+            return subTypeInfo.get(array[1]).get("type").toString().toLowerCase();
+        } else {
+            return ((HashMap<String, HashMap>) structure.getItems()).get(parameter).get("type").toString().trim().toLowerCase();
         }
     }
 

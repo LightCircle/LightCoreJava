@@ -323,7 +323,19 @@ public class Dispatcher {
         });
         //default
         put(Throwable.class, (ctx, e) -> {
-            Error error = new Error("000", e != null ? e.getMessage() : "Unknown error.");
+
+            String msg;
+            if (e == null) {
+                msg = "Unknown error.";
+            } else {
+                msg = e.getMessage();
+                if (StringUtils.isEmpty(msg)) {
+                    msg = e.toString();
+                }
+            }
+
+
+            Error error = new Error("000", msg);
             ctx.response()
                     .setStatusCode(Constant.GLOBAL_ERROR_STATUS_CODE)
                     .putHeader(CONTENT_TYPE, "application/json; charset=utf-8")
