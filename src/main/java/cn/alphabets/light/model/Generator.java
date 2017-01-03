@@ -122,7 +122,7 @@ public class Generator {
 
         // If the subtype is not defined
         Document items = (Document) define.get("contents");
-        if (items == null) {
+        if (items == null || items.isEmpty()) {
             this.append(spec, name, this.type(type));
             return;
         }
