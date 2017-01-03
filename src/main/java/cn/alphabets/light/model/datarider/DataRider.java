@@ -314,7 +314,7 @@ public class DataRider {
             //collect field value
             List fieldValues = new ArrayList();
             if (result instanceof ModCommon) {
-                Object value = ((ModCommon) result).toDocument().get(key);
+                Object value = ((ModCommon) result).getFieldValue(key);
                 Object converted = convertor.convert(valueType, value);
                 if (converted instanceof List) {
                     fieldValues.addAll((Collection) convertor.convert(valueType, value));
@@ -323,7 +323,7 @@ public class DataRider {
                 }
             } else if (result instanceof Plural) {
                 ((Plural) result).getItems().forEach(item -> {
-                    Object value = ((ModCommon) item).toDocument(true).get(key);
+                    Object value = ((ModCommon) item).getFieldValue(key);
                     Object converted = convertor.convert(valueType, value);
                     if (converted instanceof List) {
                         fieldValues.addAll((Collection) convertor.convert(valueType, value));

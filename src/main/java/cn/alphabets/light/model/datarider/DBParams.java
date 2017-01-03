@@ -275,7 +275,7 @@ public class DBParams {
 
                 });
 
-                //is section is not empty,add to conditionOr
+                //skip empty section
                 if (section.size() > 0) {
                     conditionOr.add(section);
                 }

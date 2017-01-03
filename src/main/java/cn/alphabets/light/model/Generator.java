@@ -259,7 +259,7 @@ public class Generator {
             "options"
     );
 
-    private final static List<String> reserved = Arrays.asList(
+    public final static List<String> reserved = Arrays.asList(
             "abstract",
             "continue",
             "for",

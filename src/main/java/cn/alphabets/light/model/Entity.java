@@ -184,4 +184,34 @@ public class Entity implements Serializable {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Get field value by name
+     * <p>
+     * support sub class field like "xx.xxx"
+     *
+     * @param fieldName field name
+     * @return field value
+     */
+    @JsonIgnore
+    public Object getFieldValue(String fieldName) {
+
+        try {
+            String fields[] = fieldName.split("\\.");
+
+            Object step = this;
+
+            for (String f : Arrays.asList(fields)) {
+                PropertyDescriptor pd =
+                        new PropertyDescriptor(Generator.reserved.contains(f) ? f + "_" : f,
+                                step.getClass());
+                step = pd.getReadMethod().invoke(step);
+            }
+
+            return step;
+        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+            logger.error("Error get field value : " + fieldName, e);
+        }
+        return null;
+    }
 }
