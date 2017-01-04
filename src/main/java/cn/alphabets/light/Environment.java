@@ -19,6 +19,7 @@ public class Environment {
     //using 'SLF4JLogDelegateFactory' for logging
     static {
         System.setProperty(LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME, "io.vertx.core.logging.SLF4JLogDelegateFactory");
+        System.setProperty("vertx.disableFileCaching", "true");
     }
 
     private static final Logger logger = LoggerFactory.getLogger(Environment.class);
