@@ -10,11 +10,11 @@ mongodb:
   host: 127.0.0.1
   port: 57017
   user: light
-  pass: 2e35501c2b7e
+  pass: 22345678
   auth: SCRAM-SHA-1
 
 mysql:
-  host: db.alphabets.cn
+  host: 127.0.0.1
   port: 55017
   user: admin
-  pass: iB0!ec9Y
+  pass: 12345678
