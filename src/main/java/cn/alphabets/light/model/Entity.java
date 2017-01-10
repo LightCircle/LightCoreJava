@@ -202,6 +202,7 @@ public class Entity implements Serializable {
             Object step = this;
 
             for (String f : Arrays.asList(fields)) {
+                if (step == null) return step;
                 PropertyDescriptor pd =
                         new PropertyDescriptor(Generator.reserved.contains(f) ? f + "_" : f,
                                 step.getClass());
