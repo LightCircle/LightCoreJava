@@ -91,11 +91,18 @@ public class Controller {
 
     public Long remove() {
         logger.debug("[REMOVE] DB params : " + params.toString());
+
+        Document document = new Document();
+        document.put("updateAt", new Date());
+        document.put("updateBy", this.uid);
+        document.put("valid", Constant.INVALID);
+
         Document condition = params.getCondition();
         if (condition == null || condition.size() == 0) {
             throw DataRiderException.ParameterUnsatisfied("Remove condition can not be empty.");
         }
-        return this.model.remove(params.getCondition());
+
+        return this.model.update(condition, document);
     }
 
     public Long count() {
