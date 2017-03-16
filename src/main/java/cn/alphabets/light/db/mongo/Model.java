@@ -64,7 +64,7 @@ public class Model {
         this.clazz = clazz;
 
         if (table != null) {
-            table = English.plural(table);
+            table = English.plural(table.toLowerCase());
             if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
                 table = code + '.' + table;
             }
