@@ -131,6 +131,8 @@ public interface CSRFHandler extends Handler<RoutingContext> {
 
             HttpMethod method = ctx.request().method();
 
+            // TODO: check ignore
+
             switch (method) {
                 case GET:
                     final String token = generateToken();

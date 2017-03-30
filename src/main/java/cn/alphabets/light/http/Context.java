@@ -71,7 +71,11 @@ public class Context {
 
         // form
         if (ctx.getBodyAsString().length() > 0) {
-            parameter.putAll(Document.parse(ctx.getBodyAsString()));
+            if (ctx.request().getHeader("content-type").equals("application/xml")) {
+                parameter.put("xml", ctx.getBodyAsString());
+            } else {
+                parameter.putAll(Document.parse(ctx.getBodyAsString()));
+            }
         }
 
         // file

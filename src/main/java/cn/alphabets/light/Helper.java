@@ -12,6 +12,8 @@ import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.bson.Document;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
@@ -20,8 +22,11 @@ import org.jtwig.environment.EnvironmentFactory;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.resource.reference.ResourceReference;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
@@ -48,6 +53,25 @@ public class Helper {
     static {
         ISO_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         ISO_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
+    public static org.w3c.dom.Document stringToXml(String xml) {
+        try {
+            return DocumentBuilderFactory
+                .newInstance()
+                .newDocumentBuilder()
+                .parse(new InputSource(new StringReader(xml)));
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static JSONObject xmlToJSON(String xml) {
+        return XML.toJSONObject(xml);
+    }
+
+    public static String jsonToXML(JSONObject json) {
+        return XML.toString(json);
     }
 
     public static Model getPOM(String path) {

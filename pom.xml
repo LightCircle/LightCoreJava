@@ -248,5 +248,11 @@
             <artifactId>maven-model</artifactId>
             <version>3.3.9</version>
         </dependency>
+        <!-- xml 与 json 的相互转换 -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+        </dependency>
     </dependencies>
 </project>
