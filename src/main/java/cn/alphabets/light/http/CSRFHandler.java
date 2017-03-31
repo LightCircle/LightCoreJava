@@ -1,5 +1,6 @@
 package cn.alphabets.light.http;
 
+import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.exception.LightException;
 import io.vertx.core.Handler;
@@ -9,6 +10,8 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.SessionHandler;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,7 +19,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 /**
  * CSRFHandler
@@ -48,12 +53,20 @@ public interface CSRFHandler extends Handler<RoutingContext> {
         private String queryName = DEFAULT_QUERY_NAME;
         private long timeout = SessionHandler.DEFAULT_SESSION_TIMEOUT;
 
+        private Pattern ignore;
+
         CSRFHandlerImpl(final String secret) {
             try {
                 mac = Mac.getInstance("HmacSHA256");
                 mac.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
             } catch (NoSuchAlgorithmException | InvalidKeyException e) {
                 throw new RuntimeException(e);
+            }
+
+            List<String> paths = ConfigManager.INSTANCE.getIgnoreCsrf();
+            if (CollectionUtils.isNotEmpty(paths)) {
+                String regex = StringUtils.join(paths, "|");
+                ignore = Pattern.compile(regex.replaceAll("(?<!\\.)\\*", ".*"));
             }
         }
 
@@ -131,7 +144,12 @@ public interface CSRFHandler extends Handler<RoutingContext> {
 
             HttpMethod method = ctx.request().method();
 
-            // TODO: check ignore
+            // ignore path
+            String path = ctx.request().path();
+            if (ignore != null && ignore.matcher(path).matches()) {
+                ctx.next();
+                return;
+            }
 
             switch (method) {
                 case GET:

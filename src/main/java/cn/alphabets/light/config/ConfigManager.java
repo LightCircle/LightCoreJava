@@ -46,6 +46,10 @@ public enum ConfigManager {
         return this.getArray(Constant.CFK_IGNORE_AUTH);
     }
 
+    public List<String> getIgnoreCsrf() {
+        return this.getArray(Constant.CFK_IGNORE_CSRF);
+    }
+
     public String getString(String key) {
         if (map.get(key) != null) {
             return String.valueOf(map.get(key));
