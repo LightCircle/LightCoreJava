@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.alphabets.light</groupId>
     <artifactId>lightcore-java</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
     <!-- name, description, url, licenses, scm, distributionManagement，developers标签是Central Repository要求 -->
     <name>LightCoreJava</name>
