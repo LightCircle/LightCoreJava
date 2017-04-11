@@ -43,6 +43,24 @@ public class DBParams {
     private Class<? extends ModCommon> clazz;
     private Context handler;
 
+    // 操作单个文档时，直接使用id，不用condition对象
+    private ObjectId _id;
+    public void id(String id) {
+        this._id = new ObjectId(id);
+    }
+
+    public void id(ObjectId id) {
+        this._id = id;
+    }
+
+    public Document getId() {
+        if (this._id == null) {
+            return null;
+        }
+
+        return new Document().append("_id", this._id);
+    }
+
     public DBParams(Context aHandler) {
         this(aHandler, false);
     }
@@ -64,6 +82,7 @@ public class DBParams {
 
                     Document condition = new Document();
                     if (json.containsKey(PARAM_ID)) {
+                        this._id = new ObjectId(json.getString(PARAM_ID));
                         condition.append("_id", new ObjectId(json.getString(PARAM_ID)));
                     }
                     if (json.containsKey(PARAM_CONDITION)) {
@@ -144,6 +163,10 @@ public class DBParams {
     }
 
     public Document getCondition() {
+        if (this._id != null) {
+            return this.getId();
+        }
+
         if (this.condition == null) {
             this.condition = new Document();
         }
