@@ -1,6 +1,5 @@
 package cn.alphabets.light;
 
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,16 +7,59 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * HelperTest
  */
 public class HelperTest {
+
+    @Test
+    public void testXmlToJSON() {
+        String xml = "" +
+            "<NULL>null</NULL>" +
+            "<ARRAY><EMPTY/></ARRAY><ARRAY><EMPTY/></ARRAY>" +
+            "<STRING>A</STRING>" +
+            "<OBJECT><NUMBER>1</NUMBER></OBJECT>";
+
+        Document doc = Helper.xmlToJSON(xml);
+
+        Assert.assertNull(doc.get("NULL"));
+        Assert.assertEquals(doc.get("STRING"), "A");
+        Assert.assertEquals(((List<Document>)doc.get("ARRAY")).get(0).get("EMPTY"), "");
+        Assert.assertEquals(((Document)doc.get("OBJECT")).getInteger("NUMBER"), new Integer(1));
+    }
+
+    @Test
+    public void testJsonToXML() {
+
+        Document sub = new Document();
+        sub.put("NUMBER", 1);
+
+        Document arr1 = new Document();
+        arr1.put("EMPTY", "");
+        Document arr2 = new Document();
+        arr2.put("EMPTY", "");
+
+        Document doc = new Document();
+        doc.put("STRING", "A");
+        doc.put("NULL", null);
+        doc.put("OBJECT", sub);
+        doc.put("ARRAY", Arrays.asList(arr1, arr2));
+        doc.put("EMPTY_DOCUMENT", new Document());
+
+        List<String> emptyArray = new ArrayList<>();
+        doc.put("EMPTY_ARRAY", emptyArray);
+
+        String xml = Helper.jsonToXML(doc);
+        Assert.assertEquals("" +
+            "<NULL>null</NULL>" +
+            "<ARRAY><EMPTY/></ARRAY><ARRAY><EMPTY/></ARRAY>" +
+            "<EMPTY_DOCUMENT></EMPTY_DOCUMENT>" +
+            "<STRING>A</STRING>" +
+            "<OBJECT><NUMBER>1</NUMBER></OBJECT>", xml);
+    }
 
     @Test
     public void testToUTCString() {

@@ -66,12 +66,13 @@ public class Helper {
         }
     }
 
-    public static JSONObject xmlToJSON(String xml) {
-        return XML.toJSONObject(xml);
+    public static Document xmlToJSON(String xml) {
+        return Document.parse(XML.toJSONObject(xml).toString());
     }
 
-    public static String jsonToXML(JSONObject json) {
-        return XML.toString(json);
+    public static String jsonToXML(Document doc) {
+        // If you use an empty array, the tags are missing
+        return XML.toString(new JSONObject(doc.toJson()));
     }
 
     public static Model getPOM(String path) {
