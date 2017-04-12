@@ -67,7 +67,7 @@ public class MockHttpServerRequest implements HttpServerRequest {
 
     @Override
     public String uri() {
-        return null;
+        return "";
     }
 
     @Override

@@ -10,11 +10,9 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.*;
+import io.vertx.ext.web.Locale;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * RoutingContext
@@ -228,7 +226,7 @@ public class MockRoutingContext implements RoutingContext {
 
     @Override
     public Map<String, String> pathParams() {
-        return null;
+        return new HashMap<>();
     }
 
     @Override
