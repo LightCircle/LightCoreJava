@@ -154,6 +154,18 @@ public class Environment {
         return System.getenv(Constant.ENV_LIGHT_APP_PACKAGE);
     }
 
+    public boolean isMaster() {
+        if (this.args.local) {
+            return this.app.isMaster();
+        }
+
+        String master = System.getenv(Constant.ENV_LIGHT_APP_MASTER);
+        if (master == null) {
+            return false;
+        }
+        return "true".equals(master.toLowerCase());
+    }
+
     public String getMySQLHost() {
         if (this.args.local) {
             return this.mysql.getHost();

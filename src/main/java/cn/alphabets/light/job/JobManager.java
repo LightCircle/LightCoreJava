@@ -19,7 +19,7 @@ public class JobManager {
     public static void start() {
 
         //start job only app is master
-        if (!Environment.instance().app.isMaster()) {
+        if (!Environment.instance().isMaster()) {
             return;
         }
 
