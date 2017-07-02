@@ -148,4 +148,26 @@ public class ConfigFile {
         private String user;
         private String pass;
     }
+
+    public static class ConfigBinary {
+
+        public String[] getSuffix() {
+            return suffix;
+        }
+
+        public void setSuffix(String[] suffix) {
+            this.suffix = suffix;
+        }
+
+        public String[] getFile() {
+            return file;
+        }
+
+        public void setFile(String[] file) {
+            this.file = file;
+        }
+
+        private String[] suffix;
+        private String[] file;
+    }
 }

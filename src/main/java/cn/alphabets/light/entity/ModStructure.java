@@ -21,11 +21,6 @@ public class ModStructure extends ModCommon {
 
   private String schema;
 
-  @JsonDeserialize(
-      using = LongDeserializer.class
-  )
-  private Long tenant;
-
   private String version;
 
   private Object extend;
@@ -43,10 +38,7 @@ public class ModStructure extends ModCommon {
   )
   private Long public_;
 
-  @JsonDeserialize(
-      using = LongDeserializer.class
-  )
-  private Long type;
+  private String parent;
 
   public String getDescription() {
     return this.description;
@@ -70,14 +62,6 @@ public class ModStructure extends ModCommon {
 
   public void setSchema(String schema) {
     this.schema = schema;
-  }
-
-  public Long getTenant() {
-    return this.tenant;
-  }
-
-  public void setTenant(Long tenant) {
-    this.tenant = tenant;
   }
 
   public String getVersion() {
@@ -120,11 +104,11 @@ public class ModStructure extends ModCommon {
     this.public_ = public_;
   }
 
-  public Long getType() {
-    return this.type;
+  public String getParent() {
+    return this.parent;
   }
 
-  public void setType(Long type) {
-    this.type = type;
+  public void setParent(String parent) {
+    this.parent = parent;
   }
 }

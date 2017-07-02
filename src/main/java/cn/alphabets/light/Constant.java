@@ -30,7 +30,7 @@ public class Constant {
     public static final String ENV_LIGHT_MYSQL_HOST = "LIGHTMYSQL_HOST";
     public static final String ENV_LIGHT_MYSQL_PORT = "LIGHTMYSQL_PORT";
 
-    public static final String SYSTEM_DB = "LightDB";
+    public static final String SYSTEM_DB = "light";
     public static final String SYSTEM_DB_PREFIX = "light";
     public static final String SYSTEM_DB_CONFIG = "configuration";
     public static final String SYSTEM_DB_VALIDATOR = "validator";

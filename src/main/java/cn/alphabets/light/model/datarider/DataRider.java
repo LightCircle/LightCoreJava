@@ -342,8 +342,8 @@ public class DataRider {
             Bson condition;
             String table;
             Class clazz;
-            if (modStructure.getKind() == 1) {
-                table = DBParams.extendType.get(modStructure.getType());
+            if (modStructure.getParent().length() > 0) {
+                table = modStructure.getParent();
                 condition = Filters.and(Filters.in(link, fieldValues), Filters.eq("type", structure));
             } else {
                 table = structure;

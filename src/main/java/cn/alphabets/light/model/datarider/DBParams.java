@@ -26,13 +26,6 @@ public class DBParams {
 
     private static final Logger logger = LoggerFactory.getLogger(DBParams.class);
 
-    public static HashMap<Long, String> extendType = new HashMap<Long, String>() {{
-        put(1L, "user");
-        put(2L, "group");
-        put(3L, "file");
-        put(4L, "category");
-    }};
-
     private Document condition;
     private Document select;
     private Document sort;
@@ -243,8 +236,8 @@ public class DBParams {
         buildSort(board);
 
         //part4. change table name for extended structure
-        if (structure.getKind() == 1) {
-            table = extendType.get(structure.getType());
+        if (structure.getParent().length() > 0) {
+            table = structure.getParent();
             condition.append("type", structure.getSchema());
         } else {
             table = rider.getClazz().getSimpleName().replace(MODEL_PREFIX, "").toLowerCase();

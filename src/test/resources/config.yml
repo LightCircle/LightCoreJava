@@ -1,20 +1,14 @@
 app:
   port: 7001
-  domain: LightDB
+  domain: light
   master: false
   local: false
   dev: true
   packages: cn.alphabets.light
 
 mongodb:
-  host: 127.0.0.1
+  host: db.alphabets.cn
   port: 57017
   user: light
-  pass: 22345678
+  pass: 2e35501c2b7e
   auth: SCRAM-SHA-1
-
-mysql:
-  host: 127.0.0.1
-  port: 55017
-  user: admin
-  pass: 12345678

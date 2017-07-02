@@ -33,8 +33,6 @@ public class ModUser extends ModCommon {
 
   private String outer;
 
-  private String openID;
-
   public String getStatus() {
     return this.status;
   }
@@ -129,13 +127,5 @@ public class ModUser extends ModCommon {
 
   public void setOuter(String outer) {
     this.outer = outer;
-  }
-
-  public String getOpenID() {
-    return this.openID;
-  }
-
-  public void setOpenID(String openID) {
-    this.openID = openID;
   }
 }

@@ -48,16 +48,6 @@ public class ModJob extends ModCommon {
   )
   private Date last;
 
-  @JsonDeserialize(
-      using = DateDeserializer.class
-  )
-  @JsonSerialize(
-      using = DateSerializer.class
-  )
-  private Date start;
-
-  private String description;
-
   private Object extend;
 
   private List<Step> step;
@@ -116,22 +106,6 @@ public class ModJob extends ModCommon {
 
   public void setLast(Date last) {
     this.last = last;
-  }
-
-  public Date getStart() {
-    return this.start;
-  }
-
-  public void setStart(Date start) {
-    this.start = start;
-  }
-
-  public String getDescription() {
-    return this.description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
   }
 
   public Object getExtend() {

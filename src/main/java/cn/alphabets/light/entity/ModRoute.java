@@ -1,7 +1,10 @@
 package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.ModCommon;
+import cn.alphabets.light.model.deserializer.LongDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.lang.Long;
 import java.lang.String;
 
 /**
@@ -18,6 +21,13 @@ public class ModRoute extends ModCommon {
   private String class_;
 
   private String description;
+
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
+  private Long kind;
+
+  private String version;
 
   public String getUrl() {
     return this.url;
@@ -57,5 +67,21 @@ public class ModRoute extends ModCommon {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Long getKind() {
+    return this.kind;
+  }
+
+  public void setKind(Long kind) {
+    this.kind = kind;
+  }
+
+  public String getVersion() {
+    return this.version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
   }
 }

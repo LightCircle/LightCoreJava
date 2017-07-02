@@ -13,10 +13,6 @@ public class ModFunction extends ModCommon {
 
   private String menu;
 
-  private String reserved;
-
-  private String status;
-
   private String type;
 
   private String url;
@@ -26,6 +22,10 @@ public class ModFunction extends ModCommon {
   private String kind;
 
   private String parent;
+
+  private String version;
+
+  private String status;
 
   public String getOrder() {
     return this.order;
@@ -49,22 +49,6 @@ public class ModFunction extends ModCommon {
 
   public void setMenu(String menu) {
     this.menu = menu;
-  }
-
-  public String getReserved() {
-    return this.reserved;
-  }
-
-  public void setReserved(String reserved) {
-    this.reserved = reserved;
-  }
-
-  public String getStatus() {
-    return this.status;
-  }
-
-  public void setStatus(String status) {
-    this.status = status;
   }
 
   public String getType() {
@@ -105,5 +89,21 @@ public class ModFunction extends ModCommon {
 
   public void setParent(String parent) {
     this.parent = parent;
+  }
+
+  public String getVersion() {
+    return this.version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
+  public String getStatus() {
+    return this.status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
   }
 }

@@ -24,11 +24,6 @@ public class ModBoard extends ModCommon {
   @JsonDeserialize(
       using = LongDeserializer.class
   )
-  private Long kind;
-
-  @JsonDeserialize(
-      using = LongDeserializer.class
-  )
   private Long type;
 
   private List<Selects> selects;
@@ -42,11 +37,16 @@ public class ModBoard extends ModCommon {
 
   private String description;
 
-  private String reserved;
-
   private String schema;
 
   private String script;
+
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
+  private Long kind;
+
+  private String version;
 
   public String getAction() {
     return this.action;
@@ -70,14 +70,6 @@ public class ModBoard extends ModCommon {
 
   public void setFilters(List<Filters> filters) {
     this.filters = filters;
-  }
-
-  public Long getKind() {
-    return this.kind;
-  }
-
-  public void setKind(Long kind) {
-    this.kind = kind;
   }
 
   public Long getType() {
@@ -128,14 +120,6 @@ public class ModBoard extends ModCommon {
     this.description = description;
   }
 
-  public String getReserved() {
-    return this.reserved;
-  }
-
-  public void setReserved(String reserved) {
-    this.reserved = reserved;
-  }
-
   public String getSchema() {
     return this.schema;
   }
@@ -150,6 +134,22 @@ public class ModBoard extends ModCommon {
 
   public void setScript(String script) {
     this.script = script;
+  }
+
+  public Long getKind() {
+    return this.kind;
+  }
+
+  public void setKind(Long kind) {
+    this.kind = kind;
+  }
+
+  public String getVersion() {
+    return this.version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
   }
 
   @JsonIgnoreProperties(

@@ -1,6 +1,5 @@
 package cn.alphabets.light.model;
 
-import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,27 +24,31 @@ public class GeneratorTest {
 
         String pkg = Environment.instance().getPackages() + ".entity";
         List<String> target = Arrays.asList(
-                "board",
-                "configuration",
-                "i18n",
-                "route",
-                "structure",
-                "tenant",
-                "validator",
                 "access",
                 "authority",
-                "role",
-                "user",
-                "group",
+                "board",
                 "category",
-                "file",
                 "code",
+                "configuration",
+                "counter",
+                "etl",
+                "file",
                 "form",
-                "place",
                 "function",
+                "group",
+                "i18n",
+                "job",
+                "log",
+                "markdown",
+                "place",
+                "role",
+                "route",
                 "setting",
+                "structure",
                 "tag",
-                "job"
+                "tenant",
+                "user",
+                "validator"
         );
 
         new Generator(pkg).generate(Environment.instance().getAppName(), target);

@@ -37,6 +37,8 @@ public class ModFile extends ModCommon {
   )
   private Long length;
 
+  private String kind;
+
   public String getContentType() {
     return this.contentType;
   }
@@ -91,5 +93,13 @@ public class ModFile extends ModCommon {
 
   public void setLength(Long length) {
     this.length = length;
+  }
+
+  public String getKind() {
+    return this.kind;
+  }
+
+  public void setKind(String kind) {
+    this.kind = kind;
   }
 }

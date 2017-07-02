@@ -26,9 +26,13 @@ public class Environment {
     private static Environment instance;
     public final Args args = new Args();
 
+    // 配置文件config.yml内容
     public ConfigFile.ConfigApp app;
     public ConfigFile.ConfigMongoDB mongodb;
     public ConfigFile.ConfigMySQL mysql;
+    public String lang;
+    public String[] ignore;
+    public ConfigFile.ConfigBinary binary;
 
     private Environment() {
     }

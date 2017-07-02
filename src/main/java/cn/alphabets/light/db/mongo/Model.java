@@ -94,7 +94,7 @@ public class Model {
     }
 
     public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames, Bson sort, int skip, int limit) {
-        return this.list(condition, Projections.include(fieldNames), sort, skip, limit);
+        return this.list(condition, fieldNames == null ? null : Projections.include(fieldNames), sort, skip, limit);
     }
 
 
@@ -126,6 +126,8 @@ public class Model {
 //        return result;
 //    }
 //
+
+    @SuppressWarnings("unchecked")
     public <T extends ModCommon> List<T> list(Bson condition, Bson select, Bson sort, int skip, int limit) {
 
         // set fetch options
@@ -136,10 +138,18 @@ public class Model {
         find.forEach((Block<? super Document>) document -> {
             result.add((T) ModCommon.fromDocument(document, this.getModelType()));
         });
-        return result;
 
+        return result;
     }
 
+    /**
+     * 检索数据，类似于list方法，不使用Entity类型转换，直接返回原生的Document对象。
+     * core内部操作原生数据使用
+     *
+     * @param condition 条件
+     * @param fieldNames 字段名称
+     * @return 检索结果
+     */
     public List<Document> document(Document condition, List<String> fieldNames) {
 
         FindIterable<Document> find = this.collection.find(condition);

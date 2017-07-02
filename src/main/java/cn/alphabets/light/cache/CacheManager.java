@@ -35,53 +35,33 @@ public enum CacheManager {
 
         String code = Constant.SYSTEM_DB_PREFIX;
         Document valid = Document.parse("{valid:1}");
-        List<String> select;
 
         // configuration
-        select = Arrays.asList("type", "key", "value", "valueType");
-        configuration = new Model(domain, code, Constant.SYSTEM_DB_CONFIG)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        configuration = new Model(domain, code, Constant.SYSTEM_DB_CONFIG).list(valid);
 
         // validator
-        select = Arrays.asList("group", "name", "rule", "key", "option", "message", "sanitize", "class", "action", "condition");
-        validators = new Model(domain, code, Constant.SYSTEM_DB_VALIDATOR)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        validators = new Model(domain, code, Constant.SYSTEM_DB_VALIDATOR).list(valid);
 
         // i18n
-        select = Arrays.asList("type", "lang", "key");
-        i18ns = new Model(domain, code, Constant.SYSTEM_DB_I18N)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        i18ns = new Model(domain, code, Constant.SYSTEM_DB_I18N).list(valid);
 
         // structure
-        select = Arrays.asList("public", "lock", "type", "kind", "tenant", "version", "schema", "items", "extend", "tenant");
-        structures = new Model(domain, code, Constant.SYSTEM_DB_STRUCTURE)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        structures = new Model(domain, code, Constant.SYSTEM_DB_STRUCTURE).list(valid);
 
         // board
-        select = Arrays.asList("schema", "api", "type", "kind", "path", "class", "action", "filters", "selects", "sorts", "reserved", "script");
-        boards = new Model(domain, code, Constant.SYSTEM_DB_BOARD)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        boards = new Model(domain, code, Constant.SYSTEM_DB_BOARD).list(valid);
 
         // route
-        select = Arrays.asList("template", "url", "class", "action");
-        routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE).list(valid);
 
         // function
-        select = Arrays.asList("order", "description", "menu", "reserved", "status", "type", "url", "icon", "kind", "parent");
-        functions = new Model(domain, code, Constant.SYSTEM_DB_FUNCTION)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        functions = new Model(domain, code, Constant.SYSTEM_DB_FUNCTION).list(valid);
 
         // job
-        select = Arrays.asList("name", "run", "schedule", "limit", "status", "count", "last", "start", "description", "extend", "step");
-        jobs = new Model(domain, code, Constant.SYSTEM_DB_JOB)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        jobs = new Model(domain, code, Constant.SYSTEM_DB_JOB).list(valid);
 
         // tenant
-        // tenant table name has no prefix,so code here pass null
-        select = Arrays.asList("code", "name");
-        tenants = new Model(domain, null, Constant.SYSTEM_DB_TENANT)
-                .list(valid, select, null, 0, Constant.MAX_LIMIT);
+        tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT).list(valid);
     }
 
     public List<ModConfiguration> getConfiguration() {
