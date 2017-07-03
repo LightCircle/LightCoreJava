@@ -30,6 +30,7 @@ public class DBParams {
     private Document select;
     private Document sort;
     private Document data;
+    private List<Document> datas;
     private int skip;
     private int limit;
     private String table;
@@ -38,6 +39,7 @@ public class DBParams {
 
     // 操作单个文档时，直接使用id，不用condition对象
     private ObjectId _id;
+
     public void id(String id) {
         this._id = new ObjectId(id);
     }
@@ -89,8 +91,14 @@ public class DBParams {
                 this.select = (Document) json.get(PARAM_SELECT);
                 //sort from handler
                 this.sort = (Document) json.get(PARAM_SORT);
+
                 //data from handler
-                this.data = (Document) json.get(PARAM_DATA);
+                Object originalData = json.get(PARAM_DATA);
+                if (originalData instanceof List) {
+                    this.datas = (List<Document>) originalData;
+                } else {
+                    this.data = (Document) originalData;
+                }
 
                 //skip
                 String skip = json.getString(Constant.PARAM_SKIP);
@@ -179,6 +187,10 @@ public class DBParams {
             this.data = new Document();
         }
         return this.data;
+    }
+
+    public List<Document> getDatas() {
+        return this.datas;
     }
 
     public int getSkip() {
@@ -401,13 +413,19 @@ public class DBParams {
 
     @Override
     public String toString() {
+
+        String dataString = "null";
+        if (this.data != null) {
+            dataString = this.data instanceof Document ? ((Document) data).toJson() : "list";
+        }
+
         return "\n{" +
                 "\n\ttable = " + getTable() +
                 "\n\tclass = " + (clazz == null ? "null" : clazz.getName()) +
                 "\n\tcondition = " + (condition == null ? "null" : condition.toJson()) +
                 "\n\tselect = " + (select == null ? "null" : select.toJson()) +
                 "\n\tsort = " + (sort == null ? "null" : sort.toJson()) +
-                "\n\tdata = " + (data == null ? "null" : data.toJson()) +
+                "\n\tdata = " + dataString +
                 "\n\tskip = " + skip +
                 "\n\tlimit = " + limit +
                 "\n\tuid = " + getUid() +

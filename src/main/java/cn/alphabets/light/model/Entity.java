@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -166,13 +167,20 @@ public class Entity implements Serializable {
         }
     }
 
-    public static <T extends ModCommon> T fromDocument(Document document, Class<T> clazz, Context handler) {
+    public static <T extends ModCommon> List<T> fromDocument(List<Document> documents, Class<T> clazz, TimeZone tz) {
+        if (documents == null || documents.size() <= 0) {
+            return null;
+        }
+
+        return documents.stream().map(document -> Entity.fromDocument(document, clazz, tz)).collect(Collectors.toList());
+    }
+
+    public static <T extends ModCommon> T fromDocument(Document document, Class<T> clazz, TimeZone tz) {
         if (document == null) {
             return null;
         }
 
         try {
-            TimeZone tz = handler.getTimeZone();
             ObjectMapper mapper = objectMappers.get(tz);
             if (mapper == null) {
                 mapper = new ObjectMapper();

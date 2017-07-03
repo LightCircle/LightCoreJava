@@ -43,6 +43,9 @@ public class Constant {
     public static final String SYSTEM_DB_FILE = "file";
     public static final String SYSTEM_DB_JOB = "job";
     public static final String SYSTEM_DB_COUNTER = "counter";
+    public static final String SYSTEM_DB_ETL = "etl";
+    public static final String SYSTEM_DB_SETTING = "setting";
+    public static final String SYSTEM_DB_CODE = "code";
 
 
     public static final String MODEL_PREFIX = "Mod";

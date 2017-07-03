@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * PluralData
+ * Plural 返回多个值
+ *
  * Created by lilin on 2016/11/13.
  */
 @JsonPropertyOrder(alphabetic = true)
 public class Plural<T extends ModCommon> {
 
-    private T item;
     private Long totalItems;
     private List<T> items;
     private HashMap<String, HashMap<String, ModCommon>> options;
@@ -37,10 +37,6 @@ public class Plural<T extends ModCommon> {
 
     public List<T> getItems() {
         return items;
-    }
-
-    public T getItem() {
-        return item;
     }
 
     public HashMap<String, HashMap<String, ModCommon>> getOptions() {

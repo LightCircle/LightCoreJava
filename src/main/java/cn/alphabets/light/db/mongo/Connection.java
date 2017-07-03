@@ -33,9 +33,7 @@ public class Connection {
                 uri = new MongoClientURI(
                         String.format("mongodb://%s:%s/",
                                 env.getMongoHost(),
-                                env.getMongoPort(),
-                                env.getMongoAuth(),
-                                env.getAppName()
+                                env.getMongoPort()
                         ));
             } else {
                 uri = new MongoClientURI(

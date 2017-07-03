@@ -34,6 +34,11 @@ import java.util.List;
 
 /**
  * Model
+ *
+ * Model接受的参数为原生的Document对象
+ * 返回值会根据指定的类型转换成ModCommon实例
+ *
+ * 额外的，Model提供一个document方法，他不对结果做转换直接返回Document对象，主要由平台内部使用
  */
 public class Model {
 
@@ -98,46 +103,33 @@ public class Model {
     }
 
 
-    //    @SuppressWarnings("unchecked")
-//    public <T extends ModCommon> List<T> list(
-//            Document condition,
-//            List<String> fieldNames,
-//            List<String> sortField,
-//            int skipCount,
-//            int limitCount) {
-//
-//        // default value
-//        condition = condition == null ? new Document() : condition;
-//        fieldNames = fieldNames == null ? Collections.emptyList() : fieldNames;
-//        sortField = sortField == null ? Collections.emptyList() : sortField;
-//
-//        // set fetch condition
-//        FindIterable<Document> find = this.collection.find(condition);
-//        FindIterable<Document> skip = find.skip(skipCount);
-//        FindIterable<Document> limit = skip.limit(limitCount);
-//        FindIterable<Document> sort = limit.sort(descending(sortField));
-//        FindIterable<Document> projection = sort.projection(Projections.include(fieldNames));
-//
-//        // fetch and convert
-//        List<T> result = new ArrayList<>();
-//        projection.forEach((Block<? super Document>) document -> {
-//            result.add((T) ModCommon.fromDocument(document, this.getModelType()));
-//        });
-//        return result;
-//    }
-//
-
+    /**
+     * 检索数据
+     *
+     * @param condition 条件
+     * @param select    选择项目
+     * @param sort      排序
+     * @param skip      开始位置
+     * @param limit     获取件数
+     * @param <T>       类型
+     * @return 数据列表
+     */
     @SuppressWarnings("unchecked")
     public <T extends ModCommon> List<T> list(Bson condition, Bson select, Bson sort, int skip, int limit) {
 
         // set fetch options
-        FindIterable<Document> find = this.collection.find(condition).projection(select).sort(sort).skip(skip).limit(limit);
+        FindIterable<Document> find = this.collection
+                .find(condition)
+                .projection(select)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit);
 
         // fetch and convert
         List<T> result = new ArrayList<>();
-        find.forEach((Block<? super Document>) document -> {
-            result.add((T) ModCommon.fromDocument(document, this.getModelType()));
-        });
+        find.forEach((Block<? super Document>) document -> result.add(
+                (T) ModCommon.fromDocument(document, this.getModelType())
+        ));
 
         return result;
     }
@@ -146,7 +138,7 @@ public class Model {
      * 检索数据，类似于list方法，不使用Entity类型转换，直接返回原生的Document对象。
      * core内部操作原生数据使用
      *
-     * @param condition 条件
+     * @param condition  条件
      * @param fieldNames 字段名称
      * @return 检索结果
      */
@@ -164,28 +156,29 @@ public class Model {
         return this.get(condition, (List<String>) null);
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends ModCommon> T get(Document condition, List<String> fieldNames) {
+        fieldNames = fieldNames == null ? Collections.emptyList() : fieldNames;
+        return this.get(condition, Projections.include(fieldNames));
+    }
+
+    /**
+     * 获取单条数据
+     *
+     * @param condition 条件
+     * @param select    选择项目
+     * @param <T>       类型
+     * @return 数据对象
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends ModCommon> T get(Document condition, Bson select) {
 
         // default value
         condition = condition == null ? new Document() : condition;
-        fieldNames = fieldNames == null ? Collections.emptyList() : fieldNames;
-
-        // set fetch condition
-        FindIterable<Document> find = this.collection.find(condition);
-        FindIterable<Document> projection = find.projection(Projections.include(fieldNames));
-
-        Document document = find.first();
-        return (T) ModCommon.fromDocument(document, this.getModelType());
-    }
-
-    public <T extends ModCommon> T get(Document condition, Document select) {
 
         // set fetch condition
         FindIterable<Document> find = this.collection.find(condition).projection(select);
 
-        Document document = find.first();
-        return (T) ModCommon.fromDocument(document, this.getModelType());
+        return (T) ModCommon.fromDocument(find.first(), this.getModelType());
     }
 
     public long remove(Document condition) {
@@ -204,25 +197,20 @@ public class Model {
         return this.collection.count(condition);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ModCommon> List<T> add(List<Document> document) {
-
+    public long add(List<Document> document) {
         this.collection.insertMany(document);
-
-        List<T> result = new ArrayList<>();
-        document.forEach((x) ->
-                result.add((T) ModCommon.fromDocument(x, this.getModelType()))
-        );
-        return result;
+        return document.size();
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends ModCommon> T add(Document document) {
         this.collection.insertOne(document);
         return (T) ModCommon.fromDocument(document, this.getModelType());
     }
 
     public long increase(String type) {
-        Document document = this.collection.findOneAndUpdate(Filters.eq("type", type),
+        Document document = this.collection.findOneAndUpdate(
+                Filters.eq("type", type),
                 Updates.inc("sequence", 1L),
                 new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER));
         return document.getLong("sequence");
@@ -349,9 +337,20 @@ public class Model {
         GridFSBuckets.create(this.db).delete(fileId);
     }
 
+
+    /**
+     * 获取Entity类的类型，通过反射生成具体表名对应的类型
+     * - 系统表的Entity在 cn.alphabets.light.entity 包下
+     * - 而用户表的Entity在 用户包名.entity 下
+     *
+     * @param structure 表名称
+     * @return 类型
+     */
     public static Class getModelType(String structure) {
         String className = Constant.MODEL_PREFIX + WordUtils.capitalize(structure);
-        String packageName = reserved.contains(structure)
+
+        // 如果前缀是系统表，那么包名称使用 cn.alphabets.light，否则使用用户定义的包名
+        String packageName = system.contains(structure)
                 ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
                 : Environment.instance().getPackages() + ".entity";
 
@@ -375,7 +374,7 @@ public class Model {
         return getModelType(this.name);
     }
 
-    public static List<String> reserved = Arrays.asList(
+    public static List<String> system = Arrays.asList(
             Constant.SYSTEM_DB_BOARD,
             Constant.SYSTEM_DB_CONFIG,
             Constant.SYSTEM_DB_VALIDATOR,
@@ -384,6 +383,10 @@ public class Model {
             Constant.SYSTEM_DB_BOARD,
             Constant.SYSTEM_DB_ROUTE,
             Constant.SYSTEM_DB_TENANT,
-            Constant.SYSTEM_DB_FILE
+            Constant.SYSTEM_DB_FILE,
+            Constant.SYSTEM_DB_ETL,
+            Constant.SYSTEM_DB_SETTING,
+            Constant.SYSTEM_DB_FUNCTION,
+            Constant.SYSTEM_DB_CODE
     );
 }

@@ -64,7 +64,7 @@ public class DataRider {
 
         String className = MODEL_PREFIX + WordUtils.capitalize(board.getSchema());
 
-        boolean usingLightEntity = Model.reserved.contains(board.getSchema())
+        boolean usingLightEntity = Model.system.contains(board.getSchema())
                 || Constant.KIND_BOARD_SYSTEM_DATA_API.equals(board.getKind());
 
         String packageName = usingLightEntity
