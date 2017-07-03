@@ -19,12 +19,26 @@ import java.io.ByteArrayOutputStream;
 import static io.vertx.core.http.HttpHeaders.*;
 
 /**
- * Result
+ * Result 返回给客户端的数据格式
+ *
+ * {
+ *   apiVersion: '1.0',
+ *   data: {
+ *     items: [],
+ *     totalItems: 15
+ *   },
+ *   error: {
+ *     code: '',
+ *     message: ''
+ *   }
+ * }
+ *
  * Created by lilin on 2016/11/12.
  */
 @JsonPropertyOrder(alphabetic = true)
 public class Result {
 
+    private String apiVersion = "1.0";
     private Object data;
     private Error error;
 
@@ -40,7 +54,7 @@ public class Result {
     }
 
     public String getApiVersion() {
-        return "1.0";
+        return this.apiVersion;
     }
 
     public Object getData() {
@@ -75,6 +89,4 @@ public class Result {
         response.setStatusCode(HttpResponseStatus.FOUND.code());
         response.end();
     }
-
-
 }

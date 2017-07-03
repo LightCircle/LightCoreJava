@@ -219,9 +219,9 @@ public class DataRider {
                     });
 
 
-            if (result instanceof ModCommon) {
-                ((ModCommon) result).setOptions(options.size() == 0 ? null : options);
-            }
+//            if (result instanceof ModCommon) {
+//                ((ModCommon) result).setOptions(options.size() == 0 ? null : options);
+//            }
 
             if (result instanceof Plural) {
                 ((Plural) result).setOptions(options.size() == 0 ? null : options);

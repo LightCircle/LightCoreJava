@@ -202,7 +202,7 @@ public class Dispatcher {
                     put("req", handler.req());
                     put("handler", handler);
                     put("conf", Environment.instance());
-                    put("csrftoken", ctx.get(CSRFHandler.DEFAULT_HEADER_NAME));
+                    put(CSRFHandler.DEFAULT_QUERY_NAME, ctx.get(CSRFHandler.DEFAULT_HEADER_NAME));
                 }};
                 if (handler.user() != null) {
                     model.put("user", handler.user());

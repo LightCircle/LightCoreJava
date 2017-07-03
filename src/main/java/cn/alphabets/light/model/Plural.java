@@ -12,6 +12,11 @@ import java.util.List;
 @JsonPropertyOrder(alphabetic = true)
 public class Plural<T extends ModCommon> {
 
+    private T item;
+    private Long totalItems;
+    private List<T> items;
+    private HashMap<String, HashMap<String, ModCommon>> options;
+
     public Plural(List<T> items) {
         this((long) items.size(), items, null);
     }
@@ -34,6 +39,10 @@ public class Plural<T extends ModCommon> {
         return items;
     }
 
+    public T getItem() {
+        return item;
+    }
+
     public HashMap<String, HashMap<String, ModCommon>> getOptions() {
         return options;
     }
@@ -42,7 +51,4 @@ public class Plural<T extends ModCommon> {
         this.options = options;
     }
 
-    private Long totalItems;
-    private List<T> items;
-    private HashMap<String, HashMap<String, ModCommon>> options;
 }

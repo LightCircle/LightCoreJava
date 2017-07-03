@@ -15,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -29,8 +31,8 @@ import java.util.regex.Pattern;
  */
 public interface CSRFHandler extends Handler<RoutingContext> {
 
-    String DEFAULT_COOKIE_NAME = "XSRF-TOKEN";
-    String DEFAULT_HEADER_NAME = "X-XSRF-TOKEN";
+    String DEFAULT_COOKIE_NAME = "csrf-token";
+    String DEFAULT_HEADER_NAME = "csrf-token";
     String DEFAULT_QUERY_NAME = "_csrf";
 
     static CSRFHandler create(String secret) {
@@ -163,13 +165,20 @@ public interface CSRFHandler extends Handler<RoutingContext> {
                 case PUT:
                 case DELETE:
                 case PATCH:
-                    String value = ctx.request().getHeader(headerName);
+
+                    // 尝试从Header里获取
+                    String value = this.decode(ctx.request().getHeader(headerName));
+
+                    // 尝试从body里获取
                     if (value == null) {
-                        value = ctx.request().getFormAttribute(headerName);
+                        value = this.decode(ctx.request().getFormAttribute(queryName));
                     }
+
+                    // 尝试从query里获取
                     if (value == null) {
-                        value = ctx.request().params().get(queryName);
+                        value = this.decode(ctx.request().params().get(queryName));
                     }
+
                     if (validateToken(value)) {
                         ctx.next();
                     } else {
@@ -180,6 +189,17 @@ public interface CSRFHandler extends Handler<RoutingContext> {
                     // ignore these methods
                     ctx.next();
                     break;
+            }
+        }
+
+        private String decode(String original) {
+            if (original == null) {
+                return null;
+            }
+            try {
+                return URLDecoder.decode(original, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                return original;
             }
         }
     }

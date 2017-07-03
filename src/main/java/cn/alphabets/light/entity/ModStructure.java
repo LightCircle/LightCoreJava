@@ -27,11 +27,6 @@ public class ModStructure extends ModCommon {
 
   private Object items;
 
-  @JsonDeserialize(
-      using = LongDeserializer.class
-  )
-  private Long kind;
-
   @JsonProperty("public")
   @JsonDeserialize(
       using = LongDeserializer.class
@@ -39,6 +34,11 @@ public class ModStructure extends ModCommon {
   private Long public_;
 
   private String parent;
+
+  @JsonDeserialize(
+      using = LongDeserializer.class
+  )
+  private Long kind;
 
   public String getDescription() {
     return this.description;
@@ -88,14 +88,6 @@ public class ModStructure extends ModCommon {
     this.items = items;
   }
 
-  public Long getKind() {
-    return this.kind;
-  }
-
-  public void setKind(Long kind) {
-    this.kind = kind;
-  }
-
   public Long getPublic_() {
     return this.public_;
   }
@@ -110,5 +102,13 @@ public class ModStructure extends ModCommon {
 
   public void setParent(String parent) {
     this.parent = parent;
+  }
+
+  public Long getKind() {
+    return this.kind;
+  }
+
+  public void setKind(Long kind) {
+    this.kind = kind;
   }
 }
