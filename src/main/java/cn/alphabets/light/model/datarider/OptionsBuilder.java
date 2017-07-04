@@ -161,11 +161,9 @@ class OptionsBuilder {
 
     private static class OptionsBuilderGroup {
         private List<OptionsBuilder> list;
-//        private String structure;
 
         private OptionsBuilderGroup(List<OptionsBuilder> list) {
             this.list = list;
-//            this.structure = structure;
         }
 
         private Map<String, ModCommon> build(Context handler, Object result) {
