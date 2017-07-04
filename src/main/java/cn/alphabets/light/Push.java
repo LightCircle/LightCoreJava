@@ -76,7 +76,7 @@ class Push {
         data.put("app", env.getAppName());
         data.put("name", "app.jar");
         data.put("type", "binary");
-        data.put("source", result.getItems().get(0).get_id().toHexString());
+        data.put("source", result.items.get(0).get_id().toHexString());
         Rider.add(handler, ModCode.class, new Params().data(data));
 
         logger.debug(jarFile);

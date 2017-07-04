@@ -15,6 +15,7 @@ import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.model.Error;
 import cn.alphabets.light.model.datarider.Rider;
 import io.vertx.core.Handler;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
@@ -48,6 +49,11 @@ public class Dispatcher {
     private final Map<String, Method> methods;
     private final ConfigManager conf;
 
+    private final List<HttpMethod> METHOD = Arrays.asList(
+            HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.GET,
+            HttpMethod.GET, HttpMethod.GET, HttpMethod.GET);
+
+
     public Dispatcher() {
         this.boards = CacheManager.INSTANCE.getBoards();
         this.routes = CacheManager.INSTANCE.getRoutes();
@@ -63,18 +69,17 @@ public class Dispatcher {
     public void routeProcessAPI(Router router) {
 
         this.boards.forEach(board -> {
-            if (!Constant.KIND_BOARD_USER_LOGIC.equals(board.getKind())) {
-                return;
-            }
-            if (!Constant.KIND_BOARD_SYSTEM_LOGIC.equals(board.getKind())) {
+            if (!Constant.KIND_BOARD_USER_LOGIC.equals(board.getKind())
+                    && !Constant.KIND_BOARD_SYSTEM_LOGIC.equals(board.getKind())) {
                 return;
             }
 
-            io.vertx.ext.web.Route r = router.route(board.getApi());
+            logger.debug(String.format(">> %s %s, %s, %s", METHOD.get(board.getType().intValue()).toString(),
+                    board.getApi(), board.getClass_(), board.getAction()));
+
+            io.vertx.ext.web.Route r = router.route(METHOD.get(board.getType().intValue()), board.getApi());
             r.failureHandler(getFailureHandler());
             r.blockingHandler(ctx -> {
-
-                Object data;
 
                 String className = board.getClass_(), actionName = board.getAction();
                 if (className == null || actionName == null) {
@@ -86,6 +91,7 @@ public class Dispatcher {
                     throw new MethodNotFoundException("Dispatch method not found.");
                 }
 
+                Object data;
                 try {
                     data = method.invoke(method.getDeclaringClass().newInstance(), new Context(ctx));
                 } catch (InvocationTargetException e) {
@@ -93,7 +99,8 @@ public class Dispatcher {
                 } catch (IllegalAccessException | InstantiationException e) {
                     throw new ProcessingException(e);
                 }
-                //if controller method return type is void ,do nothing
+
+                // if controller method return type is void, do nothing
                 if (!method.getReturnType().equals(Void.TYPE)) {
                     new Result(data).send(ctx);
                 }
@@ -108,14 +115,15 @@ public class Dispatcher {
      */
     public void routeDataAPI(Router router) {
         this.boards.forEach(board -> {
-            if (!Constant.KIND_BOARD_USER_DATA.equals(board.getKind())) {
-                return;
-            }
-            if (!Constant.KIND_BOARD_SYSTEM_DATA.equals(board.getKind())) {
+            if (!Constant.KIND_BOARD_USER_DATA.equals(board.getKind())
+                    && !Constant.KIND_BOARD_SYSTEM_DATA.equals(board.getKind())) {
                 return;
             }
 
-            io.vertx.ext.web.Route r = router.route(board.getApi());
+            logger.debug(String.format(">> %s %s, %s, %s",
+                    METHOD.get(board.getType().intValue()).toString(), board.getApi(), board.getClass_(), board.getAction()));
+
+            io.vertx.ext.web.Route r = router.route(METHOD.get(board.getType().intValue()), board.getApi());
             r.failureHandler(getFailureHandler());
             r.blockingHandler(ctx -> {
 
@@ -166,6 +174,8 @@ public class Dispatcher {
     public void routeView(Router router) {
 
         this.routes.forEach(route -> {
+
+            logger.debug(String.format(">> %s, %s, %s", route.getUrl(), route.getClass_(), route.getAction()));
 
             io.vertx.ext.web.Route r = router.route(route.getUrl());
             r.failureHandler(getFailureHandler());

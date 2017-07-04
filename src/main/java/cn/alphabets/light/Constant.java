@@ -49,12 +49,11 @@ public class Constant {
 
 
     public static final String MODEL_PREFIX = "Mod";
-    public static final String DEFAULT_TENANT = "Default";
+    public static final String DEFAULT_TENANT = "default";
     public static final String DEFAULT_PACKAGE_NAME = "cn.alphabets.light";
     public static final String DEFAULT_JOB_USER_ID = "000000000000000000000000";
     public static final String DEFAULT_JOB_USER_LANG = "zh";
     public static final Integer DEFAULT_LIMIT = 0;                              // 一次允许获取的数据库记录数
-    public static final Integer MAX_LIMIT = 10000;                              // 数据库记录的最大值数, 超过这个应该使用Cursor
     public static final Integer VALID = 1;                                      // 有效数据库记录
     public static final Integer INVALID = 0;                                    // 无效数据库记录
 

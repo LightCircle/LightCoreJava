@@ -36,10 +36,10 @@ import java.util.List;
 
 /**
  * Model
- *
+ * <p>
  * Model接受的参数为原生的Document对象
  * 返回值会根据指定的类型转换成ModCommon实例
- *
+ * <p>
  * 额外的，Model提供一个document方法，他不对结果做转换直接返回Document对象，主要由平台内部使用
  */
 public class Model {
@@ -75,27 +75,30 @@ public class Model {
             final String current = table;
 
             // 查看是否定义有父表
-            ModStructure struct = CacheManager.INSTANCE.getStructures()
-                    .stream()
-                    .filter(s -> s.getSchema().equals(current))
-                    .findFirst()
-                    .get();
+            List<ModStructure> structs = CacheManager.INSTANCE.getStructures();
+            if (structs != null) {
+                ModStructure struct = CacheManager.INSTANCE.getStructures()
+                        .stream()
+                        .filter(s -> s.getSchema().equals(current))
+                        .findFirst()
+                        .get();
 
-            // 父表作为当前操作的表名称
-            if (struct.getParent().length() > 0) {
-                table = struct.getParent();
+                // 父表作为当前操作的表名称
+                if (struct.getParent().length() > 0) {
+                    table = struct.getParent();
+                }
             }
 
-            table = English.plural(table.toLowerCase());
+            String plural = English.plural(table.toLowerCase());
 
             // 使用系统表时，用light前缀
             if (system.contains(table)) {
-                table = Constant.SYSTEM_DB_PREFIX + "." + table;
+                plural = Constant.SYSTEM_DB_PREFIX + "." + plural;
             } else if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
-                table = code + '.' + table;
+                plural = code + '.' + plural;
             }
 
-            this.collection = this.db.getCollection(table);
+            this.collection = this.db.getCollection(plural);
         }
     }
 

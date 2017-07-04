@@ -38,7 +38,7 @@ public class Rider {
     );
 
     public static Object call(Context handler, Class clazz, String boardMethod) throws DataRiderException {
-        return call(handler, clazz, boardMethod);
+        return call(handler, clazz, boardMethod, null);
     }
 
     public static Object call(Context handler, Class clazz, String boardMethod, Params params) throws DataRiderException {

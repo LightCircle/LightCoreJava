@@ -23,14 +23,6 @@ public class ModCommon extends Entity {
 
     private static final long serialVersionUID = 1L;
 
-
-//    //Use JsonView annotation to filter out this field
-//    @JsonView(Views.OptionsView.class)
-//    //Use JsonProperty access = READ_ONLY to ignore this field during deserialization
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-//    private HashMap<String, HashMap<String, ModCommon>> options;
-
-
     private Integer valid;
     private String createBy;
     private String updateBy;
@@ -94,13 +86,5 @@ public class ModCommon extends Entity {
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
     }
-
-//    public HashMap<String, HashMap<String, ModCommon>> getOptions() {
-//        return options;
-//    }
-//
-//    public void setOptions(HashMap<String, HashMap<String, ModCommon>> options) {
-//        this.options = options;
-//    }
 
 }

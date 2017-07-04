@@ -52,10 +52,17 @@ public class Params {
             } else {
 
                 this.condition = new Document();
+
+                // 如果包含id字段，尝试转换成ObjectID类
                 if (json.containsKey(PARAM_ID)) {
-                    this.id(new ObjectId(json.getString(PARAM_ID)));
-                    this.condition.append("_id", new ObjectId(json.getString(PARAM_ID)));
+                    if (ObjectId.isValid(json.getString(PARAM_ID))) {
+                        this.id(new ObjectId(json.getString(PARAM_ID)));
+                        this.condition.append("_id", new ObjectId(json.getString(PARAM_ID)));
+                    } else {
+                        this.condition.append("id", json.getString(PARAM_ID));
+                    }
                 }
+
                 if (json.containsKey(PARAM_CONDITION)) {
                     this.condition.putAll((Document) json.get(PARAM_CONDITION));
                 }
@@ -96,9 +103,23 @@ public class Params {
         }
     }
 
-    public Params(Document condition, Object data, Document select,
-                  Document sort, ObjectId _id, int skip, int limit,
-                  List<RequestFile> files, String table, Class clazz) {
+    /**
+     * 这个构造函数主要用于DataRider中，通过Board定义正规化参数值时使用
+     * 目的主要是，正规化过程中不修改用于指定的handler.params内的参数
+     *
+     * @param condition condition
+     * @param data      data
+     * @param select    select
+     * @param sort      sort
+     * @param _id       _id
+     * @param skip      skip
+     * @param limit     limit
+     * @param files     files
+     * @param table     table
+     * @param clazz     clazz
+     */
+    public Params(Document condition, Object data, Document select, Document sort, ObjectId _id, int skip, int limit,
+           List<RequestFile> files, String table, Class clazz) {
         this.condition = condition;
         this.data = data;
         this.select = select;

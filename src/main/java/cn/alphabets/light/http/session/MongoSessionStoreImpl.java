@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * MongoSessionStore
  * Created by luohao on 2016/10/27.
  */
 public class MongoSessionStoreImpl implements SessionStore {

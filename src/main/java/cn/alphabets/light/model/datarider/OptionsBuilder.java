@@ -7,6 +7,7 @@ import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
+import cn.alphabets.light.model.Singular;
 import com.mongodb.client.model.Filters;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.conversions.Bson;
@@ -18,16 +19,26 @@ import java.util.stream.Collectors;
  * OptionsBuilder
  * Created by lilin on 2017/7/4.
  */
-public class OptionsBuilder {
+class OptionsBuilder {
 
-    //key
+    // 数据的Key
     private String key;
-    //fields contains by option
+
+    // 获取的内容
     private List<String> field;
-    //foreign key
+
+    // 关联检索的字段
     private String link;
-    //option structure
+
+    // 关联的表名
     private String structure;
+
+    private OptionsBuilder(String key, List<String> field, String link, String structure) {
+        this.key = key;
+        this.field = field;
+        this.link = link;
+        this.structure = structure;
+    }
 
     /**
      * attach options info accord board info
@@ -37,129 +48,132 @@ public class OptionsBuilder {
      * @param board   board info
      * @return DB result with options attached
      */
-    public static Object fetchOptions(Context handler, Object result, ModBoard board) {
+    static Object fetchOptions(Context handler, Object result, ModBoard board) {
 
-        if (result instanceof ModCommon || result instanceof Plural) {
-
-            List<OptionsBuilder> optionsBuilders = new ArrayList<>();
-            board.getSelects().forEach(select -> {
-                if (select.getSelect() && StringUtils.isNotEmpty(select.getOption())) {
-                    optionsBuilders.add(
-                            new OptionsBuilder(
-                                    select.getKey(),
-                                    select.getFields(),
-                                    select.getLink(),
-                                    select.getOption()));
-                }
-            });
-
-            HashMap<String, HashMap<String, ModCommon>> options = new HashMap<>();
-
-            optionsBuilders.stream()
-                    .collect(Collectors.groupingBy(OptionsBuilder::getStructure))
-                    .forEach((s, optionsBuilders1) -> {
-                        OptionsBuilder.OptionsBuilderGroup optionsBuilderGroup = new OptionsBuilder.OptionsBuilderGroup(optionsBuilders1, s);
-                        options.put(s, optionsBuilderGroup.build(handler, result));
-                    });
-
-
-//            TODO:
-//            if (result instanceof ModCommon) {
-//                ((ModCommon) result).setOptions(options.size() == 0 ? null : options);
-//            }
-
-            if (result instanceof Plural) {
-                ((Plural) result).setOptions(options.size() == 0 ? null : options);
-            }
+        if (!(result instanceof Singular || result instanceof Plural)) {
+            return result;
         }
+
+        List<OptionsBuilder> builders = new ArrayList<>();
+        board.getSelects().forEach(select -> {
+            if (select.getSelect() && StringUtils.isNotEmpty(select.getOption())) {
+                builders.add(
+                        new OptionsBuilder(select.getKey(), select.getFields(), select.getOption(), select.getLink()));
+            }
+        });
+
+        Map<String, Map<String, ModCommon>> options = new HashMap<>();
+
+        builders.stream()
+                .collect(Collectors.groupingBy(OptionsBuilder::getStructure))
+                .forEach((s, consumer) -> {
+                    OptionsBuilder.OptionsBuilderGroup group = new OptionsBuilder.OptionsBuilderGroup(consumer);
+                    options.put(s, group.build(handler, result));
+                });
+
+        // 单个文档的时候
+        if (result instanceof Singular) {
+            ((Singular) result).options = options.size() == 0 ? null : options;
+        }
+
+        // 文档列表的时候
+        if (result instanceof Plural) {
+            ((Plural) result).options = options.size() == 0 ? null : options;
+        }
+
         return result;
     }
 
-    public OptionsBuilder(String key, List<String> field, String link, String structure) {
-        this.key = key;
-        this.field = field;
-        this.link = link;
-        this.structure = structure;
-    }
 
+    private Map<String, ModCommon> build(Context handler, Object result) {
 
-    public HashMap<String, ModCommon> build(Context handler, Object result) {
-        ModStructure modStructure = CacheManager.INSTANCE.getStructures().stream().filter(s -> s.getSchema().equals(structure)).findFirst().get();
+        Map<String, ModCommon> option = new HashMap<>();
 
-        HashMap<String, ModCommon> option = new HashMap<>();
-
-        //convert to typed value
-        TypeConverter convertor = new TypeConverter(handler);
-
-        //field type
-        String valueType = ((HashMap<String, HashMap>) modStructure.getItems()).get(link).get("type").toString().trim().toLowerCase();
-
-        //collect field value
-        List fieldValues = new ArrayList();
-        if (result instanceof ModCommon) {
-            Object value = ((ModCommon) result).getFieldValue(key);
-            Object converted = convertor.convert(valueType, value);
-            if (converted instanceof List) {
-                fieldValues.addAll((Collection) convertor.convert(valueType, value));
-            } else {
-                fieldValues.add(convertor.convert(valueType, value));
-            }
-        } else if (result instanceof Plural) {
-            ((Plural) result).getItems().forEach(item -> {
-                Object value = ((ModCommon) item).getFieldValue(key);
-                Object converted = convertor.convert(valueType, value);
-                if (converted instanceof List) {
-                    fieldValues.addAll((Collection) convertor.convert(valueType, value));
-                } else {
-                    fieldValues.add(convertor.convert(valueType, value));
-                }
-            });
-        } else {
+        if (!(result instanceof Singular || result instanceof Plural)) {
             return option;
         }
+
+        ModStructure structure = CacheManager.INSTANCE.getStructures()
+                .stream()
+                .filter(s -> s.getSchema().equals(this.structure))
+                .findFirst()
+                .get();
+
+        // convert to typed value
+        TypeConverter converter = new TypeConverter(handler);
+
+        // field type
+        String valueType = ((Map<String, Map>) structure.getItems()).get(link).get("type").toString().trim().toLowerCase();
+
+        // collect field value
+        List<Object> fieldValues = new ArrayList<>();
+        if (result instanceof Singular) {
+            Object value = ((Singular) result).item.getFieldValue(key);
+            Object converted = converter.convert(valueType, value);
+            if (converted instanceof List) {
+                fieldValues.addAll((Collection) converter.convert(valueType, value));
+            } else {
+                fieldValues.add(converter.convert(valueType, value));
+            }
+        }
+        if (result instanceof Plural) {
+            ((Plural) result).items.forEach(item -> {
+                Object value = ((ModCommon) item).getFieldValue(key);
+                Object converted = converter.convert(valueType, value);
+                if (converted instanceof List) {
+                    fieldValues.addAll((Collection) converter.convert(valueType, value));
+                } else {
+                    fieldValues.add(converter.convert(valueType, value));
+                }
+            });
+        }
+
         fieldValues.removeAll(Collections.singleton(null));
         if (fieldValues.size() == 0) {
             return option;
         }
 
-        Bson condition;
-        String table;
-        Class clazz;
-        if (modStructure.getParent().length() > 0) {
-            table = modStructure.getParent();
-            condition = Filters.and(Filters.in(link, fieldValues), Filters.eq("type", structure));
-        } else {
-            table = structure;
-            condition = Filters.in(link, fieldValues);
-        }
-        clazz = Model.getEntityType(structure);
+        boolean hasParent = structure.getParent().length() > 0;
 
+        // 组合option的检索条件
+        String table = hasParent ? structure.getParent() : this.structure;
+        Class clazz = Model.getEntityType(this.structure);
+        Bson condition = hasParent
+                ? Filters.and(Filters.in(link, fieldValues), Filters.eq("type", this.structure))
+                : Filters.in(link, fieldValues);
 
+        // 为了将link字段也选择出来，clone一个field并添加link字段
+        List<String> select = new ArrayList<>(field);
+        select.add(link);
+
+        // 检索
         Model model = new Model(handler.getDomain(), handler.getCode(), table, clazz);
-
-        model.list(condition, field).forEach(item -> {
+        model.list(condition, select).forEach(item -> {
             option.put(item.toDocument(true).get(link).toString(), item);
         });
+
         return option;
-
     }
 
-    public String getStructure() {
-        return structure;
+    private String getStructure() {
+        return this.structure;
     }
 
-    public static class OptionsBuilderGroup {
+    private static class OptionsBuilderGroup {
         private List<OptionsBuilder> list;
-        private String structure;
+//        private String structure;
 
-        public OptionsBuilderGroup(List<OptionsBuilder> list, String structure) {
+        private OptionsBuilderGroup(List<OptionsBuilder> list) {
             this.list = list;
-            this.structure = structure;
+//            this.structure = structure;
         }
 
-        public HashMap<String, ModCommon> build(Context handler, Object result) {
-            HashMap<String, ModCommon> option = new HashMap<>();
-            List<HashMap<String, ModCommon>> results = list.stream().map(qb -> qb.build(handler, result)).collect(Collectors.toList());
+        private Map<String, ModCommon> build(Context handler, Object result) {
+            Map<String, ModCommon> option = new HashMap<>();
+            List<Map<String, ModCommon>> results = list.stream()
+                    .map(qb -> qb.build(handler, result))
+                    .collect(Collectors.toList());
+
             results.forEach(option::putAll);
             return option;
         }

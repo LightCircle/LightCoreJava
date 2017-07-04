@@ -1,7 +1,5 @@
 package cn.alphabets.light.http;
 
-import cn.alphabets.light.Helper;
-import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.model.Error;
 import cn.alphabets.light.model.Views;
@@ -10,13 +8,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 
-import java.io.ByteArrayOutputStream;
-
-import static io.vertx.core.http.HttpHeaders.*;
+import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
 
 /**
  * Result 返回给客户端的数据格式
@@ -43,14 +38,19 @@ public class Result {
     private Error error;
 
     public Result(Object data) {
+
+        // 异常数据处理
         if (data instanceof LightException) {
             LightException error = (LightException) data;
             this.error = new Error(error.getCode(), error.getMessage());
-        } else if (data instanceof Error) {
-            this.error = (Error) data;
-        } else {
-            this.data = data;
         }
+
+        if (data instanceof Error) {
+            this.error = (Error) data;
+        }
+
+        // 数据
+        this.data = data;
     }
 
     public String getApiVersion() {
