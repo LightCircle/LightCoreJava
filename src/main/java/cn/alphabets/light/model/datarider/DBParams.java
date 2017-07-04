@@ -1,3 +1,4 @@
+/*
 package cn.alphabets.light.model.datarider;
 
 import cn.alphabets.light.Constant;
@@ -19,9 +20,13 @@ import java.util.stream.Collectors;
 
 import static cn.alphabets.light.Constant.*;
 
+*/
 /**
+ * 参数类
+ *
  * Created by luohao on 2016/11/30.
- */
+ *//*
+
 public class DBParams {
 
     private static final Logger logger = LoggerFactory.getLogger(DBParams.class);
@@ -272,7 +277,7 @@ public class DBParams {
                     .append("valid", VALID);
         } else {
 
-            TypeConvertor convertor = new TypeConvertor(this);
+            TypeConverter convertor = new TypeConverter(this);
             List<Document> conditionOr = new ArrayList<>();
 
             //group condition by filter group
@@ -331,7 +336,8 @@ public class DBParams {
         }
     }
 
-    /**
+    */
+/**
      * build select
      * <p>
      * if select is passed from client, use the passed select
@@ -341,7 +347,8 @@ public class DBParams {
      * {"field1":1,"field2":1}
      *
      * @param board board info
-     */
+     *//*
+
     private void buildSelect(ModBoard board) {
 
         //passed from client
@@ -363,7 +370,8 @@ public class DBParams {
 
     }
 
-    /**
+    */
+/**
      * build sort
      * <p>
      * if sort is passed from client, use the passed sort
@@ -373,7 +381,8 @@ public class DBParams {
      * {"field1":-1,"field2":1}
      *
      * @param board board info
-     */
+     *//*
+
     private void buildSort(ModBoard board) {
         //passed from client
         if (sort != null) {
@@ -414,18 +423,13 @@ public class DBParams {
     @Override
     public String toString() {
 
-        String dataString = "null";
-        if (this.data != null) {
-            dataString = this.data instanceof Document ? ((Document) data).toJson() : "list";
-        }
-
         return "\n{" +
                 "\n\ttable = " + getTable() +
                 "\n\tclass = " + (clazz == null ? "null" : clazz.getName()) +
                 "\n\tcondition = " + (condition == null ? "null" : condition.toJson()) +
                 "\n\tselect = " + (select == null ? "null" : select.toJson()) +
                 "\n\tsort = " + (sort == null ? "null" : sort.toJson()) +
-                "\n\tdata = " + dataString +
+                "\n\tdata = " + (data == null ? "null" : data.toJson()) +
                 "\n\tskip = " + skip +
                 "\n\tlimit = " + limit +
                 "\n\tuid = " + getUid() +
@@ -434,3 +438,4 @@ public class DBParams {
                 "\n}";
     }
 }
+*/

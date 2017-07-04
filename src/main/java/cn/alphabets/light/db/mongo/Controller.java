@@ -3,12 +3,13 @@ package cn.alphabets.light.db.mongo;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.DataRiderException;
+import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.Params;
 import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
-import cn.alphabets.light.model.datarider.DBParams;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
@@ -37,15 +38,24 @@ public class Controller {
 
     private static final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(Controller.class);
 
-    private DBParams params;
+    private Context handler;
+    private Params params;
     private Model model;
     private String uid;
 
+    public Controller(Context handler) {
+        this(handler, null);
+    }
 
-    public Controller(DBParams params) {
+    public Controller(Context handler, Params params) {
+        this.handler = handler;
+        this.uid = handler.uid();
         this.params = params;
-        this.model = new Model(params.getDomain(), params.getCode(), params.getTable(), params.getClazz());
-        this.uid = params.getUid();
+
+        if (params == null) {
+            this.params = handler.params;
+        }
+        this.model = new Model(handler.domain(), handler.getCode(), this.params.getTable(), this.params.getClazz());
     }
 
 
@@ -92,7 +102,7 @@ public class Controller {
             List<Document> confirmed = Entity.fromDocument(
                     documents,
                     params.getClazz(),
-                    params.getHandler().getTimeZone()
+                    this.handler.tz()
             ).stream().map(Entity::toDocument).collect(Collectors.toList());
 
             // 多条数据时，返回插入的数据件数
@@ -111,7 +121,7 @@ public class Controller {
         Document confirmed = Entity.fromDocument(
                 document,
                 params.getClazz(),
-                params.getHandler().getTimeZone()).toDocument();
+                this.handler.tz()).toDocument();
         this.model.add(confirmed);
 
         return new Singular<>(this.model.add(confirmed));
@@ -127,7 +137,7 @@ public class Controller {
         Document confirmed = Entity.fromDocument(
                 document,
                 params.getClazz(),
-                params.getHandler().getTimeZone()).toDocument(true);
+                this.handler.tz()).toDocument(true);
 
         Document condition = params.getCondition();
         if (condition == null || condition.size() == 0) {

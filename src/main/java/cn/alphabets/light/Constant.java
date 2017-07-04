@@ -58,10 +58,10 @@ public class Constant {
     public static final Integer VALID = 1;                                      // 有效数据库记录
     public static final Integer INVALID = 0;                                    // 无效数据库记录
 
-    public static final Long KIND_BOARD_PROCESS_API = 1L;                       // 处理类型API
-    public static final Long KIND_BOARD_SYSTEM_DATA_API = 2L;                   // 系统数据类型API
-    public static final Long KIND_BOARD_DATA_API = 0L;                          // 数据类型API
-
+    public static final Long KIND_BOARD_USER_DATA = 0L;                         // 用户定义数据型API
+    public static final Long KIND_BOARD_USER_LOGIC = 1L;                        // 用户定义逻辑型API
+    public static final Long KIND_BOARD_SYSTEM_DATA = 2L;                       // 系统定义数据型API
+    public static final Long KIND_BOARD_SYSTEM_LOGIC = 3L;                      // 系统定义逻辑型API
 
     public static final String COOKIE_KEY_LANG = "light.lang";
     public static final String COOKIE_KEY_ACCEPT_LANGUAGE = "Accept-Language";

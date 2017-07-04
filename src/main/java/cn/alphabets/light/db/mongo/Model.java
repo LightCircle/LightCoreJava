@@ -3,7 +3,9 @@ package cn.alphabets.light.db.mongo;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
+import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.entity.ModFile;
+import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.model.ModCommon;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -69,8 +71,27 @@ public class Model {
         this.clazz = clazz;
 
         if (table != null) {
+
+            final String current = table;
+
+            // 查看是否定义有父表
+            ModStructure struct = CacheManager.INSTANCE.getStructures()
+                    .stream()
+                    .filter(s -> s.getSchema().equals(current))
+                    .findFirst()
+                    .get();
+
+            // 父表作为当前操作的表名称
+            if (struct.getParent().length() > 0) {
+                table = struct.getParent();
+            }
+
             table = English.plural(table.toLowerCase());
-            if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
+
+            // 使用系统表时，用light前缀
+            if (system.contains(table)) {
+                table = Constant.SYSTEM_DB_PREFIX + "." + table;
+            } else if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
                 table = code + '.' + table;
             }
 
@@ -128,7 +149,7 @@ public class Model {
         // fetch and convert
         List<T> result = new ArrayList<>();
         find.forEach((Block<? super Document>) document -> result.add(
-                (T) ModCommon.fromDocument(document, this.getModelType())
+                (T) ModCommon.fromDocument(document, this.getEntityType())
         ));
 
         return result;
@@ -178,7 +199,7 @@ public class Model {
         // set fetch condition
         FindIterable<Document> find = this.collection.find(condition).projection(select);
 
-        return (T) ModCommon.fromDocument(find.first(), this.getModelType());
+        return (T) ModCommon.fromDocument(find.first(), this.getEntityType());
     }
 
     public long remove(Document condition) {
@@ -205,7 +226,7 @@ public class Model {
     @SuppressWarnings("unchecked")
     public <T extends ModCommon> T add(Document document) {
         this.collection.insertOne(document);
-        return (T) ModCommon.fromDocument(document, this.getModelType());
+        return (T) ModCommon.fromDocument(document, this.getEntityType());
     }
 
     public long increase(String type) {
@@ -346,7 +367,7 @@ public class Model {
      * @param structure 表名称
      * @return 类型
      */
-    public static Class getModelType(String structure) {
+    public static Class getEntityType(String structure) {
         String className = Constant.MODEL_PREFIX + WordUtils.capitalize(structure);
 
         // 如果前缀是系统表，那么包名称使用 cn.alphabets.light，否则使用用户定义的包名
@@ -365,13 +386,13 @@ public class Model {
         }
     }
 
-    private Class getModelType() {
+    private Class getEntityType() {
 
         if (this.clazz != null) {
             return this.clazz;
         }
 
-        return getModelType(this.name);
+        return getEntityType(this.name);
     }
 
     public static List<String> system = Arrays.asList(

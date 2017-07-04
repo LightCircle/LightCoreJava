@@ -11,14 +11,12 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Cookie;
-import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
 import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
@@ -36,10 +34,6 @@ public class Context {
     protected String domain;
     protected String code;
     protected String uid;
-
-    protected Context() {
-        params = null;
-    }
 
     public Context(Params params, String domain, String code, String uid) {
         this.params = params;
@@ -71,6 +65,8 @@ public class Context {
 
         // form
         if (ctx.getBodyAsString().length() > 0) {
+
+            // xml格式的数据
             if (ctx.request().getHeader("content-type").equals("application/xml")) {
                 parameter.put("xml", ctx.getBodyAsString());
             } else {
@@ -79,18 +75,17 @@ public class Context {
         }
 
         // file
+        List<RequestFile> files = null;
         if (ctx.fileUploads().size() > 0) {
-            Set<FileUpload> uploads = ctx.fileUploads();
-            List<RequestFile> files = uploads.stream().map(x -> {
-                RequestFile file = new RequestFile(Constant.PARAM_FILE_NAME, x.fileName());
-                file.put(Constant.PARAM_FILE_TYPE, x.contentType());
-                file.put(Constant.PARAM_FILE_PHYSICAL, x.uploadedFileName());
+            files = ctx.fileUploads().stream().map(item -> {
+                RequestFile file = new RequestFile(Constant.PARAM_FILE_NAME, item.fileName());
+                file.put(Constant.PARAM_FILE_TYPE, item.contentType());
+                file.put(Constant.PARAM_FILE_PHYSICAL, item.uploadedFileName());
                 return file;
             }).collect(Collectors.toList());
-            this.params = new Params(parameter, files);
-        } else {
-            this.params = new Params(parameter);
         }
+
+        this.params = new Params(parameter, files);
 
         logger.debug("req params : " + this.params.toString());
     }
@@ -122,6 +117,10 @@ public class Context {
         ctx.session().put(Constant.SK_USER, user);
     }
 
+    public String domain() {
+        return getDomain();
+    }
+
     public String getDomain() {
         if (this.domain != null) {
             return this.domain;
@@ -137,6 +136,10 @@ public class Context {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    public String code() {
+        return getCode();
     }
 
     public String getCode() {
@@ -175,6 +178,10 @@ public class Context {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public TimeZone tz() {
+        return this.getTimeZone();
     }
 
     public TimeZone getTimeZone() {

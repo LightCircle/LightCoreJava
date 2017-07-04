@@ -1,3 +1,4 @@
+/*
 package cn.alphabets.light.model.datarider;
 
 
@@ -26,10 +27,12 @@ import java.util.stream.Collectors;
 import static cn.alphabets.light.Constant.DEFAULT_PACKAGE_NAME;
 import static cn.alphabets.light.Constant.MODEL_PREFIX;
 
+*/
 /**
  * DataRider
  * Created by lilin on 2016/11/12.
- */
+ *//*
+
 public class DataRider {
 
     private static final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(DataRider.class);
@@ -40,24 +43,28 @@ public class DataRider {
     private ModBoard board;
 
 
-    /**
+    */
+/**
      * New instance with Mod Class
      *
      * @param clazz mod class
      * @return instance
-     */
+     *//*
+
     public static DataRider ride(Class clazz) {
         DataRider dataRider = new DataRider();
         dataRider.clazz = clazz;
         return dataRider;
     }
 
-    /**
+    */
+/**
      * New instance with board
      *
      * @param board board info
      * @return instance
-     */
+     *//*
+
     public static DataRider ride(ModBoard board) {
         DataRider dataRider = new DataRider();
         dataRider.board = board;
@@ -80,66 +87,78 @@ public class DataRider {
         return dataRider;
     }
 
-    /**
+    */
+/**
      * shortcut for board "add" method
      *
      * @param params DBParams
      * @param <T>    mod class
      * @return added mod instance
-     */
+     *//*
+
     public <T extends ModCommon> T add(DBParams params) {
         return (T) this.call("add", params);
     }
 
-    /**
+    */
+/**
      * shortcut for board "get" method
      *
      * @param params DBParams
      * @param <T>    mod class
      * @return fetched mod instance
-     */
+     *//*
+
     public <T extends ModCommon> T get(DBParams params) {
         return (T) this.call("get", params);
     }
 
-    /**
+    */
+/**
      * shortcut for board "list" method
      *
      * @param params DBParams
      * @param <T>    mod class
      * @return fetched mod instance list
-     */
+     *//*
+
     public <T extends ModCommon> Plural<T> list(DBParams params) {
         return (Plural<T>) this.call("list", params);
     }
 
-    /**
+    */
+/**
      * shortcut for board "remove" method
      *
      * @param params DBParams
      * @return removed db record count
-     */
+     *//*
+
     public Long remove(DBParams params) {
         return (Long) this.call("remove", params);
     }
 
-    /**
+    */
+/**
      * shortcut for board "update" method
      *
      * @param params DBParams
      * @param <T>    mod class
      * @return updated mod instance
-     */
+     *//*
+
     public <T extends ModCommon> T update(DBParams params) {
         return (T) this.call("update", params);
     }
 
-    /**
+    */
+/**
      * shortcut for board "count" method
      *
      * @param params DBParams
      * @return db record count
-     */
+     *//*
+
     public Long count(DBParams params) {
         return (Long) this.call("count", params);
     }
@@ -149,14 +168,16 @@ public class DataRider {
         throw new UnsupportedOperationException("rider search");
     }
 
-    /**
+    */
+/**
      * call data rider by board method
      *
      * @param boardMethod method of board
      * @param params      DBParams
      * @return db result
      * @throws DataRiderException exception
-     */
+     *//*
+
     public Object call(String boardMethod, DBParams params) throws DataRiderException {
         if (board != null) {
             logger.warn("The board is exist , arg 'boardName' will be ignored");
@@ -167,13 +188,15 @@ public class DataRider {
         return call(params);
     }
 
-    /**
+    */
+/**
      * call data rider
      *
      * @param params DBParams
      * @return db result
      * @throws DataRiderException exception
-     */
+     *//*
+
     public Object call(DBParams params) throws DataRiderException {
         if (board == null) {
             throw DataRiderException.BoardNotFound("unknown api");
@@ -185,14 +208,16 @@ public class DataRider {
     }
 
 
-    /**
+    */
+/**
      * attach options info accord board info
      *
      * @param handler Context
      * @param result  DB result will be attached
      * @param board   board info
      * @return DB result with options attached
-     */
+     *//*
+
     private Object options(Context handler, Object result, ModBoard board) {
 
         if (result instanceof ModCommon || result instanceof Plural) {
@@ -230,13 +255,15 @@ public class DataRider {
         return result;
     }
 
-    /**
+    */
+/**
      * invoke controller method to perform db operation
      *
      * @param board  board info
      * @param params DBParams
      * @return db operation result
-     */
+     *//*
+
     private Object callCtrl(ModBoard board, DBParams params) {
         params = params.adaptToBoard(this, board);
         Controller ctrl = new Controller(params);
@@ -251,13 +278,15 @@ public class DataRider {
         }
     }
 
-    /**
+    */
+/**
      * find board by mod class & board method (eg : get,remove etc.)
      *
      * @param clazz  Mod class
      * @param method board method
      * @return board
-     */
+     *//*
+
     private static ModBoard getBoard(Class<? extends ModCommon> clazz, String method) {
 
         String api = String.format("/api/%s/%s", WordUtils.uncapitalize(clazz.getSimpleName().replace(MODEL_PREFIX, "")), method);
@@ -271,11 +300,13 @@ public class DataRider {
         throw DataRiderException.BoardNotFound(api);
     }
 
-    /**
+    */
+/**
      * return mod class associate with this data rider
      *
      * @return mod class
-     */
+     *//*
+
     public Class<? extends ModCommon> getClazz() {
         return clazz;
     }
@@ -306,7 +337,7 @@ public class DataRider {
             HashMap<String, ModCommon> option = new HashMap<>();
 
             //convert to typed value
-            TypeConvertor convertor = new TypeConvertor(new DBParams(handler));
+            TypeConverter convertor = new TypeConverter(new DBParams(handler));
 
             //field type
             String valueType = ((HashMap<String, HashMap>) modStructure.getItems()).get(link).get("type").toString().trim().toLowerCase();
@@ -349,7 +380,7 @@ public class DataRider {
                 table = structure;
                 condition = Filters.in(link, fieldValues);
             }
-            clazz = Model.getModelType(structure);
+            clazz = Model.getEntityType(structure);
 
 
             Model model = new Model(handler.getDomain(), handler.getCode(), table, clazz);
@@ -383,3 +414,4 @@ public class DataRider {
         }
     }
 }
+*/

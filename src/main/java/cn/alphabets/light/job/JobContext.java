@@ -4,6 +4,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.entity.ModUser;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.Params;
 import cn.alphabets.light.model.ModCommon;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -14,37 +15,37 @@ import org.bson.types.ObjectId;
 import java.util.TimeZone;
 
 /**
+ * JobContext
+ *
  * Created by luohao on 2016/12/26.
  */
 public class JobContext extends Context {
 
-
     private ModUser fakeSessionUser;
 
-
     public JobContext() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
     public JobContext(String code) {
-        this(null, code, null);
+        this(null, null, code, null);
     }
 
     public JobContext(String domain, String code) {
-        this(domain, code, null);
+        this(null, domain, code, null);
     }
 
-    public JobContext(String domain, String code, ModUser user) {
+    public JobContext(Params params, String domain, String code, ModUser user) {
+        super(params, domain, code, Constant.DEFAULT_JOB_USER_ID);
+
         this.domain = domain == null ? Environment.instance().getAppName() : domain;
         this.code = code == null ? Constant.DEFAULT_TENANT : code;
-
         if (user == null) {
             user = new ModUser();
             user.set_id(new ObjectId(Constant.DEFAULT_JOB_USER_ID));
             user.setLang(Constant.DEFAULT_JOB_USER_LANG);
         }
-        fakeSessionUser = user;
-
+        this.fakeSessionUser = user;
     }
 
 

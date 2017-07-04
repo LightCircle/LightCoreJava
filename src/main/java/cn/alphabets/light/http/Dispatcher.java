@@ -13,8 +13,7 @@ import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
 import cn.alphabets.light.model.Error;
-import cn.alphabets.light.model.datarider.DBParams;
-import cn.alphabets.light.model.datarider.DataRider;
+import cn.alphabets.light.model.datarider.Rider;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -64,7 +63,10 @@ public class Dispatcher {
     public void routeProcessAPI(Router router) {
 
         this.boards.forEach(board -> {
-            if (!Constant.KIND_BOARD_PROCESS_API.equals(board.getKind())) {
+            if (!Constant.KIND_BOARD_USER_LOGIC.equals(board.getKind())) {
+                return;
+            }
+            if (!Constant.KIND_BOARD_SYSTEM_LOGIC.equals(board.getKind())) {
                 return;
             }
 
@@ -106,7 +108,10 @@ public class Dispatcher {
      */
     public void routeDataAPI(Router router) {
         this.boards.forEach(board -> {
-            if (!Constant.KIND_BOARD_SYSTEM_DATA_API.equals(board.getKind()) && !Constant.KIND_BOARD_DATA_API.equals(board.getKind())) {
+            if (!Constant.KIND_BOARD_USER_DATA.equals(board.getKind())) {
+                return;
+            }
+            if (!Constant.KIND_BOARD_SYSTEM_DATA.equals(board.getKind())) {
                 return;
             }
 
@@ -146,7 +151,7 @@ public class Dispatcher {
                 }
 
                 // Try lookup rider class
-                data = DataRider.ride(board).call(new DBParams(handler, true));
+                data = Rider.call(handler, Rider.getEntityType(className, board.getKind()), actionName);
 
                 new Result(data).send(ctx);
             }, false);

@@ -2,25 +2,26 @@ package cn.alphabets.light.model.datarider;
 
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.exception.DataRiderException;
+import cn.alphabets.light.http.Context;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * TypeConverter
+ * <p>
  * Created by luohao on 2016/12/3.
  */
-public class TypeConvertor {
-    private static final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(TypeConvertor.class);
+public class TypeConverter {
+    private static final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(TypeConverter.class);
 
-    private DBParams params;
+    private Context handler;
+
     private Map<String, Function> typeConverts = new ConcurrentHashMap<String, Function>() {{
 
         put("string", o -> {
@@ -99,7 +100,7 @@ public class TypeConvertor {
                     } else if (((String) o).endsWith("Z")) {
                         return Helper.fromUTCString((String) o);
                     } else {
-                        return Helper.fromSupportedString((String) o, params.getHandler().getTimeZone());
+                        return Helper.fromSupportedString((String) o, handler.tz());
                     }
 
                 } catch (Exception e) {
@@ -133,8 +134,8 @@ public class TypeConvertor {
 
     }};
 
-    public TypeConvertor(DBParams params) {
-        this.params = params;
+    public TypeConverter(Context handler) {
+        this.handler = handler;
     }
 
     public Object convert(String valueType, Object value) {

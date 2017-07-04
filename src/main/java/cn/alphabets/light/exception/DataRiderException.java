@@ -19,8 +19,8 @@ public class DataRiderException extends RuntimeException {
         return new DataRiderException(String.format("Parameter unsatisfied : %s", parameter), throwable);
     }
 
-    public static DataRiderException EntityClassNotFound(String clazz, ModBoard board) {
-        return new DataRiderException(String.format("Can not found class : %s , board : %s", clazz, board.toDocument().toJson()));
+    public static DataRiderException EntityClassNotFound(String clazz) {
+        return new DataRiderException(String.format("Can not found class : %s", clazz));
     }
 
     public static DataRiderException ControllerMethodCallFailed(String methodName, Throwable throwable) {

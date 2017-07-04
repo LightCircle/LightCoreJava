@@ -12,9 +12,9 @@ import java.util.Map;
 @JsonPropertyOrder(alphabetic = true)
 public class Singular<T extends ModCommon> {
 
-    private Long count;
-    private T item;
-    private Map<String, Map<String, ModCommon>> options;
+    public Long count;
+    public T item;
+    public Map<String, Map<String, ModCommon>> options;
 
     public Singular(T item) {
         this.item = item;
@@ -28,21 +28,4 @@ public class Singular<T extends ModCommon> {
         this.count = count;
         this.item = item;
     }
-
-    public T getItem() {
-        return this.item;
-    }
-
-    public Long getCount() {
-        return this.count;
-    }
-
-    public Map<String, Map<String, ModCommon>> getOptions() {
-        return options;
-    }
-
-    public void setOptions(Map<String, Map<String, ModCommon>> options) {
-        this.options = options;
-    }
-
 }

@@ -10,8 +10,8 @@ import cn.alphabets.light.http.Params;
 import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.File;
 import cn.alphabets.light.model.Plural;
-import cn.alphabets.light.model.datarider.DBParams;
-import cn.alphabets.light.model.datarider.DataRider;
+import cn.alphabets.light.model.Singular;
+import cn.alphabets.light.model.datarider.Rider;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.maven.model.Model;
@@ -69,17 +69,15 @@ class Push {
         }
 
         // Delete the old jar file
-        DBParams condition = new DBParams(handler);
-        condition.getCondition().put("name", "app.jar");
-        DataRider.ride(ModCode.class).remove(condition);
+        Rider.remove(handler, ModCode.class, new Params().condition(new Document("name", "app.jar")));
 
         // Add a new jar file
-        DBParams data = new DBParams(handler);
-        data.getData().put("app", env.getAppName());
-        data.getData().put("name", "app.jar");
-        data.getData().put("type", "binary");
-        data.getData().put("source", result.getItems().get(0).get_id().toHexString());
-        DataRider.ride(ModCode.class).add(data);
+        Document data = new Document();
+        data.put("app", env.getAppName());
+        data.put("name", "app.jar");
+        data.put("type", "binary");
+        data.put("source", result.getItems().get(0).get_id().toHexString());
+        Rider.add(handler, ModCode.class, new Params().data(data));
 
         logger.debug(jarFile);
         logger.info("Uploaded successfully");
@@ -96,16 +94,16 @@ class Push {
         Context handler = new Context(defaults, appName, SYSTEM_DB_PREFIX, DEFAULT_JOB_USER_ID);
 
         // get code data
-        DBParams codeParams = new DBParams(handler).condition(new Document("name", "app.jar"));
-        ModCode code = DataRider.ride(ModCode.class).get(codeParams);
+        Params params = new Params().condition(new Document("name", "app.jar"));
+        Singular<ModCode> code = Rider.get(handler, ModCode.class, params);
 
         // get file data
-        DBParams fileParams = new DBParams(handler).condition(new Document("_id", new ObjectId(code.getSource())));
-        ModFile file = DataRider.ride(ModFile.class).get(fileParams);
-        file.setPath(path);
+        params = new Params().id(new ObjectId(code.item.getSource()));
+        Singular<ModFile> file = Rider.get(handler, ModFile.class, params);
+        file.item.setPath(path);
 
         // save file
-        new File().saveFile(handler, file);
+        new File().saveFile(handler, file.item);
     }
 
     public static void main(String[] args) {

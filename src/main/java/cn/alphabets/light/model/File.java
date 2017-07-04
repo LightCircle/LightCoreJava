@@ -6,17 +6,15 @@ import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.Params;
 import cn.alphabets.light.http.RequestFile;
-import cn.alphabets.light.model.datarider.DBParams;
-import cn.alphabets.light.model.datarider.DataRider;
+import cn.alphabets.light.model.datarider.Rider;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -46,14 +44,15 @@ public class File {
      */
     public Plural<ModFile> add(Context handler) throws BadRequestException {
 
-
         List<RequestFile> files = handler.params.getFiles();
         if (files == null) {
             throw new BadRequestException("No file content found.");
         }
+
         List<ModFile> result = new ArrayList<>();
         files.forEach(file -> {
-            GridFSFile gfsFile = new Controller(new DBParams(handler)).writeFileToGrid(file);
+
+            GridFSFile gfsFile = new Controller(handler).writeFileToGrid(file);
 
             ModFile info = new ModFile();
             info.setName(gfsFile.getFilename());
@@ -61,15 +60,19 @@ public class File {
             info.setContentType(gfsFile.getMetadata().getString("contentType"));
             info.setFileId(gfsFile.getObjectId());
 
-            ModFile saved = DataRider.ride(ModFile.class).add(new DBParams(handler).data(info));
+            handler.params.data(info);
+            Singular<ModFile> saved = Rider.add(handler, ModFile.class);
 
             // delete tmp file after upload to grid fs
             if (!file.isKeep()) {
-                new java.io.File(file.getFilePath()).delete();
+                boolean state = new java.io.File(file.getFilePath()).delete();
+                if (!state) {
+                    logger.warn("Failed to delete temporary files");
+                }
             }
 
-            logger.debug("file upload done : " + saved.toDocument().toJson());
-            result.add(saved);
+            logger.debug("file upload done : " + saved.item.toDocument().toJson());
+            result.add(saved.item);
         });
 
         return new Plural<>((long) result.size(), result);
@@ -84,26 +87,23 @@ public class File {
      */
     public long remove(Context handler) throws LightException {
 
-        //step 1. get meta
-        ModFile info = DataRider.ride(ModFile.class).get(new DBParams(handler, true));
-        if (info == null) {
+        // step 1. get meta
+        Singular<ModFile> info = Rider.get(handler, ModFile.class);
+        if (info.item == null) {
             throw new BadRequestException("File not exist.");
         }
-        logger.warn(info.toDocument().toString());
+        logger.warn(info.item.toDocument().toString());
 
-        //step 2. delete file from grid fs
-
+        // step 2. delete file from grid fs
         try {
-            ObjectId fileId = info.getFileId();
-            Controller ctrl = new Controller(new DBParams(handler).condition(new Document("_id", fileId)));
-            ctrl.deleteFromGrid();
+            new Controller(handler, new Params().id(info.item.getFileId())).deleteFromGrid();
         } catch (Exception e) {
             logger.error("File content delete failed : ", e);
             throw new BadRequestException("File content delete failed.");
         }
 
-        //step 3. delete file info
-        return DataRider.ride(ModFile.class).remove(new DBParams(handler, true));
+        // step 3. delete file info
+        return Rider.remove(handler, ModFile.class);
     }
 
     /**
@@ -115,8 +115,8 @@ public class File {
     public void image(Context handler) throws LightException {
 
         try {
-            ModFile file = DataRider.ride(ModFile.class).get(new DBParams(handler, true));
-            sendFile(handler, file);
+            Singular<ModFile> file = Rider.get(handler, ModFile.class);
+            sendFile(handler, file.item);
         } catch (Exception e) {
             logger.error("error read file : ", e);
             throw new BadRequestException("File not exist.");
@@ -133,7 +133,7 @@ public class File {
      */
     public void saveFile(Context handler, ModFile file) {
 
-        Controller ctrl = new Controller(new DBParams(handler).condition(new Document("_id", file.getFileId())));
+        Controller ctrl = new Controller(handler, new Params().id(file.getFileId()));
 
         try {
             FileOutputStream outputStream = new FileOutputStream(file.getPath());
@@ -147,14 +147,13 @@ public class File {
 
     public void sendFile(Context handler, ModFile file) {
 
-
-        //Range: bytes=0-801 offset:0 length:801
+        // Range: bytes=0-801 offset:0 length:801
         String range = handler.req().getHeader("Range");
 
-        Controller ctrl = new Controller(new DBParams(handler).condition(new Document("_id", file.getFileId())));
+        Controller ctrl = new Controller(handler, new Params().id(file.getFileId()));
 
         if (StringUtils.isEmpty(range)) {
-            //get entire file content
+            // get entire file content
             ByteArrayOutputStream content = ctrl.readStreamFromGrid();
 
             handler.res().putHeader(ACCEPT_RANGES, "bytes")
