@@ -91,7 +91,7 @@ public class Rider {
 
         // part4. change condition for extended structure
         Document data = params.getData();
-        if (structure.getParent().length() > 0) {
+        if (structure.getParent() != null && structure.getParent().length() > 0) {
 
             // 检索条件添加type
             condition.append("type", structure.getSchema());

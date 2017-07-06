@@ -50,7 +50,17 @@ class OptionsBuilder {
      */
     static Object fetchOptions(Context handler, Object result, ModBoard board) {
 
-        if (!(result instanceof Singular || result instanceof Plural)) {
+        if (result == null) {
+            return null;
+        } else if (result instanceof Singular) {
+            if (((Singular) result).item == null) {
+                return result;
+            }
+        } else if (result instanceof Plural) {
+            if (((Plural) result).items.size() <= 0) {
+                return result;
+            }
+        } else {
             return result;
         }
 
@@ -58,7 +68,7 @@ class OptionsBuilder {
         board.getSelects().forEach(select -> {
             if (select.getSelect() && StringUtils.isNotEmpty(select.getOption())) {
                 builders.add(
-                        new OptionsBuilder(select.getKey(), select.getFields(), select.getOption(), select.getLink()));
+                        new OptionsBuilder(select.getKey(), select.getFields(), select.getLink(), select.getOption()));
             }
         });
 
@@ -133,7 +143,7 @@ class OptionsBuilder {
             return option;
         }
 
-        boolean hasParent = structure.getParent().length() > 0;
+        boolean hasParent = structure.getParent() != null && structure.getParent().length() > 0;
 
         // 组合option的检索条件
         String table = hasParent ? structure.getParent() : this.structure;

@@ -84,7 +84,7 @@ public class Model {
                         .get();
 
                 // 父表作为当前操作的表名称
-                if (struct.getParent().length() > 0) {
+                if (struct.getParent() != null && struct.getParent().length() > 0) {
                     table = struct.getParent();
                 }
             }
