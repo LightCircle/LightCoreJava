@@ -91,14 +91,18 @@ public class Model {
 
             String plural = English.plural(table.toLowerCase());
 
-            // 使用系统表时，用light前缀
-            if (system.contains(table)) {
-                plural = Constant.SYSTEM_DB_PREFIX + "." + plural;
-            } else if (!Constant.SYSTEM_DB.equals(domain) && !StringUtils.isEmpty(code)) {
-                plural = code + '.' + plural;
+            if (Constant.SYSTEM_DB.equals(domain)) {
+                // light库时，不加前缀
+                this.collection = this.db.getCollection(plural);
+            } else if (system.contains(table)) {
+                // 使用系统表时，用light前缀
+                this.collection = this.db.getCollection(Constant.SYSTEM_DB_PREFIX + "." + plural);
+            } else if (!StringUtils.isEmpty(code)) {
+                // code不为空时，加code为前缀
+                this.collection = this.db.getCollection(code + "." + plural);
+            } else {
+                this.collection = this.db.getCollection(plural);
             }
-
-            this.collection = this.db.getCollection(plural);
         }
     }
 
