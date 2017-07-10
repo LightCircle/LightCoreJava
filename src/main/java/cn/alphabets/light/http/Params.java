@@ -222,6 +222,9 @@ public class Params {
     }
 
     public List<Document> getDatas() {
+        if (data == null || !(data instanceof List)) {
+            return null;
+        }
         return (List<Document>) data;
     }
 

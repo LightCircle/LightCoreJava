@@ -122,7 +122,6 @@ public class Controller {
                 document,
                 params.getClazz(),
                 this.handler.tz()).toDocument();
-        this.model.add(confirmed);
 
         return new Singular<>(this.model.add(confirmed));
     }
