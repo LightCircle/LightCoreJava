@@ -41,13 +41,13 @@ public class Account {
             throw new BadRequestException("Password Not Correct.");
         }
 
-        // 重新生成session
-        Environment env = Environment.instance();
-        long sessionTimeout = 1000L * 60 * 60 * ConfigManager.INSTANCE.getAppSessionTimeout();
-        handler.ctx().currentRoute().handler(SessionHandlerImpl
-                .create(new MongoSessionStoreImpl(env.getAppName(), handler.ctx().vertx()))
-                .setNagHttps(false)
-                .setSessionTimeout(sessionTimeout));
+        // 重新生成session TODO: 下面的方法不好用，会使route无效，使用 SessionHandlerImpl#createNewSession ？
+//        Environment env = Environment.instance();
+//        long sessionTimeout = 1000L * 60 * 60 * ConfigManager.INSTANCE.getAppSessionTimeout();
+//        handler.ctx().currentRoute().handler(
+//                SessionHandlerImpl.create(new MongoSessionStoreImpl(env.getAppName(), handler.ctx().vertx()))
+//                        .setNagHttps(false)
+//                        .setSessionTimeout(sessionTimeout));
 
         user.item.setPassword("");
         handler.session().put(Constant.SK_USER, user.item);
