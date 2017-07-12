@@ -2,11 +2,9 @@ package cn.alphabets.light.validator;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
-import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.entity.ModValidator;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
-import cn.alphabets.light.mock.MockRoutingContext;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,15 +19,12 @@ import java.util.List;
  */
 public class RuleTest {
 
-    private Context handler;
-
     @Before
     public void setUp() {
         Environment.instance().args.local = true;
-        handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
-    @Test
+    //@Test
     public void testIsValid() {
         Document json = new Document();
         Context handler = new Context(new Params(json), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX, null);
@@ -128,52 +123,4 @@ public class RuleTest {
         Assert.assertNull(result);
     }
 
-    //@Test
-    public void testDetectValue() {
-
-        Object result;
-        Document c = new Document("c", "hello");
-        Document b = new Document("b", c);
-        Document a = new Document("a", b);
-
-        // 文档类型的数据
-        result = new Rule().detectValue("null", a);
-        Assert.assertNull(result);
-
-        result = new Rule().detectValue("a", a);
-        Assert.assertEquals(result, b);
-
-        result = new Rule().detectValue("a.b", a);
-        Assert.assertEquals(result, c);
-
-        result = new Rule().detectValue("a.b.c", a);
-        Assert.assertEquals(result, "hello");
-
-        // 列表嵌套文档的数据
-        List<Document> list = new ArrayList<>();
-        list.add(a);
-        list.add(a);
-
-        result = new Rule().detectValue("a", list);
-        Assert.assertEquals(((List)result).get(0), b);
-
-        result = new Rule().detectValue("a.b", list);
-        Assert.assertEquals(((List)result).get(0), c);
-
-        result = new Rule().detectValue("1.a.b", list);
-        Assert.assertEquals(result, c);
-
-        // 文档嵌套列表的数据
-        list = new ArrayList<>();
-        list.add(b);
-        list.add(b);
-        a = new Document("a", list);
-
-        result = new Rule().detectValue("a.b", a);
-        Assert.assertEquals(((List)result).get(0), c);
-
-        result = new Rule().detectValue("a.1.b", a);
-        Assert.assertEquals(result, c);
-
-    }
 }

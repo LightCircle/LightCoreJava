@@ -105,6 +105,8 @@ public class Controller {
                     this.handler.tz()
             ).stream().map(Entity::toDocument).collect(Collectors.toList());
 
+            this.model.add(confirmed);
+
             // 多条数据时，返回插入的数据件数
             return new Singular<>(this.model.add(confirmed));
         }
@@ -123,7 +125,8 @@ public class Controller {
                 params.getClazz(),
                 this.handler.tz()).toDocument();
 
-        return new Singular<>(this.model.add(confirmed));
+        confirmed = this.model.add(confirmed);
+        return new Singular(ModCommon.fromDocument(confirmed, Model.getEntityType(this.handler.params.getTable())));
     }
 
 

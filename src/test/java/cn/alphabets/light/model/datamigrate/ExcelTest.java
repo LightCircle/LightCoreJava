@@ -21,29 +21,7 @@ public class ExcelTest {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("ExcelTest.xlsx");
 
-        ModEtl.Mappings mapping;
-        List<ModEtl.Mappings> mappings = new ArrayList<>();
-
-        mapping = new ModEtl.Mappings();
-        mapping.setCol(0L);
-        mapping.setKey("A");
-        mappings.add(mapping);
-
-        mapping = new ModEtl.Mappings();
-        mapping.setCol(1L);
-        mapping.setKey("B");
-        mappings.add(mapping);
-
-        mapping = new ModEtl.Mappings();
-        mapping.setCol(2L);
-        mapping.setKey("C");
-        mappings.add(mapping);
-
-        mapping = new ModEtl.Mappings();
-        mapping.setCol(3L);
-        mapping.setKey("D");
-        mappings.add(mapping);
-
+        List<ModEtl.Mappings> mappings = getMockMappings();
         List<Document> excel = new Excel().parse(inputStream, mappings);
         Assert.assertEquals(4, excel.size());
 
@@ -86,4 +64,31 @@ public class ExcelTest {
         new Excel().dump(outputStream, data);
         Assert.assertTrue(new File(file).delete());
     }
+
+    public static List<ModEtl.Mappings> getMockMappings() {
+        ModEtl.Mappings mapping;
+        List<ModEtl.Mappings> mappings = new ArrayList<>();
+
+        mapping = new ModEtl.Mappings();
+        mapping.setCol(0L);
+        mapping.setKey("A");
+        mappings.add(mapping);
+
+        mapping = new ModEtl.Mappings();
+        mapping.setCol(1L);
+        mapping.setKey("B");
+        mappings.add(mapping);
+
+        mapping = new ModEtl.Mappings();
+        mapping.setCol(2L);
+        mapping.setKey("C");
+        mappings.add(mapping);
+
+        mapping = new ModEtl.Mappings();
+        mapping.setCol(3L);
+        mapping.setKey("D");
+        mappings.add(mapping);
+        return mappings;
+    }
+
 }

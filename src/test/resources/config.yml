@@ -7,7 +7,7 @@ app:
   packages: cn.alphabets.light
 
 mongodb:
-  host: db.alphabets.cn
+  host: db
   port: 57017
   user: light
   pass: 2e35501c2b7e

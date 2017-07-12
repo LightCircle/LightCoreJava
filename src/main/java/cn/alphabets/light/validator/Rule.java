@@ -14,7 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Rule
@@ -47,8 +46,14 @@ public class Rule {
         return errors.size() > 0 ? errors : null;
     }
 
+    public static Document format(Object value, Document document) {
+
+
+        return document;
+    }
+
     Document required(Context handler, ModValidator rule) {
-        Object value = this.detectValue(rule.getKey(), handler.params.getJson());
+        Object value = MPath.detectValue(rule.getKey(), handler.params.getJson());
         if (value == null) {
             return this.makeError(rule);
         }
@@ -93,7 +98,7 @@ public class Rule {
             return null;
         }
 
-        Object value = this.detectValue(rule.getKey(), handler.params.getJson());
+        Object value = MPath.detectValue(rule.getKey(), handler.params.getJson());
         if (StringUtils.isNumeric(String.valueOf(value))) {
             return null;
         }
@@ -106,7 +111,7 @@ public class Rule {
             return null;
         }
 
-        Object value = this.detectValue(rule.getKey(), handler.params.getJson());
+        Object value = MPath.detectValue(rule.getKey(), handler.params.getJson());
 
         if (String.valueOf(value).matches((String) rule.getOption())) {
             return null;
@@ -137,7 +142,7 @@ public class Rule {
 
         // 非严格模式，值为空时不认为异常
         if (!rule.getStrict()) {
-            Object value = this.detectValue(rule.getKey(), json);
+            Object value = MPath.detectValue(rule.getKey(), json);
             if (value == null) {
                 return true;
             }
@@ -151,7 +156,7 @@ public class Rule {
         if (rule.getCondition() != null && rule.getCondition().getKey() != null) {
 
             // 请求参数里的值
-            String requestValue = String.valueOf(this.detectValue(rule.getKey(), json));
+            String requestValue = String.valueOf(MPath.detectValue(rule.getKey(), json));
 
             // 设定的条件值
             String compareValue = rule.getCondition().getParameter();
@@ -194,7 +199,7 @@ public class Rule {
 
             // 参数为引用类型的（第一个字母为$），那么在handler.params里取值做为条件
             if (value.charAt(0) == '$') {
-                Object reference = this.detectValue(value.substring(1), handler.params.getJson());
+                Object reference = MPath.detectValue(value.substring(1), handler.params.getJson());
 
                 if (reference instanceof String) {
 
@@ -217,91 +222,6 @@ public class Rule {
         });
 
         return new Model(handler.domain(), handler.code(), option.getString("schema")).count(condition);
-    }
-
-    /**
-     * 通过指定的 key path 获取值嵌套Document中的值，支持数组类型。类似于node中的mpath
-     * <p>
-     * 假设key=a.1.b，先通过.符号分隔成多个segment
-     * 1. 当父节点的值不是数组时，返回对象parent.segment
-     * 2. 当父节点的值是数组类型
-     * 2.1 如果segment是整数 将父节点替换为 parent[segment]
-     * 2.2 如果segment不是整数 遍历数组并获取parent.segment替换数组内容
-     *
-     * @param path 路径
-     * @param data 数据，可以使文档也可以是文档列表
-     * @return 解析的值
-     */
-    Object detectValue(String path, Object data) {
-        if (data instanceof Document) {
-            return this.detectValueFromDocument(path, (Document) data);
-        }
-
-        if (data instanceof List) {
-            return this.detectValueFromList(path, (List<Object>) data);
-        }
-
-        return null;
-    }
-
-    private Object detectValueFromDocument(String path, Document data) {
-
-        String[] keys = path.split("\\.");
-        if (keys.length < 1) {
-            return null;
-        }
-
-        String key = keys[0];
-        Object value = data.get(key);
-        if (keys.length == 1 || value == null) {
-            return value;
-        }
-
-        String residue = path.replace(key + ".", "");
-        if (value instanceof Document) {
-            return this.detectValueFromDocument(residue, (Document) value);
-        }
-
-        if (value instanceof List) {
-            return this.detectValueFromList(residue, (List<Object>) value);
-        }
-
-        return null;
-    }
-
-    private Object detectValueFromList(String path, List<Object> data) {
-        String[] keys = path.split("\\.");
-        if (keys.length < 1) {
-            return null;
-        }
-
-        String key = keys[0];
-        Object value;
-        if (key.matches("^\\d+$")) {
-            value = data.get(Integer.parseInt(key));
-        } else {
-            value = data.stream().map(item -> {
-                if (item instanceof Document) {
-                    return ((Document) item).get(key);
-                }
-                return null;
-            }).collect(Collectors.toList());
-        }
-
-        if (keys.length == 1 || value == null) {
-            return value;
-        }
-
-        String residue = path.replace(key + ".", "");
-        if (value instanceof Document) {
-            return this.detectValueFromDocument(residue, (Document) value);
-        }
-
-        if (value instanceof List) {
-            return this.detectValueFromList(residue, (List<Object>) value);
-        }
-
-        return null;
     }
 
     private Document makeError(ModValidator rule) {

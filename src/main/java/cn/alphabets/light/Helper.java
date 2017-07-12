@@ -1,6 +1,7 @@
 package cn.alphabets.light;
 
 import io.vertx.core.http.HttpServerRequest;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -53,6 +54,18 @@ public class Helper {
     static {
         ISO_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         ISO_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
+    public static String randomGUID4() {
+        return RandomStringUtils.randomAlphanumeric(4);
+    }
+
+    public static String randomGUID8() {
+        return RandomStringUtils.randomAlphanumeric(8);
+    }
+
+    public static String randomGUID12() {
+        return RandomStringUtils.randomAlphanumeric(12);
     }
 
     public static org.w3c.dom.Document stringToXml(String xml) {

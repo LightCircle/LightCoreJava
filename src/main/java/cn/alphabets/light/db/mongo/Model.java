@@ -49,6 +49,7 @@ public class Model {
     private MongoDatabase db;
     private MongoCollection<Document> collection;
     private String name;
+    private String code;
     private Class<? extends ModCommon> clazz;
 
     private Model() {
@@ -93,16 +94,18 @@ public class Model {
 
             if (Constant.SYSTEM_DB.equals(domain)) {
                 // light库时，不加前缀
-                this.collection = this.db.getCollection(plural);
+                this.code = plural;
             } else if (system.contains(table)) {
                 // 使用系统表时，用light前缀
-                this.collection = this.db.getCollection(Constant.SYSTEM_DB_PREFIX + "." + plural);
+                this.code = Constant.SYSTEM_DB_PREFIX + "." + plural;
             } else if (!StringUtils.isEmpty(code)) {
                 // code不为空时，加code为前缀
-                this.collection = this.db.getCollection(code + "." + plural);
+                this.code = code + "." + plural;
             } else {
-                this.collection = this.db.getCollection(plural);
+                this.code = plural;
             }
+
+            this.collection = this.db.getCollection(this.code);
         }
     }
 
@@ -230,10 +233,9 @@ public class Model {
         return document.size();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ModCommon> T add(Document document) {
+    public Document add(Document document) {
         this.collection.insertOne(document);
-        return (T) ModCommon.fromDocument(document, this.getEntityType());
+        return document;
     }
 
     public long increase(String type) {
@@ -417,4 +419,16 @@ public class Model {
             Constant.SYSTEM_DB_FUNCTION,
             Constant.SYSTEM_DB_CODE
     );
+
+    public void dropCollection() {
+        this.db.listCollectionNames().forEach((Block<String>) name -> {
+            if (name.equals(this.code)) {
+                this.collection.drop();
+            }
+        });
+    }
+
+    public FindIterable<Document> getIterable() {
+        return this.collection.find();
+    }
 }
