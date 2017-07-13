@@ -2,12 +2,9 @@ package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
-import cn.alphabets.light.model.deserializer.LongDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Boolean;
-import java.lang.Long;
 import java.lang.Object;
 import java.lang.String;
 
@@ -39,11 +36,6 @@ public class ModValidator extends ModCommon {
   private String rule;
 
   private Boolean strict;
-
-  @JsonDeserialize(
-      using = LongDeserializer.class
-  )
-  private Long kind;
 
   private String version;
 
@@ -141,14 +133,6 @@ public class ModValidator extends ModCommon {
 
   public void setStrict(Boolean strict) {
     this.strict = strict;
-  }
-
-  public Long getKind() {
-    return this.kind;
-  }
-
-  public void setKind(Long kind) {
-    this.kind = kind;
   }
 
   public String getVersion() {

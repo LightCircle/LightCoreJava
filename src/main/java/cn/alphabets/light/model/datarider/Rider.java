@@ -317,7 +317,7 @@ public class Rider {
     }
 
     public static <T extends ModCommon> Singular<T> update(Context handler, Class clazz) {
-        return update(handler, clazz);
+        return update(handler, clazz, null);
     }
 
     public static <T extends ModCommon> Singular<T> update(Context handler, Class clazz, Params params) {
@@ -325,7 +325,7 @@ public class Rider {
     }
 
     public static Long count(Context handler, Class clazz) {
-        return count(handler, clazz);
+        return count(handler, clazz, null);
     }
 
     public static Long count(Context handler, Class clazz, Params params) {
@@ -333,7 +333,7 @@ public class Rider {
     }
 
     public static <T extends ModCommon> Plural<T> search(Context handler, Class clazz) {
-        return search(handler, clazz);
+        return search(handler, clazz, null);
     }
 
     public static <T extends ModCommon> Plural<T> search(Context handler, Class clazz, Document params) {

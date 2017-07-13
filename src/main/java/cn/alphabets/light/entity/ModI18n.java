@@ -1,9 +1,6 @@
 package cn.alphabets.light.entity;
 
 import cn.alphabets.light.model.ModCommon;
-import cn.alphabets.light.model.deserializer.LongDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.lang.Long;
 import java.lang.Object;
 import java.lang.String;
 
@@ -16,11 +13,6 @@ public class ModI18n extends ModCommon {
   private Object lang;
 
   private String type;
-
-  @JsonDeserialize(
-      using = LongDeserializer.class
-  )
-  private Long kind;
 
   private String version;
 
@@ -46,14 +38,6 @@ public class ModI18n extends ModCommon {
 
   public void setType(String type) {
     this.type = type;
-  }
-
-  public Long getKind() {
-    return this.kind;
-  }
-
-  public void setKind(Long kind) {
-    this.kind = kind;
   }
 
   public String getVersion() {

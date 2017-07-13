@@ -144,23 +144,17 @@ public class EtlImporter {
         this.mappings.forEach(mapping -> {
 
             if (mapping.getSanitize() != null) {
-
-                String key = mapping.getVariable();
-                if (key == null) {
-                    key = mapping.getKey();
-                }
-
-                if (key == null) {
-                    return;
-                }
-
-                Object value = MPath.detectValue(key, document);
+                Object value = MPath.detectValue(Common.key(mapping), document);
                 if (value == null) {
                     return;
                 }
 
                 // sanitize处理
                 value = Rule.format(value, (Document) mapping.getSanitize());
+                document.put(Common.key(mapping), value);
+
+                // 数据保存到handler里，供后续功能参照使用
+                handler.params.data(document);
 
                 // 获取关联内容
             }
@@ -181,4 +175,5 @@ public class EtlImporter {
 
     private void end() {
     }
+
 }

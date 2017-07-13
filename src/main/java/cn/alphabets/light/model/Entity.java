@@ -198,6 +198,8 @@ public class Entity implements Serializable {
      * <p>
      * support sub class field like "xx.xxx"
      *
+     * TODO: 与MPath类的方法合并
+     *
      * @param fieldName field name
      * @return field value
      */

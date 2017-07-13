@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Boolean;
 import java.lang.Long;
+import java.lang.Object;
 import java.lang.String;
 import java.util.List;
 
@@ -224,10 +225,6 @@ public class ModBoard extends ModCommon {
   public static final class Selects extends Entity {
     private String key;
 
-    private String link;
-
-    private String option;
-
     private Boolean select;
 
     private String alias;
@@ -247,28 +244,16 @@ public class ModBoard extends ModCommon {
     )
     private Long reserved;
 
+    private String schema;
+
+    private Object conditions;
+
     public String getKey() {
       return this.key;
     }
 
     public void setKey(String key) {
       this.key = key;
-    }
-
-    public String getLink() {
-      return this.link;
-    }
-
-    public void setLink(String link) {
-      this.link = link;
-    }
-
-    public String getOption() {
-      return this.option;
-    }
-
-    public void setOption(String option) {
-      this.option = option;
     }
 
     public Boolean getSelect() {
@@ -333,6 +318,22 @@ public class ModBoard extends ModCommon {
 
     public void setReserved(Long reserved) {
       this.reserved = reserved;
+    }
+
+    public String getSchema() {
+      return this.schema;
+    }
+
+    public void setSchema(String schema) {
+      this.schema = schema;
+    }
+
+    public Object getConditions() {
+      return this.conditions;
+    }
+
+    public void setConditions(Object conditions) {
+      this.conditions = conditions;
     }
   }
 

@@ -8,11 +8,15 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
+import cn.alphabets.light.validator.MPath;
 import com.mongodb.client.model.Filters;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
@@ -28,162 +32,183 @@ class OptionsBuilder {
     private List<String> field;
 
     // 关联检索的字段
-    private String link;
+    private Map<String, String> conditions;
 
     // 关联的表名
-    private String structure;
+    private String schema;
 
-    private OptionsBuilder(String key, List<String> field, String link, String structure) {
+    private OptionsBuilder(String key, List<String> field, Map<String, String> conditions, String schema) {
         this.key = key;
         this.field = field;
-        this.link = link;
-        this.structure = structure;
+        this.conditions = conditions;
+        this.schema = schema;
     }
 
-    /**
-     * attach options info accord board info
-     *
-     * @param handler Context
-     * @param result  DB result will be attached
-     * @param board   board info
-     * @return DB result with options attached
-     */
-    static Object fetchOptions(Context handler, Object result, ModBoard board) {
+    private Map<String, Document> build(Context handler, Object result) {
 
-        if (result == null) {
-            return null;
-        } else if (result instanceof Singular) {
-            if (((Singular) result).item == null) {
-                return result;
-            }
-        } else if (result instanceof Plural) {
-            if (((Plural) result).items.size() <= 0) {
-                return result;
-            }
-        } else {
-            return result;
-        }
-
-        List<OptionsBuilder> builders = new ArrayList<>();
-        board.getSelects().forEach(select -> {
-            if (select.getSelect() && StringUtils.isNotEmpty(select.getOption())) {
-                builders.add(
-                        new OptionsBuilder(select.getKey(), select.getFields(), select.getLink(), select.getOption()));
-            }
-        });
-
-        Map<String, Map<String, ModCommon>> options = new HashMap<>();
-
-        builders.stream()
-                .collect(Collectors.groupingBy(OptionsBuilder::getStructure))
-                .forEach((s, consumer) -> {
-                    OptionsBuilder.OptionsBuilderGroup group = new OptionsBuilder.OptionsBuilderGroup(consumer);
-                    options.put(s, group.build(handler, result));
-                });
-
-        // 单个文档的时候
-        if (result instanceof Singular) {
-            ((Singular) result).options = options.size() == 0 ? null : options;
-        }
-
-        // 文档列表的时候
-        if (result instanceof Plural) {
-            ((Plural) result).options = options.size() == 0 ? null : options;
-        }
-
-        return result;
-    }
-
-
-    private Map<String, ModCommon> build(Context handler, Object result) {
-
-        Map<String, ModCommon> option = new HashMap<>();
-
+        Map<String, Document> option = new HashMap<>();
         if (!(result instanceof Singular || result instanceof Plural)) {
             return option;
         }
 
+        // 获取表定义
         ModStructure structure = CacheManager.INSTANCE.getStructures()
                 .stream()
-                .filter(s -> s.getSchema().equals(this.structure))
+                .filter(s -> s.getSchema().equals(this.schema))
                 .findFirst()
                 .get();
 
         // convert to typed value
         TypeConverter converter = new TypeConverter(handler);
 
-        // field type
-        String valueType = ((Map<String, Map>) structure.getItems()).get(link).get("type").toString().trim().toLowerCase();
+        Document condition = new Document();
 
-        // collect field value
-        List<Object> fieldValues = new ArrayList<>();
-        if (result instanceof Singular) {
-            Object value = ((Singular) result).item.getFieldValue(key);
-            Object converted = converter.convert(valueType, value);
-            if (converted instanceof List) {
-                fieldValues.addAll((Collection) converter.convert(valueType, value));
-            } else {
-                fieldValues.add(converter.convert(valueType, value));
-            }
-        }
-        if (result instanceof Plural) {
-            ((Plural) result).items.forEach(item -> {
-                Object value = ((ModCommon) item).getFieldValue(key);
-                Object converted = converter.convert(valueType, value);
-                if (converted instanceof List) {
-                    fieldValues.addAll((Collection) converter.convert(valueType, value));
-                } else {
-                    fieldValues.add(converter.convert(valueType, value));
+        // 遍历所有定义的条件，将$开头的变量替换成实际的值
+        this.conditions.forEach((k, v) -> {
+
+            if (String.valueOf(v).charAt(0) == '$') {
+                // 如果条件里的值以$开头，说明是引用，去document里查找引用的值
+
+                String key = (String.valueOf(v)).substring(1);
+
+                // field type
+                String defineType = (String) ((Map<String, Map>) structure.getItems()).get(key).get("type");
+                final String valueType = (k.equals("_id") ? "ObjectId" : defineType).trim().toLowerCase();
+
+                // 处理单个对象
+                if (result instanceof Singular) {
+                    Object value = ((Singular) result).item.getFieldValue(key);
+                    Object converted = converter.convert(valueType, value);
+                    if (converted instanceof List) {
+                        condition.put(k, new Document("$in", converted));
+                    } else {
+                        condition.put(k, converted);
+                    }
                 }
-            });
-        }
 
-        fieldValues.removeAll(Collections.singleton(null));
-        if (fieldValues.size() == 0) {
+                // 处理列表对象
+                if (result instanceof Plural) {
+                    ((Plural) result).items.forEach(item -> {
+                        Object value = ((ModCommon) item).getFieldValue(key);
+                        Object converted = converter.convert(valueType, value);
+                        if (converted instanceof List) {
+                            condition.put(k, new Document("$in", converted));
+                        } else {
+                            condition.put(k, converted);
+                        }
+                    });
+                }
+            } else {
+
+                // 否则直接作为条件
+                condition.put(k, v);
+            }
+        });
+
+        if (condition.size() <= 0) {
             return option;
         }
 
         boolean hasParent = structure.getParent() != null && structure.getParent().length() > 0;
+        if (hasParent) {
+            condition.put("type", this.schema);
+        }
 
-        // 组合option的检索条件
-        String table = hasParent ? structure.getParent() : this.structure;
-        Class clazz = Model.getEntityType(this.structure);
-        Bson condition = hasParent
-                ? Filters.and(Filters.in(link, fieldValues), Filters.eq("type", this.structure))
-                : Filters.in(link, fieldValues);
-
-        // 为了将link字段也选择出来，clone一个field并添加link字段
+        // 为了将key字段也选择出来，clone一个field并添加key字段
         List<String> select = new ArrayList<>(field);
-        select.add(link);
+        select.add(this.key);
 
         // 检索
-        Model model = new Model(handler.getDomain(), handler.getCode(), table, clazz);
+        Model model = new Model(handler.getDomain(), handler.getCode(), this.schema, Model.getEntityType(this.schema));
         model.list(condition, select).forEach(item -> {
-            option.put(item.toDocument(true).get(link).toString(), item);
+            option.put(item.getString(this.key).toString(), item);
         });
 
         return option;
     }
 
-    private String getStructure() {
-        return this.structure;
+    private String getSchema() {
+        return this.schema;
     }
 
+    // 处理schema单位的options值
     private static class OptionsBuilderGroup {
-        private List<OptionsBuilder> list;
 
-        private OptionsBuilderGroup(List<OptionsBuilder> list) {
-            this.list = list;
+        private List<OptionsBuilder> builders;
+
+        // schema所属的builders
+        private OptionsBuilderGroup(List<OptionsBuilder> builders) {
+            this.builders = builders;
         }
 
-        private Map<String, ModCommon> build(Context handler, Object result) {
-            Map<String, ModCommon> option = new HashMap<>();
-            List<Map<String, ModCommon>> results = list.stream()
-                    .map(qb -> qb.build(handler, result))
+        // 逐一检索option值，结果保存到列表中
+        private Map<String, Document> build(Context handler, Object result) {
+            Map<String, Document> option = new HashMap<>();
+            List<Map<String, Document>> results = builders.stream()
+                    .map(builder -> builder.build(handler, result))
                     .collect(Collectors.toList());
-
             results.forEach(option::putAll);
             return option;
         }
     }
+
+    /**
+     * attach options info accord board info
+     *
+     * @param handler Context
+     * @param data    DB data will be attached
+     * @param board   board info
+     * @return DB data with options attached
+     */
+    static Object fetchOptions(Context handler, Object data, ModBoard board) {
+
+        if (data == null) {
+            return null;
+        } else if (data instanceof Singular) {
+            if (((Singular) data).item == null) {
+                return data;
+            }
+        } else if (data instanceof Plural) {
+            if (((Plural) data).items.size() <= 0) {
+                return data;
+            }
+        } else {
+            return data;
+        }
+
+        List<OptionsBuilder> builders = new ArrayList<>();
+
+        // 遍历选择项目（选择项目设定中包含关联信息）
+        board.getSelects().forEach(select -> {
+
+            // 选择，并且设定了关联表的才进行处理
+            if (select.getSelect() && StringUtils.isNotEmpty(select.getSchema())) {
+                builders.add(new OptionsBuilder(
+                        select.getKey(),
+                        select.getFields(),
+                        (Map<String, String>) select.getConditions(),
+                        select.getSchema()));
+            }
+        });
+
+        // 应该使用document
+        Map<String, Map<String, Document>> options = new HashMap<>();
+
+        builders.stream()
+                .collect(Collectors.groupingBy(OptionsBuilder::getSchema))
+                .forEach((s, builder) -> options.put(s, new OptionsBuilderGroup(builder).build(handler, data)));
+
+        // 单个文档的时候
+        if (data instanceof Singular) {
+            ((Singular) data).options = options.size() == 0 ? null : options;
+        }
+
+        // 文档列表的时候
+        if (data instanceof Plural) {
+            ((Plural) data).options = options.size() == 0 ? null : options;
+        }
+
+        return data;
+    }
+
 }

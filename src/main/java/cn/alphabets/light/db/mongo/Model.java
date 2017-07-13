@@ -109,27 +109,27 @@ public class Model {
         }
     }
 
-    public <T extends ModCommon> List<T> list() {
+    public List<Document> list() {
         return this.list(null);
     }
 
-    public <T extends ModCommon> List<T> list(Bson condition) {
+    public List<Document> list(Bson condition) {
         return this.list(condition, null);
     }
 
-    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames) {
+    public List<Document> list(Bson condition, List<String> fieldNames) {
         return this.list(condition, fieldNames, null);
     }
 
-    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames, Bson sort) {
+    public List<Document> list(Bson condition, List<String> fieldNames, Bson sort) {
         return this.list(condition, fieldNames, sort, 0);
     }
 
-    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames, Bson sort, int skip) {
+    public List<Document> list(Bson condition, List<String> fieldNames, Bson sort, int skip) {
         return this.list(condition, fieldNames, sort, skip, Constant.DEFAULT_LIMIT);
     }
 
-    public <T extends ModCommon> List<T> list(Bson condition, List<String> fieldNames, Bson sort, int skip, int limit) {
+    public List<Document> list(Bson condition, List<String> fieldNames, Bson sort, int skip, int limit) {
         return this.list(condition, fieldNames == null ? null : Projections.include(fieldNames), sort, skip, limit);
     }
 
@@ -142,11 +142,13 @@ public class Model {
      * @param sort      排序
      * @param skip      开始位置
      * @param limit     获取件数
-     * @param <T>       类型
      * @return 数据列表
      */
-    @SuppressWarnings("unchecked")
-    public <T extends ModCommon> List<T> list(Bson condition, Bson select, Bson sort, int skip, int limit) {
+    public List<Document> list(Bson condition, Bson select, Bson sort, int skip, int limit) {
+
+        if (condition == null) {
+            condition = new Document();
+        }
 
         // set fetch options
         FindIterable<Document> find = this.collection
@@ -156,38 +158,17 @@ public class Model {
                 .skip(skip)
                 .limit(limit);
 
-        // fetch and convert
-        List<T> result = new ArrayList<>();
-        find.forEach((Block<? super Document>) document -> result.add(
-                (T) ModCommon.fromDocument(document, this.getEntityType())
-        ));
-
-        return result;
-    }
-
-    /**
-     * 检索数据，类似于list方法，不使用Entity类型转换，直接返回原生的Document对象。
-     * core内部操作原生数据使用
-     *
-     * @param condition  条件
-     * @param fieldNames 字段名称
-     * @return 检索结果
-     */
-    public List<Document> document(Document condition, List<String> fieldNames) {
-
-        FindIterable<Document> find = this.collection.find(condition);
-        FindIterable<Document> projection = find.projection(Projections.include(fieldNames));
-
+        // fetch
         List<Document> result = new ArrayList<>();
-        projection.forEach((Block<? super Document>) result::add);
+        find.forEach((Block<? super Document>) result::add);
         return result;
     }
 
-    public <T extends ModCommon> T get(Document condition) {
+    public Document get(Document condition) {
         return this.get(condition, (List<String>) null);
     }
 
-    public <T extends ModCommon> T get(Document condition, List<String> fieldNames) {
+    public Document get(Document condition, List<String> fieldNames) {
         fieldNames = fieldNames == null ? Collections.emptyList() : fieldNames;
         return this.get(condition, Projections.include(fieldNames));
     }
@@ -197,19 +178,15 @@ public class Model {
      *
      * @param condition 条件
      * @param select    选择项目
-     * @param <T>       类型
      * @return 数据对象
      */
-    @SuppressWarnings("unchecked")
-    public <T extends ModCommon> T get(Document condition, Bson select) {
+    public Document get(Document condition, Bson select) {
 
         // default value
         condition = condition == null ? new Document() : condition;
 
         // set fetch condition
-        FindIterable<Document> find = this.collection.find(condition).projection(select);
-
-        return (T) ModCommon.fromDocument(find.first(), this.getEntityType());
+        return this.collection.find(condition).projection(select).first();
     }
 
     public long remove(Document condition) {

@@ -1,8 +1,12 @@
 package cn.alphabets.light.cache;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.*;
+import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.Params;
+import cn.alphabets.light.model.Plural;
 import org.bson.Document;
 
 import java.util.Arrays;
@@ -33,35 +37,62 @@ public enum CacheManager {
      */
     public void setUp(String domain) {
 
-        String code = Constant.SYSTEM_DB_PREFIX;
-        Document valid = Document.parse("{valid:1}");
+        Params params = new Params();
+        Context handler = new Context(params, domain, Constant.SYSTEM_DB_PREFIX, null);
 
         // configuration
-        configuration = new Model(domain, code, Constant.SYSTEM_DB_CONFIG).list(valid);
+        params.setTable(Constant.SYSTEM_DB_CONFIG);
+        params.setClazz(ModConfiguration.class);
+        Plural<ModConfiguration> configuration = new Controller(handler, params).list();
+        this.configuration = configuration.items;
 
         // validator
-        validators = new Model(domain, code, Constant.SYSTEM_DB_VALIDATOR).list(valid);
+        params.setTable(Constant.SYSTEM_DB_VALIDATOR);
+        params.setClazz(ModValidator.class);
+        Plural<ModValidator> validators = new Controller(handler, params).list();
+        this.validators = validators.items;
 
         // i18n
-        i18ns = new Model(domain, code, Constant.SYSTEM_DB_I18N).list(valid);
+        params.setTable(Constant.SYSTEM_DB_I18N);
+        params.setClazz(ModI18n.class);
+        Plural<ModI18n> i18ns = new Controller(handler, params).list();
+        this.i18ns = i18ns.items;
 
         // structure
-        structures = new Model(domain, code, Constant.SYSTEM_DB_STRUCTURE).list(valid);
+        params.setTable(Constant.SYSTEM_DB_STRUCTURE);
+        params.setClazz(ModStructure.class);
+        Plural<ModStructure> structures = new Controller(handler, params).list();
+        this.structures = structures.items;
 
         // board
-        boards = new Model(domain, code, Constant.SYSTEM_DB_BOARD).list(valid);
+        params.setTable(Constant.SYSTEM_DB_BOARD);
+        params.setClazz(ModBoard.class);
+        Plural<ModBoard> boards = new Controller(handler, params).list();
+        this.boards = boards.items;
 
         // route
-        routes = new Model(domain, code, Constant.SYSTEM_DB_ROUTE).list(valid);
+        params.setTable(Constant.SYSTEM_DB_ROUTE);
+        params.setClazz(ModValidator.class);
+        Plural<ModRoute> routes = new Controller(handler, params).list();
+        this.routes = routes.items;
 
         // function
-        functions = new Model(domain, code, Constant.SYSTEM_DB_FUNCTION).list(valid);
+        params.setTable(Constant.SYSTEM_DB_FUNCTION);
+        params.setClazz(ModFunction.class);
+        Plural<ModFunction> functions = new Controller(handler, params).list();
+        this.functions = functions.items;
 
         // job
-        jobs = new Model(domain, code, Constant.SYSTEM_DB_JOB).list(valid);
+        params.setTable(Constant.SYSTEM_DB_JOB);
+        params.setClazz(ModJob.class);
+        Plural<ModJob> jobs = new Controller(handler, params).list();
+        this.jobs = jobs.items;
 
         // tenant
-        tenants = new Model(domain, code, Constant.SYSTEM_DB_TENANT).list(valid);
+        params.setTable(Constant.SYSTEM_DB_TENANT);
+        params.setClazz(ModTenant.class);
+        Plural<ModTenant> tenants = new Controller(handler, params).list();
+        this.tenants = tenants.items;
     }
 
     public List<ModConfiguration> getConfiguration() {

@@ -171,8 +171,16 @@ public class Params {
         return table;
     }
 
+    public void setTable(String table) {
+        this.table = table;
+    }
+
     public Class<? extends ModCommon> getClazz() {
         return clazz;
+    }
+
+    public void setClazz(Class<? extends ModCommon> clazz) {
+        this.clazz = clazz;
     }
 
     public String get(String key) {

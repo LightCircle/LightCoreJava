@@ -10,6 +10,7 @@ import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
+import com.mongodb.Block;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
@@ -61,14 +62,18 @@ public class Controller {
 
     public <T extends ModCommon> Plural<T> list() {
         logger.debug("[LIST] DB params : " + params.toString());
-        List<T> items = this.model.list(
+        List<Document> items = this.model.list(
                 params.getCondition(),
                 params.getSelect(),
                 params.getSort(),
                 params.getSkip(),
                 params.getLimit());
 
-        return new Plural<>(this.count(), items);
+        Class<ModCommon> type = Model.getEntityType(this.params.getTable());
+        return new Plural<>(this.count(), items
+                .stream()
+                .map(document -> (T) ModCommon.fromDocument(document, type))
+                .collect(Collectors.toList()));
     }
 
 
@@ -79,7 +84,9 @@ public class Controller {
         if (condition == null || condition.size() == 0) {
             throw DataRiderException.ParameterUnsatisfied("Get condition can not be empty.");
         }
-        return new Singular<>(this.model.get(condition, params.getSelect()));
+
+        Class<ModCommon> type = Model.getEntityType(this.params.getTable());
+        return new Singular(ModCommon.fromDocument(this.model.get(condition, params.getSelect()), type));
     }
 
 
@@ -126,7 +133,7 @@ public class Controller {
                 this.handler.tz()).toDocument();
 
         confirmed = this.model.add(confirmed);
-        return new Singular(ModCommon.fromDocument(confirmed, Model.getEntityType(this.handler.params.getTable())));
+        return new Singular(ModCommon.fromDocument(confirmed, Model.getEntityType(this.params.getTable())));
     }
 
 
@@ -151,7 +158,8 @@ public class Controller {
             return new Singular<>(modifiedCount);
         }
 
-        return new Singular<>(this.model.get(condition, params.getSelect()));
+        Class<ModCommon> type = Model.getEntityType(this.params.getTable());
+        return new Singular(ModCommon.fromDocument(this.model.get(condition, params.getSelect()), type));
     }
 
 

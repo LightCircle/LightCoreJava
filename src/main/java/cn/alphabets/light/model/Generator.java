@@ -51,7 +51,7 @@ public class Generator {
         // 获取表定义
         Document condition = new Document("valid", 1);
         condition.put("schema", new Document("$in", schema));
-        List<Document> defines = model.document(condition, Arrays.asList("schema", "items"));
+        List<Document> defines = model.list(condition, Arrays.asList("schema", "items"));
 
         // 遍历表定义，生成对应的Entity类代码
         defines.forEach((define) -> {
