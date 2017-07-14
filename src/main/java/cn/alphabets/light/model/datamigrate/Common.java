@@ -94,6 +94,19 @@ public class Common {
         }
     }
 
+    static void invokeDump(Context handler, String clazz, List<Document> data) {
+        if (clazz == null) {
+            return;
+        }
+
+        try {
+            Method method = Class.forName(clazz).getMethod("dump", Context.class, List.class);
+            method.invoke(method.getDeclaringClass().newInstance(), handler, data);
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
+            logger.debug("Did not find dump method. skip. " + clazz);
+        }
+    }
+
     static void fetchLinkData(Context handler, ModEtl.Mappings mapping) {
 
         Document data = handler.params.getData();

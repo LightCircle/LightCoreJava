@@ -1,8 +1,142 @@
 package cn.alphabets.light.model.datamigrate;
 
+import cn.alphabets.light.Constant;
+import cn.alphabets.light.Environment;
+import cn.alphabets.light.Helper;
+import cn.alphabets.light.db.mongo.Model;
+import cn.alphabets.light.entity.ModEtl;
+import cn.alphabets.light.entity.ModFile;
+import cn.alphabets.light.exception.BadRequestException;
+import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.RequestFile;
+import cn.alphabets.light.model.File;
+import cn.alphabets.light.model.Plural;
+import cn.alphabets.light.validator.MPath;
+import cn.alphabets.light.validator.Rule;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.lang3.text.WordUtils;
+import org.bson.Document;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * ETL Exporter
  * Created by lilin on 2017/7/11.
  */
 public class EtlExporter {
+
+    private static final Logger logger = LoggerFactory.getLogger(EtlExporter.class);
+
+    private int total = 0;
+    private List<Document> data;
+    private String file;
+
+    private Context handler;
+    private ModEtl define;
+    private String clazz;
+    private List<ModEtl.Mappings> mappings;
+    private Model source;
+
+
+    public EtlExporter(Context handler, ModEtl define) {
+
+        this.handler = handler;
+        this.define = define;
+        this.mappings = define.getMappings();
+        this.clazz = define.getClass_();
+        if (this.clazz != null) {
+            this.clazz = Environment.instance().getPackages() + ".controller." + WordUtils.capitalize(this.clazz);
+        }
+
+        this.source = new Model(handler.domain(), handler.code(), define.getSchema());
+    }
+
+    public Document exec() throws IOException, BadRequestException {
+        this.extract();
+        this.transform();
+        this.load();
+
+        Document result = new Document();
+        result.put("total", this.total);
+        result.put("_id", this.file);
+
+        return result;
+    }
+
+    private void extract() {
+        this.data = this.source.list(this.handler.params.getCondition());
+    }
+
+    private void transform() {
+        logger.debug("Start converting data");
+        this.data.forEach(this::parse);
+    }
+
+    private void parse(final Document document) {
+
+        this.mappings.forEach(mapping -> {
+
+            // 数据保存到handler里，供后续功能参照使用
+            handler.params.data(document);
+
+            // 获取关联内容（关联数据直接替换了data内的值）
+            Common.fetchLinkData(handler, mapping);
+
+            // sanitize处理
+            Object value = MPath.detectValue(Common.key(mapping), document);
+            value = Rule.format(value, mapping.getSanitize());
+            document.put(Common.key(mapping), value);
+        });
+    }
+
+    private void load() throws IOException, BadRequestException {
+        logger.debug("Start converting data");
+
+        // 尝试调用自定义方法
+        Common.invokeDump(handler, this.clazz, this.data);
+
+        this.total = this.data.size();
+
+        // 只获取 col 被指定的项目, 并且以 col 的值排序
+        List<ModEtl.Mappings> mappings = this.define.getMappings()
+                .stream()
+                .sorted(Comparator.comparingInt(o -> o.getCol().intValue()))
+                .collect(Collectors.toList());
+
+        List<List<String>> document = new ArrayList<>();
+
+        // 添加标题栏
+        List<String> title = mappings.stream()
+                .map(mapping -> String.valueOf(mapping.getTitle()))
+                .collect(Collectors.toList());
+        document.add(title);
+
+        this.data.forEach(item -> {
+            List<String> row = mappings.stream()
+                    .map(mapping -> String.valueOf(item.get(mapping.getKey())))
+                    .collect(Collectors.toList());
+
+            document.add(row);
+        });
+
+        String fileName = Helper.randomGUID12();
+        new Excel().dump(new FileOutputStream(fileName), document);
+
+        // 写到 gridfs 里
+        RequestFile file = new RequestFile();
+        file.put(Constant.PARAM_FILE_NAME, this.define.getSchema() + ".xlsx");
+        file.put(Constant.PARAM_FILE_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        file.put(Constant.PARAM_FILE_PHYSICAL, fileName);
+        handler.params.data(new Document("kind", "file"));
+        handler.params.file(file);
+
+        Plural<ModFile> files = new File().add(handler);
+        this.file = files.items.get(0).get_id().toHexString();
+    }
 }

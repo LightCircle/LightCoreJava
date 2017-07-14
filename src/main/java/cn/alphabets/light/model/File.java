@@ -60,6 +60,11 @@ public class File {
             info.setContentType(gfsFile.getMetadata().getString("contentType"));
             info.setFileId(gfsFile.getObjectId());
 
+            info.setPath(handler.params.getData().getString("path"));
+            info.setPath(handler.params.getData().getString("path"));
+            info.setPath(handler.params.getData().getString("path"));
+            info.setPath(handler.params.getData().getString("path"));
+
             handler.params.data(info);
             Singular<ModFile> saved = Rider.add(handler, ModFile.class);
 

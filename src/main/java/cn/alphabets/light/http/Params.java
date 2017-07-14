@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static cn.alphabets.light.Constant.*;
@@ -246,6 +247,14 @@ public class Params {
 
     public List<RequestFile> getFiles() {
         return files;
+    }
+
+    public void files(List<RequestFile> files) {
+        this.files = files;
+    }
+
+    public void file(RequestFile file) {
+        this.files(Arrays.asList(file));
     }
 
     public Document getJson() {
