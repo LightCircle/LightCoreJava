@@ -61,7 +61,7 @@ public class Excel {
                 row.cellIterator().forEachRemaining(cell -> {
 
                     String value = "";
-                    String key = this.findKey(mappings, cell.getColumnIndex());
+                    String key = this.findKey(mappings, cell.getColumnIndex() + 1); // 定义中的col是从1开始计数
 
                     switch (cell.getCellTypeEnum()) {
                         case NUMERIC:

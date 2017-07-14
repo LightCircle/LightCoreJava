@@ -1,5 +1,6 @@
 package cn.alphabets.light;
 
+import cn.alphabets.light.validator.MPath;
 import io.vertx.core.http.HttpServerRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -210,66 +211,6 @@ public class Helper {
     }
 
     /**
-     * Use Json Path to set the value of the Json object. Supports embedded objects
-     *
-     * @param source target json object
-     * @param path   json path
-     * @param val    value
-     */
-    @SuppressWarnings("unchecked")
-    public static void setValueByJsonPath(Document source, List<String> path, Object val) {
-
-        Object parent = source;
-
-        for (int i = 0; i < path.size(); i++) {
-
-            String key = path.get(i);
-            boolean isLast = (i == path.size() - 1);
-
-            if (isLast) {
-                boolean isList = key.equals("") || NumberUtils.isDigits(key);
-                if (isList) {
-                    ((List<Object>) parent).add(val);
-                } else {
-                    ((Document) parent).put(key, val);
-                }
-                return;
-            }
-
-            boolean isListValue = path.get(i + 1).equals("") || NumberUtils.isDigits(path.get(i + 1));
-            boolean isObjectValue = !isListValue;
-
-            if (NumberUtils.isDigits(key)) {
-
-                if (((List<?>) parent).size() > Integer.parseInt(key)) {
-                    parent = ((List<?>) parent).get(Integer.parseInt(key));
-                } else {
-                    if (isListValue) {
-                        ((List<Object>) parent).add(new ArrayList<>());
-                    }
-                    if (isObjectValue) {
-                        ((List<Document>) parent).add(new Document());
-                    }
-                    parent = ((List<?>) parent).get(Integer.parseInt(key));
-                }
-            } else {
-
-                if (((Document) parent).containsKey(key)) {
-                    parent = ((Document) parent).get(key);
-                } else {
-                    if (isListValue) {
-                        ((Document) parent).put(key, new ArrayList<>());
-                    }
-                    if (isObjectValue) {
-                        ((Document) parent).put(key, new Document());
-                    }
-                    parent = ((Document) parent).get(key);
-                }
-            }
-        }
-    }
-
-    /**
      * Determines whether the current runtime environment is JUnit
      *
      * @return true is JUnit
@@ -352,7 +293,7 @@ public class Helper {
                 path.add(m.group(1));
             }
 
-            Helper.setValueByJsonPath(json, path, val);
+            MPath.setValueByJsonPath(json, path, val);
         });
 
         return json;

@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Rule
@@ -36,7 +37,7 @@ public class Rule {
                 return;
             }
 
-            Object error = invoke(instance, handler, validator);
+            Object error = invokeRule(instance, handler, validator);
             if (error != null) {
                 errors.add((Document) error);
             }
@@ -46,10 +47,14 @@ public class Rule {
         return errors.size() > 0 ? errors : null;
     }
 
-    public static Document format(Object value, Document document) {
+    public static Object format(Object value, Object sanitize) {
 
+        if (((Map<String, Object>) sanitize).size() <= 0) {
+            return value;
+        }
 
-        return document;
+        Sanitize instance = new Sanitize();
+        return invokeSanitize(instance, value, (Map<String, Object>) sanitize);
     }
 
     Document required(Context handler, ModValidator rule) {
@@ -120,10 +125,23 @@ public class Rule {
         return this.makeError(rule, value);
     }
 
-    private static Object invoke(Rule instance, Context handler, ModValidator rule) {
+    private static Object invokeRule(Rule instance, Context handler, ModValidator rule) {
         try {
             Method method = instance.getClass().getDeclaredMethod(rule.getRule(), Context.class, ModValidator.class);
             return method.invoke(instance, handler, rule);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Object invokeSanitize(Sanitize instance, Object data, Map<String, Object> sanitize) {
+        try {
+            Method method = instance.getClass().getDeclaredMethod(
+                    (String) sanitize.get("rule"),
+                    Object.class,
+                    Map.class);
+
+            return method.invoke(instance, data, sanitize);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }

@@ -185,13 +185,13 @@ public class ModEtl extends ModCommon {
 
     private Object conditions;
 
-    private String fields;
-
     private Object sanitize;
 
     private String title;
 
     private String variable;
+
+    private List fields;
 
     public String getKey() {
       return this.key;
@@ -225,14 +225,6 @@ public class ModEtl extends ModCommon {
       this.conditions = conditions;
     }
 
-    public String getFields() {
-      return this.fields;
-    }
-
-    public void setFields(String fields) {
-      this.fields = fields;
-    }
-
     public Object getSanitize() {
       return this.sanitize;
     }
@@ -255,6 +247,14 @@ public class ModEtl extends ModCommon {
 
     public void setVariable(String variable) {
       this.variable = variable;
+    }
+
+    public List getFields() {
+      return this.fields;
+    }
+
+    public void setFields(List fields) {
+      this.fields = fields;
     }
   }
 

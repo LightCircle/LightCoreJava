@@ -1,5 +1,6 @@
 package cn.alphabets.light;
 
+import cn.alphabets.light.validator.MPath;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
@@ -128,17 +129,17 @@ public class HelperTest {
         String slimjson = "[ \"]*";
 
         Document source = new Document();
-        Helper.setValueByJsonPath(source, Arrays.asList("key", ""), 1);
-        Helper.setValueByJsonPath(source, Arrays.asList("key", ""), 2);
+        MPath.setValueByJsonPath(source, Arrays.asList("key", ""), 1);
+        MPath.setValueByJsonPath(source, Arrays.asList("key", ""), 2);
         Assert.assertEquals(source.toJson().replaceAll(slimjson, ""), "{key:[1,2]}");
 
         source = new Document();
-        Helper.setValueByJsonPath(source, Arrays.asList("key", "son"), 1);
+        MPath.setValueByJsonPath(source, Arrays.asList("key", "son"), 1);
         Assert.assertEquals(source.toJson().replaceAll(slimjson, ""), "{key:{son:1}}");
 
         source = new Document();
-        Helper.setValueByJsonPath(source, Arrays.asList("key", "0", "son"), "value1");
-        Helper.setValueByJsonPath(source, Arrays.asList("key", "1", "son"), "value2");
+        MPath.setValueByJsonPath(source, Arrays.asList("key", "0", "son"), "value1");
+        MPath.setValueByJsonPath(source, Arrays.asList("key", "1", "son"), "value2");
         Assert.assertEquals(source.toJson().replaceAll(slimjson, ""), "{key:[{son:value1},{son:value2}]}");
     }
 
