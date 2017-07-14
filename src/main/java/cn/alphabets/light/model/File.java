@@ -54,15 +54,17 @@ public class File {
 
             GridFSFile gfsFile = new Controller(handler).writeFileToGrid(file);
 
+            // set file information
             ModFile info = new ModFile();
             info.setName(gfsFile.getFilename());
             info.setLength(gfsFile.getLength());
             info.setContentType(gfsFile.getMetadata().getString("contentType"));
             info.setFileId(gfsFile.getObjectId());
 
-            info.setPath(handler.params.getData().getString("path"));
-            info.setPath(handler.params.getData().getString("path"));
-            info.setPath(handler.params.getData().getString("path"));
+            // copy option information
+            info.setKind(handler.params.getData().getString("kind"));
+            info.setDescription(handler.params.getData().getString("description"));
+            info.setType(handler.params.getData().getString("type"));
             info.setPath(handler.params.getData().getString("path"));
 
             handler.params.data(info);
