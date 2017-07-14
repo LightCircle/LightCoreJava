@@ -32,18 +32,16 @@ public class Rule {
         List<Document> errors = new ArrayList<>();
 
         Rule instance = new Rule();
-        validators.forEach(validator -> {
-            if (!validator.getGroup().equals(group)) {
-                return;
-            }
+        validators.stream()
+                .filter(item -> item.getGroup().equals(group))
+                .forEach(validator -> {
+                    Object error = invokeRule(instance, handler, validator);
+                    if (error != null) {
+                        errors.add((Document) error);
+                    }
+                });
 
-            Object error = invokeRule(instance, handler, validator);
-            if (error != null) {
-                errors.add((Document) error);
-            }
-        });
-
-        logger.debug("End check");
+        logger.debug("End check. error count : " + errors.size());
         return errors.size() > 0 ? errors : null;
     }
 
@@ -58,7 +56,8 @@ public class Rule {
     }
 
     Document required(Context handler, ModValidator rule) {
-        Object value = MPath.detectValue(rule.getKey(), handler.params.getJson());
+
+        Object value = this.detectValue(handler, rule.getKey());
         if (value == null) {
             return this.makeError(rule);
         }
@@ -70,6 +69,59 @@ public class Rule {
         }
 
         return null;
+    }
+
+    Document max(Context handler, ModValidator rule) {
+        if (this.prepare(handler, rule)) {
+            return null;
+        }
+
+        Object value = this.detectValue(handler, rule.getKey());
+        int length = Integer.parseInt((String) rule.getOption());
+
+        if (value instanceof String) {
+            if (((String) value).length() >= length) {
+                return null;
+            }
+        }
+
+        // 如果是列表，遍历所有的值进行长度检查
+        if (value instanceof List) {
+            for (String item: ((List<String>) value)) {
+                if (item.length() < length) {
+                    return this.makeError(rule, item);
+                }
+            }
+            return null;
+        }
+
+        return this.makeError(rule, value);
+    }
+
+    Document min(Context handler, ModValidator rule) {
+        if (this.prepare(handler, rule)) {
+            return null;
+        }
+
+        Object value = this.detectValue(handler, rule.getKey());
+        int length = Integer.parseInt((String) rule.getOption());
+
+        if (value instanceof String) {
+            if (((String) value).length() < length) {
+                return null;
+            }
+        }
+
+        if (value instanceof List) {
+            for (String item: ((List<String>) value)) {
+                if (item.length() >= length) {
+                    return this.makeError(rule, item);
+                }
+            }
+            return null;
+        }
+
+        return this.makeError(rule, value);
     }
 
     Document unique(Context handler, ModValidator rule) {
@@ -103,7 +155,7 @@ public class Rule {
             return null;
         }
 
-        Object value = MPath.detectValue(rule.getKey(), handler.params.getJson());
+        Object value = this.detectValue(handler, rule.getKey());
         if (StringUtils.isNumeric(String.valueOf(value))) {
             return null;
         }
@@ -116,7 +168,7 @@ public class Rule {
             return null;
         }
 
-        Object value = MPath.detectValue(rule.getKey(), handler.params.getJson());
+        Object value = this.detectValue(handler, rule.getKey());
 
         if (String.valueOf(value).matches((String) rule.getOption())) {
             return null;
@@ -156,11 +208,9 @@ public class Rule {
      */
     boolean prepare(Context handler, ModValidator rule) {
 
-        Document json = handler.params.getJson();
-
         // 非严格模式，值为空时不认为异常
         if (!rule.getStrict()) {
-            Object value = MPath.detectValue(rule.getKey(), json);
+            Object value = this.detectValue(handler, rule.getKey());
             if (value == null) {
                 return true;
             }
@@ -171,10 +221,10 @@ public class Rule {
         }
 
         // 进行校验的前提条件判断（如果不满足条件则不进行校验）
-        if (rule.getCondition() != null && rule.getCondition().getKey() != null) {
+        if (!StringUtils.isEmpty(rule.getCondition().getKey())) {
 
             // 请求参数里的值
-            String requestValue = String.valueOf(MPath.detectValue(rule.getKey(), json));
+            String requestValue = String.valueOf(this.detectValue(handler, rule.getKey()));
 
             // 设定的条件值
             String compareValue = rule.getCondition().getParameter();
@@ -206,18 +256,18 @@ public class Rule {
      */
     long fetchCount(Context handler, ModValidator rule) {
 
-        Document condition = new Document();
-        Document option = (Document) rule.getOption();
+        Document condition = new Document("valid", 1);
+        Map<String, Object> option = (Map<String, Object>) rule.getOption();
 
-        List<Document> conditions = (List<Document>) option.get("conditions");
+        List<Map<String, String>> conditions = (List<Map<String, String>>) option.get("conditions");
         conditions.forEach(item -> {
 
-            String parameter = item.getString("parameter");
-            String value = item.getString("value");
+            String parameter = item.get("parameter");
+            String value = item.get("value");
 
             // 参数为引用类型的（第一个字母为$），那么在handler.params里取值做为条件
             if (value.charAt(0) == '$') {
-                Object reference = MPath.detectValue(value.substring(1), handler.params.getJson());
+                Object reference = this.detectValue(handler, value.substring(1));
 
                 if (reference instanceof String) {
 
@@ -239,7 +289,7 @@ public class Rule {
             condition.put(parameter, value);
         });
 
-        return new Model(handler.domain(), handler.code(), option.getString("schema")).count(condition);
+        return new Model(handler.domain(), handler.code(), (String) option.get("schema")).count(condition);
     }
 
     private Document makeError(ModValidator rule) {
@@ -254,4 +304,19 @@ public class Rule {
         return error;
     }
 
+    private Object detectValue(Context handler, String key) {
+
+        if (key.startsWith("data.")) {
+            Document data = handler.params.getData();
+            return MPath.detectValue(key.replaceFirst("data.", ""), data);
+        }
+
+        if (key.startsWith("condition.")) {
+            Document data = handler.params.getCondition();
+            return MPath.detectValue(key.replaceFirst("condition.", ""), data);
+        }
+
+        Document data = handler.params.getJson();
+        return MPath.detectValue(key, data);
+    }
 }

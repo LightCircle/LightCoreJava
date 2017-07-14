@@ -12,8 +12,11 @@ import org.bson.types.ObjectId;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -37,19 +40,17 @@ public class Common {
         }
     }
 
-    static List<Document> invokeBefore(Context handler, String clazz, List<Document> data) {
+    static void invokeBefore(Context handler, String clazz, List<Document> data) {
         if (clazz == null) {
-            return null;
+            return;
         }
 
         try {
             Method method = Class.forName(clazz).getMethod("before", Context.class, List.class);
-            return (List<Document>) method.invoke(method.getDeclaringClass().newInstance(), handler, data);
+            method.invoke(method.getDeclaringClass().newInstance(), handler, data);
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
             logger.debug("Did not find before method. skip. " + clazz);
         }
-
-        return null;
     }
 
     static void invokeParse(Context handler, String clazz, Document data) {
@@ -102,41 +103,56 @@ public class Common {
             return;
         }
 
-        // 用key，在行数据中找出对应的数据，如果值不是数组则转换成数组
-        // 转换成数组是为了后续统一操作，值为数组的场景是：Excel里用逗号分隔的内容，会转变为数组
-        Object object = MPath.detectValue(key(mapping), data);
-        boolean isListValue = object instanceof List;
-        List<Object> values = isListValue ? (List<Object>) object : Arrays.asList(object);
+        // 生成关联检索条件
+        Document condition = getCondition(handler, mapping);
+
+        // 选择项目，这里把条件字段一并取出，是为了保存原值到original里（）
+        List<String> select = new ArrayList<String>(mapping.getFields());
+        condition.forEach((k, v) -> select.add(k));
+
+        Document original = new Document();
+        List<Object> newValue = new ArrayList<>();
 
         Model model = new Model(handler.domain(), handler.code(), mapping.getSchema());
-        Document original = new Document();
+        model.list(condition, select).forEach(item -> {
 
-        // 遍历所有的值，如果对应的key是_id，那么转换为ObjectId，并最终生成检索用的条件
-        values.forEach(value -> {
-            Document fetched = model.get(getCondition(handler, mapping), mapping.getFields());
-            if (fetched != null) {
-                Object fetchedValue = fetched.get(mapping.getFields());
-                if (fetchedValue instanceof ObjectId) {
-                    fetchedValue = ((ObjectId) fetchedValue).toHexString();
+            // 保存新获取的值到列表里
+            Object value = item.get(mapping.getFields().get(0));
+            if (value instanceof ObjectId) {
+                value = ((ObjectId) value).toHexString();
+            }
+            newValue.add(value);
+
+            // Original对象是，以新值为key，旧值为value的Hash。为了要获取新值对应的旧值，需要获取用key项目对应的检索条件字段名
+            String originalKey = null;
+            for (Map.Entry entry : ((Map<String, String>) mapping.getConditions()).entrySet()) {
+                if (("$" + mapping.getKey()).equals(entry.getValue())) {
+                    originalKey = (String) entry.getKey();
                 }
+            }
 
-                // 保留原值，原值以新值为Key保存起来，需要的时候可以用新值作为索引获取原来的值（错误处理时使用）
-                original.put(String.valueOf(fetchedValue), value);
-
-                // 替换原来的值
-                MPath.setValueByJsonPath(data, Arrays.asList(key(mapping).split(".")), fetchedValue);
+            // 保存原值
+            if (originalKey != null) {
+                original.put(String.valueOf(value), item.get(originalKey));
             }
         });
 
-        data.put("_original", original);
+        // 替换原来的值
+        boolean isListValue = MPath.detectValue(key(mapping), data) instanceof List;
+        MPath.setValueByJsonPath(data, Arrays.asList(key(mapping).split(Pattern.quote("."))),
+                isListValue ? newValue : newValue.get(0));
+
+        if (original.size() > 0) {
+            data.put("_original", original);
+        }
     }
 
     private static Document getCondition(Context handler, ModEtl.Mappings mapping) {
 
-        Document condition = new Document();
+        Document condition = new Document("valid", 1);
 
         // 遍历所有定义的条件{ group: $name, valid: 1 }
-        Document defines = (Document) mapping.getConditions();
+        Map<String, String> defines = (Map<String, String>) mapping.getConditions();
         defines.forEach((k, v) -> {
 
             if (String.valueOf(v).charAt(0) == '$') {
@@ -146,12 +162,12 @@ public class Common {
                 Object real = MPath.detectValue(key, handler.params.getData());
 
                 if (real instanceof List) {
-                    if ("_id".equals(key)) {
+                    if ("_id".equals(k)) {
                         real = ((List<String>) real).stream().map(ObjectId::new).collect(Collectors.toList());
                     }
-                    condition.put(key, new Document("$in", real));
+                    condition.put(k, new Document("$in", real));
                 } else {
-                    condition.put(k, "_id".equals(key) ? new ObjectId((String) real) : real);
+                    condition.put(k, "_id".equals(k) ? new ObjectId((String) real) : real);
                 }
             } else {
 

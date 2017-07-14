@@ -1,31 +1,22 @@
 package cn.alphabets.light.model.datamigrate;
 
-import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.ModEtl;
-import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.validator.MPath;
 import cn.alphabets.light.validator.Rule;
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bson.Document;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Etl importer
@@ -121,10 +112,7 @@ public class EtlImporter {
             List<Document> data = new Excel().parse(excel, this.mappings);
 
             // 尝试调用用户的Ctrl
-            List<Document> result = Common.invokeBefore(this.handler, this.clazz, data);
-            if (result != null) {
-                data = result;
-            }
+            Common.invokeBefore(this.handler, this.clazz, data);
 
             // 添加的临时表
             data.forEach(item -> this.primitive.add(item));
@@ -141,9 +129,10 @@ public class EtlImporter {
 
         logger.debug("Start converting data");
 
+        int index = 1;
         for (Document document : this.primitive.getIterable()) {
 
-            boolean hasError = this.parse(document);
+            boolean hasError = this.parse(document, index++);
             if (hasError) {
                 if (this.define.getAllowError() && this.define.getAllowErrorMax() > 0) {
                     if (this.log.size() < this.define.getAllowErrorMax()) {
@@ -157,7 +146,7 @@ public class EtlImporter {
         }
     }
 
-    private boolean parse(final Document document) {
+    private boolean parse(final Document document, int index) {
 
         this.mappings.forEach(mapping -> {
 
@@ -175,7 +164,6 @@ public class EtlImporter {
 
             // 获取关联内容（关联数据直接替换了data内的值）
             Common.fetchLinkData(handler, mapping);
-
         });
 
         // 尝试调用开发者自定义的处理方法
@@ -185,6 +173,7 @@ public class EtlImporter {
         // 数据校验
         List<Document> error = Rule.isValid(handler, this.define.getName());
         if (error != null) {
+            error.forEach(item -> item.put("row", index + 1));
             this.log.addAll(error);
             return true;
         }
@@ -220,7 +209,7 @@ public class EtlImporter {
                 // 更新
 
                 Document condition = new Document("valid", 1);
-                this.define.getUniqueKey().forEach(uk -> condition.put((String)uk, document.get(uk)));
+                this.define.getUniqueKey().forEach(uk -> condition.put((String) uk, document.get(uk)));
 
                 if (this.target.count(condition) > 0) {
                     this.target.update(condition, document);
