@@ -215,18 +215,30 @@ public class Params {
     }
 
     public Document getCondition() {
+        if (condition == null){
+            condition = new Document();
+        }
         return condition;
     }
 
     public Document getSelect() {
+        if (select == null){
+            select = new Document();
+        }
         return select;
     }
 
     public Document getSort() {
+        if (sort == null){
+            sort = new Document();
+        }
         return sort;
     }
 
     public Document getData() {
+        if (data == null){
+            data = new Document();
+        }
         return (Document) data;
     }
 
