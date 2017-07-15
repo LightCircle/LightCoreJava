@@ -221,7 +221,7 @@ public class Rule {
         }
 
         // 进行校验的前提条件判断（如果不满足条件则不进行校验）
-        if (!StringUtils.isEmpty(rule.getCondition().getKey())) {
+        if (rule.getCondition() != null && !StringUtils.isEmpty(rule.getCondition().getKey())) {
 
             // 请求参数里的值
             String requestValue = String.valueOf(this.detectValue(handler, rule.getKey()));
