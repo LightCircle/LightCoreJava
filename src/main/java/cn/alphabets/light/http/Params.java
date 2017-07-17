@@ -57,8 +57,7 @@ public class Params {
                 // 如果包含id字段，尝试转换成ObjectID类
                 if (json.containsKey(PARAM_ID)) {
                     if (ObjectId.isValid(json.getString(PARAM_ID))) {
-                        this.id(new ObjectId(json.getString(PARAM_ID)));
-                        this.condition.append("_id", new ObjectId(json.getString(PARAM_ID)));
+                        this.id(json.getString(PARAM_ID));
                     } else {
                         this.condition.append("id", json.getString(PARAM_ID));
                     }
@@ -193,12 +192,17 @@ public class Params {
     }
 
     public Params id(String id) {
-        this._id = new ObjectId(id);
-        return this;
+        return this.id(new ObjectId(id));
     }
 
     public Params id(ObjectId id) {
         this._id = id;
+
+        if (this.condition == null) {
+            this.condition = new Document();
+        }
+        this.condition.put("_id", this._id);
+
         return this;
     }
 

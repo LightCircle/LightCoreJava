@@ -52,6 +52,8 @@ public class Model {
     }
 
     private String getSql(String sql, Document params) {
+
+        // TODO: condition.name.replace(/[ ;].*/g, ""); // 防止SQL注入
         return Helper.loadInlineTemplate(sql, params);
     }
 
