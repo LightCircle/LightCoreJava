@@ -177,11 +177,26 @@ public class Environment {
         return System.getenv(Constant.ENV_LIGHT_MONGO_HOST);
     }
 
-    public String getMySQLPort() {
+    public int getMySQLPort() {
         if (this.args.local) {
-            return String.valueOf(this.mysql.getPort());
+            return this.mysql.getPort();
         }
-        return System.getenv(Constant.ENV_LIGHT_MYSQL_PORT);
+        return Integer.parseInt(System.getenv(Constant.ENV_LIGHT_MYSQL_PORT));
+    }
+
+
+    public String getMySQLUser() {
+        if (this.args.local) {
+            return this.mysql.getUser();
+        }
+        return System.getenv(Constant.ENV_LIGHT_MYSQL_USER);
+    }
+
+    public String getMySQLPass() {
+        if (this.args.local) {
+            return this.mysql.getPass();
+        }
+        return System.getenv(Constant.ENV_LIGHT_MONGO_PASS);
     }
 
 }

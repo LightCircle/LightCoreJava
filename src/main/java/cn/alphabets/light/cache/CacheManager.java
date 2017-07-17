@@ -2,14 +2,11 @@ package cn.alphabets.light.cache;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.db.mongo.Controller;
-import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.*;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
 import cn.alphabets.light.model.Plural;
-import org.bson.Document;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**

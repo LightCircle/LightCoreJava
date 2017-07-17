@@ -335,6 +335,36 @@ public class Helper {
         return new JtwigTemplate(environment, resource).render(JtwigModel.newModel(model));
     }
 
+
+    public static String loadInlineTemplate(String template, Map<String, Object> model) {
+        List<SimpleJtwigFunction> function = new ArrayList<>();
+        return loadInlineTemplate(template, model, function);
+    }
+    public static String loadInlineTemplate(String template, Map<String, Object> model, List<SimpleJtwigFunction> function) {
+
+        EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
+                .configuration()
+                .render()
+                .withOutputCharset(Charset.forName("UTF-8"))
+                .and()
+                .resources()
+                .withDefaultInputCharset(Charset.forName("UTF-8"))
+                .and()
+                .functions()
+                .add(function)
+                .and()
+                .parser()
+                .syntax()
+                .withStartCode("<%~").withEndCode("%>")
+                .withStartOutput("<%=").withEndOutput("%>")
+                .withStartComment("<#").withEndComment("#>")
+                .and()
+                .and()
+                .build();
+
+        return JtwigTemplate.inlineTemplate(template, configuration).render(JtwigModel.newModel(model));
+    }
+
     public static class StringFunction extends SimpleJtwigFunction {
 
         private String name;

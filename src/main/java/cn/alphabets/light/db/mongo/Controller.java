@@ -10,7 +10,6 @@ import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
-import com.mongodb.Block;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
