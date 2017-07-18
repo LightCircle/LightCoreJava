@@ -135,7 +135,7 @@ public class EtlExporter {
 
         this.data.forEach(item -> {
             List<String> row = mappings.stream()
-                    .map(mapping -> String.valueOf(item.get(Common.key(mapping))))
+                    .map(m -> String.valueOf(item.get(Common.key(m)) == null ? "" : item.get(Common.key(m))))
                     .collect(Collectors.toList());
 
             document.add(row);
