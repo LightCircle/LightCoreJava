@@ -120,14 +120,7 @@ public class File {
      * @throws LightException file not found
      */
     public void image(Context handler) throws LightException {
-
-        try {
-            Singular<ModFile> file = Rider.get(handler, ModFile.class);
-            sendFile(handler, file.item);
-        } catch (Exception e) {
-            logger.error("error read file : ", e);
-            throw new BadRequestException("File not exist.");
-        }
+        this.download(handler);
     }
 
     /**
@@ -236,8 +229,18 @@ public class File {
 
     }
 
+    public void download(Context handler) throws LightException {
+
+        try {
+            Singular<ModFile> file = Rider.get(handler, ModFile.class);
+            sendFile(handler, file.item);
+        } catch (Exception e) {
+            logger.error("error read file : ", e);
+            throw new BadRequestException("File not exist.");
+        }
+    }
+
     // TODO: update
-    // TODO: download
     // TODO: zip
     // TODO: PDF
 }
