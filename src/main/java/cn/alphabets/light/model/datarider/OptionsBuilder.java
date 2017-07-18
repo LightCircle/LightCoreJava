@@ -67,7 +67,7 @@ class OptionsBuilder {
                 String key = (String.valueOf(v)).substring(1);
 
                 // field type
-                String defineType = (String) ((Map<String, Map>) structure.getItems()).get(key).get("type");
+                String defineType = (String) ((Map<String, Map>) structure.getItems()).get(k).get("type");
                 final String valueType = (k.equals("_id") ? "ObjectId" : defineType).trim().toLowerCase();
 
                 // 处理单个对象
@@ -116,7 +116,7 @@ class OptionsBuilder {
         // 检索
         Model model = new Model(handler.getDomain(), handler.getCode(), this.schema, Model.getEntityType(this.schema));
         model.list(condition, select).forEach(item -> {
-            option.put(item.getString(this.key).toString(), item);
+            option.put(item.get("_id").toString(), item);
         });
 
         return option;
