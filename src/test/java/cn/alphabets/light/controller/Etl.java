@@ -32,4 +32,8 @@ public class Etl {
     public void after(Context handler, Document data) {
         System.out.println("after");
     }
+
+    public void dump(Context handler, List<Document> data) {
+        System.out.println("dump");
+    }
 }

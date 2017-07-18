@@ -78,8 +78,7 @@ public class Model {
             // 查看是否定义有父表
             List<ModStructure> structs = CacheManager.INSTANCE.getStructures();
             if (structs != null) {
-                ModStructure struct = CacheManager.INSTANCE.getStructures()
-                        .stream()
+                ModStructure struct = structs.stream()
                         .filter(s -> s.getSchema().equals(current))
                         .findFirst()
                         .orElse(null);

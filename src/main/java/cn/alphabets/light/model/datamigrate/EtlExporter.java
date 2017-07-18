@@ -3,9 +3,11 @@ package cn.alphabets.light.model.datamigrate;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
+import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.ModEtl;
 import cn.alphabets.light.entity.ModFile;
+import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.RequestFile;
@@ -70,7 +72,21 @@ public class EtlExporter {
     }
 
     private void extract() {
-        this.data = this.source.list(this.handler.params.getCondition());
+
+        Document condition = new Document("valid", 1);
+
+        ModStructure struct = CacheManager.INSTANCE.getStructures()
+                .stream()
+                .filter(s -> s.getSchema().equals(define.getSchema()))
+                .findFirst()
+                .orElse(null);
+
+        if (struct.getParent() != null && struct.getParent().length() > 0) {
+            condition.put("type", define.getSchema());
+        }
+
+        condition.putAll(this.handler.params.getCondition());
+        this.data = this.source.list(condition);
     }
 
     private void transform() {
