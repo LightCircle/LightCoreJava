@@ -83,15 +83,13 @@ class OptionsBuilder {
 
                 // 处理列表对象
                 if (result instanceof Plural) {
+                    List<Object> values = new ArrayList<>();
                     ((Plural) result).items.forEach(item -> {
                         Object value = ((ModCommon) item).getFieldValue(key);
-                        Object converted = converter.convert(valueType, value);
-                        if (converted instanceof List) {
-                            condition.put(k, new Document("$in", converted));
-                        } else {
-                            condition.put(k, converted);
-                        }
+                        values.add(converter.convert(valueType, value));
                     });
+
+                    condition.put(k, new Document("$in", values));
                 }
             } else {
 
@@ -109,17 +107,31 @@ class OptionsBuilder {
             condition.put("type", this.schema);
         }
 
-        // 为了将key字段也选择出来，clone一个field并添加key字段
+        String optionKey = this.findOptionKeyName();
         List<String> select = new ArrayList<>(field);
-        select.add(this.key);
+        select.add(optionKey);
 
         // 检索
         Model model = new Model(handler.getDomain(), handler.getCode(), this.schema, Model.getEntityType(this.schema));
         model.list(condition, select).forEach(item -> {
-            option.put(item.get("_id").toString(), item);
+            option.put(item.get(optionKey).toString(), item);
         });
 
         return option;
+    }
+
+    private String findOptionKeyName() {
+        for (Map.Entry<String, String> entry : this.conditions.entrySet()) {
+
+            if (entry.getValue().charAt(0) != '$') {
+                continue;
+            }
+
+            if (this.key.equals(entry.getValue().substring(1))) {
+                return entry.getKey();
+            }
+        }
+        return "_id";
     }
 
     private String getSchema() {
