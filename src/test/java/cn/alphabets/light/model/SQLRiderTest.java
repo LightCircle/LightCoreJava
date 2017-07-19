@@ -8,6 +8,7 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import cn.alphabets.light.model.datarider.Rider;
 import cn.alphabets.light.model.datarider.SQLRider;
+import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,18 +35,11 @@ public class SQLRiderTest {
 
         ModBoard board = CacheManager.INSTANCE.getBoards()
                 .stream()
-                .filter(item -> item.getApi().equals("/api/test/get"))
-                .collect(Collectors.toList())
-                .get(0);
-
-        SQLRider.call(handler, Rider.getEntityType(board.getClass_(), board.getKind()), board.getAction());
-
-        board = CacheManager.INSTANCE.getBoards()
-                .stream()
                 .filter(item -> item.getApi().equals("/api/test/list"))
                 .collect(Collectors.toList())
                 .get(0);
 
+        handler.params.condition(new Document("name", "test"));
         SQLRider.call(handler, Rider.getEntityType(board.getClass_(), board.getKind()), board.getAction());
     }
 }

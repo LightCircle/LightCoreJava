@@ -81,4 +81,12 @@ public class Constant {
     public static final String PARAM_LIMIT = "limit";
 
     public static final int GLOBAL_ERROR_STATUS_CODE = 520;
+
+    public static final long API_TYPE_ADD = 1L;
+    public static final long API_TYPE_UPDATE = 2L;
+    public static final long API_TYPE_REMOVE = 3L;
+    public static final long API_TYPE_LIST = 4L;
+    public static final long API_TYPE_SEARCH = 5L;
+    public static final long API_TYPE_GET = 6L;
+    public static final long API_TYPE_COUNT = 7L;
 }

@@ -4,8 +4,7 @@ package cn.alphabets.light.model.datarider;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.cache.CacheManager;
-import cn.alphabets.light.db.mongo.Controller;
-import cn.alphabets.light.db.mongo.Model;
+import cn.alphabets.light.db.mysql.Controller;
 import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.exception.DataRiderException;
@@ -16,6 +15,7 @@ import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bson.Document;
 
@@ -76,104 +76,13 @@ public class SQLRider {
         }
     }
 
-
     public static Params adaptToBoard(Context handler, Class clazz, ModBoard board, Params params) {
 
-        ModStructure structure = getStruct(board.getSchema());
+        String script = buildScript(handler, board, params);
 
-        // part1. build select
-        Document select = buildSelect(board, params);
+        System.out.println(script);
 
-        // part2. build condition
-        Document condition = buildCondition(handler, board, structure, params);
-
-        // part3. build sort
-        Document sort = buildSort(board, params);
-
-        // part4. change condition for extended structure
-        Document data = params.getData();
-        if (structure.getParent() != null && structure.getParent().length() > 0) {
-
-            // 检索条件添加type
-            condition.append("type", structure.getSchema());
-
-            if (data != null && !data.containsKey("type")) {
-                data.append("type", structure.getSchema());
-            }
-        }
-
-        return new Params(condition, data, select, sort,
-                params.get_id(), params.getSkip(), params.getLimit(), params.getFiles(), board.getSchema(), clazz);
-    }
-
-    private static Document buildCondition(Context handler, ModBoard board, ModStructure structure, Params params) {
-
-        final Document condition = params.getCondition();
-
-        if (condition == null) {
-            return new Document("valid", VALID);
-        }
-
-        if (condition.containsKey("free")) {
-            return (Document) condition.get("free");
-        }
-
-        if (condition.containsKey("_id")) {
-            return new Document().append("_id", condition.get("_id")).append("valid", VALID);
-        }
-
-        TypeConverter converter = new TypeConverter(handler);
-        List<Document> or = new ArrayList<>();
-
-        // group condition by filter group
-        Map<String, List<ModBoard.Filters>> grouped = board.getFilters()
-                .stream()
-                .collect(Collectors.groupingBy(ModBoard.Filters::getGroup));
-
-        // build group condition
-        grouped.forEach((s, filters) -> {
-
-            Document section = new Document();
-            filters.forEach(filter -> {
-
-                String parameter = filter.getKey();
-                String key = filter.getParameter();
-                String perator = filter.getOperator();
-
-                // build reserved
-                Object value = reserved(handler, key);
-                if (value != null) {
-                    section.put(parameter, value);
-
-                } else if (condition.containsKey(key)) {
-
-                    value = condition.get(key);
-                    String valueType = detectValueType(structure, parameter);
-                    if (section.containsKey(parameter)) {
-                        ((Document) section.get(parameter)).put(perator, converter.convert(valueType, value));
-                    } else {
-                        section.put(parameter, new Document(perator, converter.convert(valueType, value)));
-                    }
-                }
-
-            });
-
-            // skip empty section
-            if (section.size() > 0) {
-                or.add(section);
-            }
-        });
-
-        Document result = new Document();
-        if (or.size() == 1) {
-            result = or.get(0);
-        }
-        if (or.size() > 1) {
-            result.put("$or", or);
-        }
-
-        result.put("valid", VALID);
-        return result;
+        return Params.clone(params, script, board.getSchema(), clazz);
     }
 
     /**
@@ -199,68 +108,141 @@ public class SQLRider {
         }
     }
 
-    /**
-     * build select
-     * <p>
-     * if select is passed from client, use the passed select
-     * or use the select get from board
-     * <p>
-     * select passed from client should be below
-     * {"field1":1,"field2":1}
-     *
-     * @param board  board info
-     * @param params request params
-     */
-    private static Document buildSelect(ModBoard board, Params params) {
+    private static String buildScript(Context handler, ModBoard board, Params params) {
 
-        final Document select = params.getSelect();
-
-        // get from board
-        if (select == null) {
-            Document confirmed = new Document();
-            board.getSelects().forEach(s -> {
-                if (s.getSelect()) {
-                    confirmed.put(s.getKey(), 1);
-                }
-            });
-            return confirmed;
+        if (!StringUtils.isEmpty(board.getScript())) {
+            return board.getScript();
         }
 
-        // passed from client.  {field1:'1',field2:'1'}  ->  {field1:1,field2:1}
-        Document confirmed = new Document();
-        select.forEach((s, o) -> confirmed.put(s, o instanceof String ? Integer.parseInt((String) o) : o));
-        return confirmed;
+        List<String> selects = new ArrayList<>();
+        board.getSelects().forEach(item -> {
+            if (item.getSelect()) {
+                selects.add(String.format("`%s`.`%s`", board.getSchema(), item.getKey()));
+            }
+        });
+
+        List<String> sorts = new ArrayList<>();
+        board.getSorts().stream()
+                .sorted(Comparator.comparingInt(item -> Integer.parseInt(item.getOrder())))
+                .forEach(item ->
+                        sorts.add(String.format("`%s`.`%s` %s", board.getSchema(), item.getKey(), item.getOrder())));
+
+
+        Map<String, List<ModBoard.Filters>> group = board.getFilters()
+                .stream()
+                .collect(Collectors.groupingBy(ModBoard.Filters::getGroup));
+
+        List<List<String>> where = new ArrayList<>();
+
+        group.values().forEach(item -> {
+            List<String> and = new ArrayList<>();
+            item.forEach(i -> and.add(compiler(i.getKey(), i.getOperator(), i.getParameter())));
+            where.add(and);
+        });
+
+        if (board.getType() == Constant.API_TYPE_LIST || board.getType() == Constant.API_TYPE_GET) {
+            return selectStatement(params, handler.getDomain(), board.getSchema(), selects, where, sorts);
+        }
+
+        if (board.getType() == Constant.API_TYPE_COUNT) {
+            return selectStatement(params, handler.getDomain(), board.getSchema(), null, where, null);
+        }
+
+        return "";
     }
 
-    /**
-     * build sort
-     * <p>
-     * if sort is passed from client, use the passed sort
-     * or use the sort get from board
-     * <p>
-     * sort passed from client should be below
-     * {"field1":-1,"field2":1}
-     *
-     * @param board  board info
-     * @param params request params
-     */
-    private static Document buildSort(ModBoard board, Params params) {
+    private static String selectStatement(
+            Params params, String db, String schema,
+            List<String> selects, List<List<String>> where, List<String> sorts) {
 
-        final Document sort = params.getSort();
+        StringBuilder builder = new StringBuilder();
 
-        // get from board
-        if (sort == null) {
-            Document confirmed = new Document();
-            board.getSorts().forEach(s -> {
-                confirmed.put(s.getKey(), "desc".equals(s.getOrder()) ? -1 : 1);
-            });
-            return confirmed;
+        builder.append("SELECT ");
+
+        if (selects != null && selects.size() > 0) {
+            builder.append(StringUtils.join(selects, ","));
+        } else {
+            builder.append(" COUNT(1) ");
         }
 
-        // passed from client. {field1:'1',field2:'-1'}  ->  {field1:1,field2:-1}
-        Document confirmed = new Document();
-        sort.forEach((s, o) -> confirmed.put(s, o instanceof String ? Integer.parseInt((String) o) : o));
-        return confirmed;
+        builder.append(String.format(" FROM `%s`.`%s`", db, schema));
+
+        // 没有指定where，尝试使用_id检索
+        if (where == null || where.size() <= 0) {
+            builder.append(" WHERE ");
+
+            // 只获取有效的项目
+            List<String> list = new ArrayList<>();
+            list.add(String.format("`%s`.`valid` = 1", schema));
+
+            // 添加_id条件
+            if (params.getId() != null) {
+                list.add(String.format("`%s`.`_id` = <%%= _id %%>", schema));
+            }
+
+            builder.append(StringUtils.join(list, " AND "));
+        }
+
+        if (where != null && where.size() == 1) {
+            builder.append(" WHERE ");
+
+            // 只获取有效的项目
+            List<String> list = where.get(0);
+            list.add(String.format("`%s`.`valid` = 1", schema));
+
+            builder.append(StringUtils.join(list, " AND "));
+        }
+
+        if (where != null && where.size() > 1) {
+            List<String> or = where.stream()
+                    .map(item -> {
+                        List<String> list = new ArrayList<>(item);
+                        list.add(String.format("`%s`.`valid` = 1", schema));
+                        return StringUtils.join(list, " AND ");
+                    })
+                    .collect(Collectors.toList());
+
+            builder.append(" WHERE ");
+            builder.append(StringUtils.join(or, " OR "));
+        }
+
+        if (sorts != null && sorts.size() > 0) {
+            builder.append(" ORDER BY ");
+            builder.append(StringUtils.join(sorts, ","));
+        }
+
+        return builder.toString();
+    }
+
+    private String insertStatement(String db, String schema) {
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(String.format("INSERT INTO `%s`.`%s` (", db, schema));
+        builder.append(") VALUES (");
+        builder.append(")");
+
+        return builder.toString();
+    }
+
+    private static String compiler(String key, String operator, String value) {
+
+        switch (operator) {
+            case "$eq":
+                return String.format("`%s` = %s", key, value);
+            case "$ne":
+                return String.format("`%s` <> %s", key, value);
+            case "$gt":
+                return String.format("`%s`> %s", key, value);
+            case "$gte":
+                return String.format("`%s` >= %s", key, value);
+            case "$lt":
+                return String.format("`%s` < %s", key, value);
+            case "$lte":
+                return String.format("`%s` <= %s", key, value);
+        }
+
+        throw new RuntimeException("Core has not yet supported the operator.");
     }
 
     private static Object reserved(Context handler, String keyword) {

@@ -56,12 +56,7 @@ public class Controller {
     public <T extends ModCommon> Singular<T> get() {
         logger.debug("[GET] DB params : " + params.toString());
 
-        Document condition = params.getCondition();
-        if (condition == null || condition.size() == 0) {
-            throw DataRiderException.ParameterUnsatisfied("Get condition can not be empty.");
-        }
-
-        Document document = this.model.get(params.getScript(), condition);
+        Document document = this.model.get(params.getScript(), params.getCondition());
 
         Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
         return new Singular(ModCommon.fromDocument(document, type));

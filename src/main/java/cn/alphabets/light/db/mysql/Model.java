@@ -42,7 +42,9 @@ public class Model {
         PreparedStatement ps = null;
         SQLException exception = null;
         ResultSet rs = null;
-        String sql = this.getSql(query, params);
+        String sql = this.getSql(query, new Document("condition", params));
+
+        System.out.println(sql);
 
         try {
             ps = this.db.prepareStatement(sql);
@@ -118,15 +120,15 @@ public class Model {
 
         switch (type) {
             case "DECIMAL":
-                return ((BigDecimal)value).longValue();
+                return ((BigDecimal) value).longValue();
             case "DATETIME":
-                return new java.util.Date(((Timestamp)value).getTime());
+                return new java.util.Date(((Timestamp) value).getTime());
             case "BIGINT":
             case "VARCHAR":
             case "INT":
                 return value;
         }
 
-        return value;
+        throw new RuntimeException("Core has not yet supported the data type.");
     }
 }

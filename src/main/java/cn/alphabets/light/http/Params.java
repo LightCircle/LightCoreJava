@@ -133,6 +133,38 @@ public class Params {
         this.clazz = clazz;
     }
 
+    public static Params clone(
+            Params params, Document condition, Object data, Document select, Document sort, String table, Class clazz){
+
+        Params newParams = new Params();
+        params.condition = condition;
+        params.data = data;
+        params.select = select;
+        params.sort = sort;
+        params._id = params.get_id();
+        params.skip = params.getSkip();
+        params.limit = params.getLimit();
+        params.files = params.getFiles();
+        params.table = table;
+        params.clazz = clazz;
+        return newParams;
+    }
+
+    public static Params clone(Params params, String script, String table, Class clazz){
+
+        Params newParams = new Params();
+        newParams.script = script;
+        newParams.condition = params.getCondition();
+        newParams.data = params.getData();
+        newParams._id = params.get_id();
+        newParams.skip = params.getSkip();
+        newParams.limit = params.getLimit();
+        newParams.files = params.getFiles();
+        newParams.table = table;
+        newParams.clazz = clazz;
+        return newParams;
+    }
+
     public Params condition(Document condition) {
         this.condition = condition;
         return this;
@@ -295,7 +327,7 @@ public class Params {
                 "\n\tdata = " + (data == null ? "null" : ((Document) data).toJson()) +
                 "\n\tskip = " + skip +
                 "\n\tlimit = " + limit +
-                "\n\tlimit = " + script +
+                "\n\tscript = " + script +
                 "\n}";
     }
 
