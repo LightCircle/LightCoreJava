@@ -39,12 +39,11 @@ public class Model {
 
     public List<Document> list(String query, Document params) {
 
+        String sql = this.getSql(query, new Document("condition", params));
+
         PreparedStatement ps = null;
         SQLException exception = null;
         ResultSet rs = null;
-        String sql = this.getSql(query, new Document("condition", params));
-
-        System.out.println(sql);
 
         try {
             ps = this.db.prepareStatement(sql);
@@ -76,6 +75,56 @@ public class Model {
         }
 
         return null;
+    }
+
+    public long count(String query, Document params) {
+        List<Document> documents = this.list(query, params);
+        if (documents != null && documents.size() > 0) {
+            return documents.get(0).getInteger(0);
+        }
+
+        return 0;
+    }
+
+    public long add(String query, Document data) {
+        return this.update(query, data, null);
+    }
+
+    public long remove(String query, Document condition) {
+        return this.update(query, null, condition);
+    }
+
+    public long update(String query, Document data, Document condition) {
+
+        Document params = new Document();
+        if (data != null) {
+            params.put("data", data);
+        }
+        if (condition != null) {
+            params.put("condition", condition);
+        }
+
+        String sql = this.getSql(query, params);
+        PreparedStatement ps = null;
+        SQLException exception = null;
+
+        try {
+            ps = this.db.prepareStatement(sql);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            exception = e;
+            throw new RuntimeException(exception);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                if (exception != null) {
+                    exception.addSuppressed(e);
+                }
+            }
+        }
     }
 
     private String getSql(String sql, Document params) {

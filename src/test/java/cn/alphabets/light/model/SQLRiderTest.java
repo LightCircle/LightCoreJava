@@ -4,6 +4,7 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.entity.ModBoard;
+import cn.alphabets.light.entity.ModTest;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import cn.alphabets.light.model.datarider.Rider;
@@ -30,7 +31,7 @@ public class SQLRiderTest {
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
-    @Test
+//    @Test
     public void testCall() {
 
         ModBoard board = CacheManager.INSTANCE.getBoards()
@@ -42,4 +43,15 @@ public class SQLRiderTest {
         handler.params.condition(new Document("name", "test"));
         SQLRider.call(handler, Rider.getEntityType(board.getClass_(), board.getKind()), board.getAction());
     }
+
+    @Test
+    public void testAdd() {
+
+        Document data = new Document();
+        data.put("name", "lalala");
+
+        handler.params.data(data);
+        SQLRider.add(handler, ModTest.class);
+    }
+
 }

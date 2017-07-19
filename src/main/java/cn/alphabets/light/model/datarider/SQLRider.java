@@ -114,6 +114,7 @@ public class SQLRider {
             return board.getScript();
         }
 
+        // SELECT
         List<String> selects = new ArrayList<>();
         board.getSelects().forEach(item -> {
             if (item.getSelect()) {
@@ -121,18 +122,19 @@ public class SQLRider {
             }
         });
 
+        // SORT
         List<String> sorts = new ArrayList<>();
         board.getSorts().stream()
                 .sorted(Comparator.comparingInt(item -> Integer.parseInt(item.getOrder())))
                 .forEach(item ->
                         sorts.add(String.format("`%s`.`%s` %s", board.getSchema(), item.getKey(), item.getOrder())));
 
+        // WHERE
+        List<List<String>> where = new ArrayList<>();
 
         Map<String, List<ModBoard.Filters>> group = board.getFilters()
                 .stream()
                 .collect(Collectors.groupingBy(ModBoard.Filters::getGroup));
-
-        List<List<String>> where = new ArrayList<>();
 
         group.values().forEach(item -> {
             List<String> and = new ArrayList<>();
@@ -148,6 +150,18 @@ public class SQLRider {
             return selectStatement(params, handler.getDomain(), board.getSchema(), null, where, null);
         }
 
+        if (board.getType() == Constant.API_TYPE_ADD) {
+            return insertStatement(params, handler.getDomain(), board.getSchema());
+        }
+
+        if (board.getType() == Constant.API_TYPE_UPDATE) {
+            return updateStatement(params, handler.getDomain(), board.getSchema(), where);
+        }
+
+        if (board.getType() == Constant.API_TYPE_REMOVE) {
+            return deleteStatement(params, handler.getDomain(), board.getSchema(), where);
+        }
+
         return "";
     }
 
@@ -159,6 +173,7 @@ public class SQLRider {
 
         builder.append("SELECT ");
 
+        // 没有指定select项目，则通过count(1)获取件数
         if (selects != null && selects.size() > 0) {
             builder.append(StringUtils.join(selects, ","));
         } else {
@@ -166,6 +181,21 @@ public class SQLRider {
         }
 
         builder.append(String.format(" FROM `%s`.`%s`", db, schema));
+        builder.append(getWhere(params, schema, where));
+
+
+        // 排序
+        if (sorts != null && sorts.size() > 0) {
+            builder.append(" ORDER BY ");
+            builder.append(StringUtils.join(sorts, ","));
+        }
+
+        return builder.toString();
+    }
+
+    private static String getWhere(Params params, String schema, List<List<String>> where) {
+
+        StringBuilder builder = new StringBuilder();
 
         // 没有指定where，尝试使用_id检索
         if (where == null || where.size() <= 0) {
@@ -183,6 +213,7 @@ public class SQLRider {
             builder.append(StringUtils.join(list, " AND "));
         }
 
+        // 没有OR条件，所有项目用 AND 连接
         if (where != null && where.size() == 1) {
             builder.append(" WHERE ");
 
@@ -193,6 +224,7 @@ public class SQLRider {
             builder.append(StringUtils.join(list, " AND "));
         }
 
+        // 有RO条件，所有项目先用AND连接，然后再用OR连接
         if (where != null && where.size() > 1) {
             List<String> or = where.stream()
                     .map(item -> {
@@ -206,40 +238,85 @@ public class SQLRider {
             builder.append(StringUtils.join(or, " OR "));
         }
 
-        if (sorts != null && sorts.size() > 0) {
-            builder.append(" ORDER BY ");
-            builder.append(StringUtils.join(sorts, ","));
-        }
+        return builder.toString();
+    }
+
+    private static String insertStatement(Params params, String db, String schema) {
+
+        ModStructure structure = getStruct(schema);
+        Map<String, Map<String, String>> items = ((Map<String, Map<String, String>>) structure.getItems());
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("INSERT INTO `%s`.`%s` (", db, schema));
+
+        // INSERT语句 字段定义 （只做成字段值在data里存在，并且字段不等于_id的项目）
+        final List<String> column = new ArrayList<>();
+        column.add("`createAt`");
+        column.add("`createBy`");
+        column.add("`updateAt`");
+        column.add("`updateBy`");
+        column.add("`valid`");
+
+        items.keySet().stream()
+                .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
+                .forEach(item -> column.add(String.format("`%s`", item)));
+        builder.append((StringUtils.join(column, ",")));
+
+        builder.append(") VALUES (");
+
+        // INSERT语句 值定义
+        final List<String> value = new ArrayList<>();
+        items.keySet().stream()
+                .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
+                .forEach(item -> value.add(String.format("<%%= data.%s %%>", item)));
+
+        builder.append(StringUtils.join(value, ","));
+        builder.append(")");
 
         return builder.toString();
     }
 
-    private String insertStatement(String db, String schema) {
+    private static String updateStatement(Params params, String db, String schema, List<List<String>> where) {
+
+        ModStructure structure = getStruct(schema);
+        Map<String, Map<String, String>> items = ((Map<String, Map<String, String>>) structure.getItems());
 
         StringBuilder builder = new StringBuilder();
+        builder.append(String.format("UPDATE `%s`.`%s` SET ", db, schema));
 
-        builder.append(String.format("INSERT INTO `%s`.`%s` (", db, schema));
-        builder.append(") VALUES (");
-        builder.append(")");
+        // UPDATE语句 字段定义 （只做成字段值在data里存在，并且字段不等于_id的项目）
+        final List<String> column = new ArrayList<>();
+        column.add("`updateAt` = <%= data.updateAt %>");
+        column.add("`updateBy` = <%= data.updateBy %>");
 
+        items.keySet().stream()
+                .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
+                .forEach(item -> column.add(String.format("`%s` = <%%= data.%s %%>", item, item)));
+        builder.append((StringUtils.join(column, ",")));
+
+        builder.append(getWhere(params, schema, where));
         return builder.toString();
+    }
+
+    private static String deleteStatement(Params params, String db, String schema, List<List<String>> where) {
+        return String.format("DELETE FROM `%s`.`%s` ", db, schema) + getWhere(params, schema, where);
     }
 
     private static String compiler(String key, String operator, String value) {
 
         switch (operator) {
             case "$eq":
-                return String.format("`%s` = %s", key, value);
+                return String.format("`%s` = condition.%s", key, value);
             case "$ne":
-                return String.format("`%s` <> %s", key, value);
+                return String.format("`%s` <> condition.%s", key, value);
             case "$gt":
-                return String.format("`%s`> %s", key, value);
+                return String.format("`%s`> condition.%s", key, value);
             case "$gte":
-                return String.format("`%s` >= %s", key, value);
+                return String.format("`%s` >= condition.%s", key, value);
             case "$lt":
-                return String.format("`%s` < %s", key, value);
+                return String.format("`%s` < condition.%s", key, value);
             case "$lte":
-                return String.format("`%s` <= %s", key, value);
+                return String.format("`%s` <= condition.%s", key, value);
         }
 
         throw new RuntimeException("Core has not yet supported the operator.");

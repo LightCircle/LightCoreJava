@@ -1,5 +1,6 @@
 package cn.alphabets.light.db.mysql;
 
+import cn.alphabets.light.Constant;
 import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
@@ -9,7 +10,9 @@ import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +63,27 @@ public class Controller {
 
         Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
         return new Singular(ModCommon.fromDocument(document, type));
+    }
+
+
+    public <T extends ModCommon> Singular<T> add() {
+        logger.debug("[ADD] DB params : " + params.toString());
+
+        Document document = params.getData();
+        document.put("createAt", new Date());
+        document.put("createBy", this.uid);
+        document.put("updateAt", new Date());
+        document.put("updateBy", this.uid);
+        document.put("valid", Constant.VALID);
+
+        Document confirmed = Entity.fromDocument(
+                document,
+                params.getClazz(),
+                this.handler.tz()).toDocument();
+
+        // TODO: 返回插入的项目
+        // SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'name' AND table_schema = 'schema'
+        return new Singular(this.model.add(params.getScript(), confirmed));
     }
 
 }
