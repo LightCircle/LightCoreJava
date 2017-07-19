@@ -1,5 +1,7 @@
 package cn.alphabets.light.model;
 
+import cn.alphabets.light.Constant;
+import cn.alphabets.light.Environment;
 import cn.alphabets.light.http.Context;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bson.Document;
 
 import java.beans.IntrospectionException;
@@ -225,4 +228,49 @@ public class Entity implements Serializable {
         }
         return null;
     }
+
+    /**
+     * 获取Entity类的类型，通过反射生成具体表名对应的类型
+     * - 系统表的Entity在 cn.alphabets.light.entity 包下
+     * - 而用户表的Entity在 用户包名.entity 下
+     *
+     * @param structure 表名称
+     * @return 类型
+     */
+    @JsonIgnore
+    public static Class getEntityType(String structure) {
+        String className = Constant.MODEL_PREFIX + WordUtils.capitalize(structure);
+
+        // 如果前缀是系统表，那么包名称使用 cn.alphabets.light，否则使用用户定义的包名
+        String packageName = system.contains(structure)
+                ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
+                : Environment.instance().getPackages() + ".entity";
+
+        try {
+            return Class.forName(packageName + "." + className);
+        } catch (ClassNotFoundException e) {
+            try {
+                return Class.forName(Constant.DEFAULT_PACKAGE_NAME + ".entity." + className);
+            } catch (ClassNotFoundException e1) {
+                throw new RuntimeException(e1);
+            }
+        }
+    }
+
+    @JsonIgnore
+    public static List<String> system = Arrays.asList(
+            Constant.SYSTEM_DB_BOARD,
+            Constant.SYSTEM_DB_CONFIG,
+            Constant.SYSTEM_DB_VALIDATOR,
+            Constant.SYSTEM_DB_I18N,
+            Constant.SYSTEM_DB_STRUCTURE,
+            Constant.SYSTEM_DB_BOARD,
+            Constant.SYSTEM_DB_ROUTE,
+            Constant.SYSTEM_DB_TENANT,
+            Constant.SYSTEM_DB_FILE,
+            Constant.SYSTEM_DB_ETL,
+            Constant.SYSTEM_DB_SETTING,
+            Constant.SYSTEM_DB_FUNCTION,
+            Constant.SYSTEM_DB_CODE
+    );
 }

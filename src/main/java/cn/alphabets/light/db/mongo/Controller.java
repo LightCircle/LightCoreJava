@@ -68,7 +68,7 @@ public class Controller {
                 params.getSkip(),
                 params.getLimit());
 
-        Class<ModCommon> type = Model.getEntityType(this.params.getTable());
+        Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
         return new Plural<>(this.count(), items
                 .stream()
                 .map(document -> (T) ModCommon.fromDocument(document, type))
@@ -84,7 +84,7 @@ public class Controller {
             throw DataRiderException.ParameterUnsatisfied("Get condition can not be empty.");
         }
 
-        Class<ModCommon> type = Model.getEntityType(this.params.getTable());
+        Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
         return new Singular(ModCommon.fromDocument(this.model.get(condition, params.getSelect()), type));
     }
 
@@ -132,7 +132,7 @@ public class Controller {
                 this.handler.tz()).toDocument();
 
         confirmed = this.model.add(confirmed);
-        return new Singular(ModCommon.fromDocument(confirmed, Model.getEntityType(this.params.getTable())));
+        return new Singular(ModCommon.fromDocument(confirmed, Entity.getEntityType(this.params.getTable())));
     }
 
 
@@ -157,7 +157,7 @@ public class Controller {
             return new Singular<>(modifiedCount);
         }
 
-        Class<ModCommon> type = Model.getEntityType(this.params.getTable());
+        Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
         return new Singular(ModCommon.fromDocument(this.model.get(condition, params.getSelect()), type));
     }
 

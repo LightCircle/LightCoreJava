@@ -6,10 +6,15 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.lang.model.type.TypeKind.INT;
 
 /**
  * Model
@@ -23,32 +28,52 @@ public class Model {
     private Model() {
     }
 
-    public Model(String domain, String code) throws SQLException {
-        // TODO: 暂不支持domain和code
-        this.db = cn.alphabets.light.db.mysql.Connection.instance(Environment.instance());
+    public Model(String domain, String code) {
+        try {
+            // TODO: 暂不支持domain和code
+            this.db = cn.alphabets.light.db.mysql.Connection.instance(Environment.instance());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-
-    public List<Document> list(String query, Document params) throws SQLException {
+    public List<Document> list(String query, Document params) {
 
         PreparedStatement ps = null;
+        SQLException exception = null;
         ResultSet rs = null;
         String sql = this.getSql(query, params);
-
-        logger.debug(sql);
 
         try {
             ps = this.db.prepareStatement(sql);
             rs = ps.executeQuery();
             return getEntitiesFromResultSet(rs);
+        } catch (SQLException e) {
+            exception = e;
+            throw new RuntimeException(exception);
         } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ps != null) {
-                ps.close();
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                if (exception != null) {
+                    exception.addSuppressed(e);
+                }
             }
         }
+    }
+
+    public Document get(String query, Document params) {
+        List<Document> documents = this.list(query, params);
+        if (documents != null && documents.size() > 0) {
+            return documents.get(0);
+        }
+
+        return null;
     }
 
     private String getSql(String sql, Document params) {
@@ -73,9 +98,35 @@ public class Model {
         for (int i = 1; i <= meta.getColumnCount(); ++i) {
 
             String columnName = meta.getColumnName(i);
-            document.put(columnName, rs.getObject(i));
+            System.out.println(columnName);
+            Object columnValue = this.parseByMetaType(
+                    columnName,
+                    meta.getColumnTypeName(i),
+                    rs.getObject(i));
 
+            document.put(columnName, columnValue);
         }
         return document;
+    }
+
+    private Object parseByMetaType(String name, String type, Object value) {
+
+        if (name.equals("_id")) {
+            String val = "000000000000000000000000" + value;
+            return val.substring(val.length() - 24);
+        }
+
+        switch (type) {
+            case "DECIMAL":
+                return ((BigDecimal)value).longValue();
+            case "DATETIME":
+                return new java.util.Date(((Timestamp)value).getTime());
+            case "BIGINT":
+            case "VARCHAR":
+            case "INT":
+                return value;
+        }
+
+        return value;
     }
 }

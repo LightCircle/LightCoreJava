@@ -5,6 +5,7 @@ import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
@@ -112,7 +113,7 @@ class OptionsBuilder {
         select.add(optionKey);
 
         // 检索
-        Model model = new Model(handler.getDomain(), handler.getCode(), this.schema, Model.getEntityType(this.schema));
+        Model model = new Model(handler.getDomain(), handler.getCode(), this.schema, Entity.getEntityType(this.schema));
         model.list(condition, select).forEach(item -> {
             option.put(item.get(optionKey).toString(), item);
         });

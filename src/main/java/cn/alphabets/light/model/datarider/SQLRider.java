@@ -27,13 +27,13 @@ import static cn.alphabets.light.Constant.MODEL_PREFIX;
 import static cn.alphabets.light.Constant.VALID;
 
 /**
- * DataRider
+ * SQLRider
  * <p>
  * Created by lilin on 2016/11/12.
  */
-public class Rider {
+public class SQLRider {
 
-    private static final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(Rider.class);
+    private static final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(SQLRider.class);
     private static final List<String> METHOD = Arrays.asList(
             "", "add", "update", "remove", "list", "search", "get", "count"
     );
@@ -290,7 +290,7 @@ public class Rider {
     }
 
     public static <T extends ModCommon> Plural<T> list(Context handler, Class clazz, Params params) {
-        return (Plural<T>) Rider.call(handler, clazz, "list", params);
+        return (Plural<T>) SQLRider.call(handler, clazz, "list", params);
     }
 
     public static <T extends ModCommon> Singular<T> add(Context handler, Class clazz) {
@@ -298,7 +298,7 @@ public class Rider {
     }
 
     public static <T extends ModCommon> Singular<T> add(Context handler, Class clazz, Params params) {
-        return (Singular<T>) Rider.call(handler, clazz, "add", params);
+        return (Singular<T>) SQLRider.call(handler, clazz, "add", params);
     }
 
     public static <T extends ModCommon> Singular<T> get(Context handler, Class clazz) {
@@ -306,7 +306,7 @@ public class Rider {
     }
 
     public static <T extends ModCommon> Singular<T> get(Context handler, Class clazz, Params params) {
-        return (Singular<T>) Rider.call(handler, clazz, "get", params);
+        return (Singular<T>) SQLRider.call(handler, clazz, "get", params);
     }
 
     public static Long remove(Context handler, Class clazz) {
@@ -314,7 +314,7 @@ public class Rider {
     }
 
     public static Long remove(Context handler, Class clazz, Params params) {
-        return (Long) Rider.call(handler, clazz, "remove", params);
+        return (Long) SQLRider.call(handler, clazz, "remove", params);
     }
 
     public static <T extends ModCommon> Singular<T> update(Context handler, Class clazz) {
@@ -322,7 +322,7 @@ public class Rider {
     }
 
     public static <T extends ModCommon> Singular<T> update(Context handler, Class clazz, Params params) {
-        return (Singular<T>) Rider.call(handler, clazz, "update", params);
+        return (Singular<T>) SQLRider.call(handler, clazz, "update", params);
     }
 
     public static Long count(Context handler, Class clazz) {
@@ -330,7 +330,7 @@ public class Rider {
     }
 
     public static Long count(Context handler, Class clazz, Params params) {
-        return (Long) Rider.call(handler, clazz, "count", params);
+        return (Long) SQLRider.call(handler, clazz, "count", params);
     }
 
     public static <T extends ModCommon> Plural<T> search(Context handler, Class clazz) {

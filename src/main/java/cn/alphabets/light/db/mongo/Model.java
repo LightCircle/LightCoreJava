@@ -6,6 +6,7 @@ import cn.alphabets.light.Helper;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.entity.ModStructure;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -94,7 +95,7 @@ public class Model {
             if (Constant.SYSTEM_DB.equals(domain)) {
                 // light库时，不加前缀
                 this.code = plural;
-            } else if (system.contains(table)) {
+            } else if (Entity.system.contains(table)) {
                 // 使用系统表时，用light前缀
                 this.code = Constant.SYSTEM_DB_PREFIX + "." + plural;
             } else if (!StringUtils.isEmpty(code)) {
@@ -298,7 +299,6 @@ public class Model {
         return this.readStreamFromGrid(new ObjectId(fileId), outputStream);
     }
 
-
     public ByteArrayOutputStream readStreamFromGrid(ObjectId fileId) {
 
         GridFSBucket gridFSBucket = GridFSBuckets.create(this.db);
@@ -342,59 +342,6 @@ public class Model {
     public void deleteFromGrid(ObjectId fileId) {
         GridFSBuckets.create(this.db).delete(fileId);
     }
-
-
-    /**
-     * 获取Entity类的类型，通过反射生成具体表名对应的类型
-     * - 系统表的Entity在 cn.alphabets.light.entity 包下
-     * - 而用户表的Entity在 用户包名.entity 下
-     *
-     * @param structure 表名称
-     * @return 类型
-     */
-    public static Class getEntityType(String structure) {
-        String className = Constant.MODEL_PREFIX + WordUtils.capitalize(structure);
-
-        // 如果前缀是系统表，那么包名称使用 cn.alphabets.light，否则使用用户定义的包名
-        String packageName = system.contains(structure)
-                ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
-                : Environment.instance().getPackages() + ".entity";
-
-        try {
-            return Class.forName(packageName + "." + className);
-        } catch (ClassNotFoundException e) {
-            try {
-                return Class.forName(Constant.DEFAULT_PACKAGE_NAME + ".entity." + className);
-            } catch (ClassNotFoundException e1) {
-                throw new RuntimeException(e1);
-            }
-        }
-    }
-
-    private Class getEntityType() {
-
-        if (this.clazz != null) {
-            return this.clazz;
-        }
-
-        return getEntityType(this.name);
-    }
-
-    public static List<String> system = Arrays.asList(
-            Constant.SYSTEM_DB_BOARD,
-            Constant.SYSTEM_DB_CONFIG,
-            Constant.SYSTEM_DB_VALIDATOR,
-            Constant.SYSTEM_DB_I18N,
-            Constant.SYSTEM_DB_STRUCTURE,
-            Constant.SYSTEM_DB_BOARD,
-            Constant.SYSTEM_DB_ROUTE,
-            Constant.SYSTEM_DB_TENANT,
-            Constant.SYSTEM_DB_FILE,
-            Constant.SYSTEM_DB_ETL,
-            Constant.SYSTEM_DB_SETTING,
-            Constant.SYSTEM_DB_FUNCTION,
-            Constant.SYSTEM_DB_CODE
-    );
 
     public void dropCollection() {
         this.db.listCollectionNames().forEach((Block<String>) name -> {

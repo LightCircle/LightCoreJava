@@ -33,6 +33,7 @@ public class Params {
     private int limit;
     private ObjectId _id;
     private String table;
+    private String script;
     private Class<? extends ModCommon> clazz;
 
     public Params() {
@@ -175,6 +176,14 @@ public class Params {
         this.table = table;
     }
 
+    public String getScript() {
+        return script;
+    }
+
+    public void setScript(String script) {
+        this.script = script;
+    }
+
     public Class<? extends ModCommon> getClazz() {
         return clazz;
     }
@@ -286,6 +295,7 @@ public class Params {
                 "\n\tdata = " + (data == null ? "null" : ((Document) data).toJson()) +
                 "\n\tskip = " + skip +
                 "\n\tlimit = " + limit +
+                "\n\tlimit = " + script +
                 "\n}";
     }
 
