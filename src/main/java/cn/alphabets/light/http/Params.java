@@ -118,15 +118,15 @@ public class Params {
             Params params, Document condition, Object data, Document select, Document sort, String table, Class clazz){
 
         Params newParams = new Params();
-        params.condition = condition;
-        params.data = data;
-        params.select = select;
-        params.sort = sort;
-        params.skip = params.getSkip();
-        params.limit = params.getLimit();
-        params.files = params.getFiles();
-        params.table = table;
-        params.clazz = clazz;
+        newParams.condition = condition;
+        newParams.data = data;
+        newParams.select = select;
+        newParams.sort = sort;
+        newParams.skip = params.getSkip();
+        newParams.limit = params.getLimit();
+        newParams.files = params.getFiles();
+        newParams.table = table;
+        newParams.clazz = clazz;
         return newParams;
     }
 
