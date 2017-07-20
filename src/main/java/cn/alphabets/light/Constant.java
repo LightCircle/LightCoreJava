@@ -89,4 +89,9 @@ public class Constant {
     public static final long API_TYPE_SEARCH = 5L;
     public static final long API_TYPE_GET = 6L;
     public static final long API_TYPE_COUNT = 7L;
+
+    public static final long STRUCT_KIND_USER = 0;                // 用户定义表
+    public static final long STRUCT_KIND_SYSTEM = 2;              // 系统表
+    public static final long STRUCT_KIND_MYSQL_USER = 4;          // RDB 用户定义表
+    public static final long STRUCT_KIND_MYSQL_SYSTEM = 6;        // RDB 系统表
 }

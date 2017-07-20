@@ -1,4 +1,4 @@
-package cn.alphabets.light.model;
+package cn.alphabets.light.model.datarider;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
@@ -8,6 +8,7 @@ import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModTest;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
+import cn.alphabets.light.model.Singular;
 import cn.alphabets.light.model.datarider.Rider;
 import cn.alphabets.light.model.datarider.SQLRider;
 import org.bson.Document;
@@ -25,7 +26,7 @@ public class SQLRiderTest {
 
     private Context handler;
 
-    @Before
+    //@Before
     public void setUp() {
         Environment.instance().args.local = true;
         CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
@@ -75,7 +76,7 @@ public class SQLRiderTest {
         SQLRider.remove(handler, ModTest.class);
     }
 
-    //@Test
+    @Test
     public void testGet() {
         handler.params.id("2");
         Singular<ModTest> test = SQLRider.get(handler, ModTest.class);

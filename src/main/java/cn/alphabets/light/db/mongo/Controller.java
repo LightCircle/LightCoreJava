@@ -60,7 +60,13 @@ public class Controller {
 
 
     public <T extends ModCommon> Plural<T> list() {
+
+        if (!params.getCondition().containsKey("valid")) {
+            params.getCondition().put("valid", Constant.VALID);
+        }
+
         logger.debug("[LIST] DB params : " + params.toString());
+
         List<Document> items = this.model.list(
                 params.getCondition(),
                 params.getSelect(),
