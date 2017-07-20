@@ -76,9 +76,9 @@ public class SQLRiderTest {
         SQLRider.remove(handler, ModTest.class);
     }
 
-    @Test
+    //@Test
     public void testGet() {
-        handler.params.id("2");
+        handler.params.id("0000002");
         Singular<ModTest> test = SQLRider.get(handler, ModTest.class);
         System.out.println(test.item);
     }

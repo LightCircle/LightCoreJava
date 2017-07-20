@@ -151,7 +151,12 @@ public abstract class Rider {
     }
 
     static ModStructure getStruct(Class clazz) {
-        return getStruct(clazz.getSimpleName().toLowerCase().substring(3));
+
+        String name = clazz.getSimpleName();
+        name = name.substring(3);
+        name = name.substring(0, 1).toLowerCase() + name.substring(1);
+
+        return getStruct(name);
     }
 
     /**
