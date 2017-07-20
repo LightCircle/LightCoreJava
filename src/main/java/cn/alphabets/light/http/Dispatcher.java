@@ -88,6 +88,10 @@ public class Dispatcher {
 
                 Method method = resolve(className, actionName);
                 if (method == null) {
+                    method = resolve(className, actionName, Constant.DEFAULT_PACKAGE_NAME + ".model");
+                }
+
+                if (method == null) {
                     throw new MethodNotFoundException("Dispatch method not found.");
                 }
 
