@@ -31,7 +31,6 @@ public class Params {
     private Object data;
     private int skip;
     private int limit;
-    private ObjectId _id;
     private String table;
     private String script;
     private Class<? extends ModCommon> clazz;
@@ -112,27 +111,9 @@ public class Params {
      * @param data      data
      * @param select    select
      * @param sort      sort
-     * @param _id       _id
-     * @param skip      skip
-     * @param limit     limit
-     * @param files     files
      * @param table     table
      * @param clazz     clazz
      */
-    public Params(Document condition, Object data, Document select, Document sort, ObjectId _id, int skip, int limit,
-           List<RequestFile> files, String table, Class clazz) {
-        this.condition = condition;
-        this.data = data;
-        this.select = select;
-        this.sort = sort;
-        this._id = _id;
-        this.skip = skip;
-        this.limit = limit;
-        this.files = files;
-        this.table = table;
-        this.clazz = clazz;
-    }
-
     public static Params clone(
             Params params, Document condition, Object data, Document select, Document sort, String table, Class clazz){
 
@@ -141,7 +122,6 @@ public class Params {
         params.data = data;
         params.select = select;
         params.sort = sort;
-        params._id = params.get_id();
         params.skip = params.getSkip();
         params.limit = params.getLimit();
         params.files = params.getFiles();
@@ -156,7 +136,6 @@ public class Params {
         newParams.script = script;
         newParams.condition = params.getCondition();
         newParams.data = params.getData();
-        newParams._id = params.get_id();
         newParams.skip = params.getSkip();
         newParams.limit = params.getLimit();
         newParams.files = params.getFiles();
@@ -232,31 +211,38 @@ public class Params {
         this.json.put(key, val);
     }
 
+    // 允许自定义的字符串类型的_id
     public Params id(String id) {
-        return this.id(new ObjectId(id));
-    }
-
-    public Params id(ObjectId id) {
-        this._id = id;
+        if (ObjectId.isValid(id)) {
+            return this.id(new ObjectId(id));
+        }
 
         if (this.condition == null) {
             this.condition = new Document();
         }
-        this.condition.put("_id", this._id);
+        this.condition.put("_id", id);
+        return this;
+    }
+
+    public Params id(ObjectId id) {
+        if (this.condition == null) {
+            this.condition = new Document();
+        }
+        this.condition.put("_id", id);
 
         return this;
     }
 
-    public ObjectId get_id() {
-        return _id;
-    }
-
     public Document getId() {
-        if (this._id == null) {
-            return null;
+        if (this.condition == null) {
+            this.condition = new Document();
         }
 
-        return new Document().append("_id", this._id);
+        if (this.condition.containsKey("_id")) {
+            return new Document().append("_id", this.condition.get("_id"));
+        }
+
+        return null;
     }
 
     public Document getCondition() {

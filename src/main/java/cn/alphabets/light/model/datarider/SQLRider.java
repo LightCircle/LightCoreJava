@@ -49,8 +49,7 @@ public class SQLRider {
             throw DataRiderException.BoardNotFound("unknown api");
         }
 
-        Object result = call(handler, clazz, board, params);
-        return OptionsBuilder.fetchOptions(handler, result, board);
+        return call(handler, clazz, board, params);
     }
 
 
@@ -77,11 +76,7 @@ public class SQLRider {
     }
 
     public static Params adaptToBoard(Context handler, Class clazz, ModBoard board, Params params) {
-
         String script = buildScript(handler, board, params);
-
-        System.out.println(script);
-
         return Params.clone(params, script, board.getSchema(), clazz);
     }
 
@@ -138,7 +133,7 @@ public class SQLRider {
 
         group.values().forEach(item -> {
             List<String> and = new ArrayList<>();
-            item.forEach(i -> and.add(compiler(i.getKey(), i.getOperator(), i.getParameter())));
+            item.forEach(i -> and.add(compiler(board.getSchema(), i.getKey(), i.getOperator(), i.getParameter())));
             where.add(and);
         });
 
@@ -177,7 +172,7 @@ public class SQLRider {
         if (selects != null && selects.size() > 0) {
             builder.append(StringUtils.join(selects, ","));
         } else {
-            builder.append(" COUNT(1) ");
+            builder.append(" COUNT(1) AS COUNT ");
         }
 
         builder.append(String.format(" FROM `%s`.`%s`", db, schema));
@@ -207,7 +202,7 @@ public class SQLRider {
 
             // 添加_id条件
             if (params.getId() != null) {
-                list.add(String.format("`%s`.`_id` = <%%= _id %%>", schema));
+                list.add(String.format("`%s`.`_id` = <%%= condition._id %%>", schema));
             }
 
             builder.append(StringUtils.join(list, " AND "));
@@ -245,6 +240,7 @@ public class SQLRider {
 
         ModStructure structure = getStruct(schema);
         Map<String, Map<String, String>> items = ((Map<String, Map<String, String>>) structure.getItems());
+        Set<String> keys = items.keySet();
 
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("INSERT INTO `%s`.`%s` (", db, schema));
@@ -257,7 +253,7 @@ public class SQLRider {
         column.add("`updateBy`");
         column.add("`valid`");
 
-        items.keySet().stream()
+        keys.stream()
                 .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
                 .forEach(item -> column.add(String.format("`%s`", item)));
         builder.append((StringUtils.join(column, ",")));
@@ -266,7 +262,13 @@ public class SQLRider {
 
         // INSERT语句 值定义
         final List<String> value = new ArrayList<>();
-        items.keySet().stream()
+        value.add("<%= data.createAt %>");
+        value.add("<%= data.createBy %>");
+        value.add("<%= data.updateAt %>");
+        value.add("<%= data.updateBy %>");
+        value.add("<%= data.valid %>");
+
+        keys.stream()
                 .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
                 .forEach(item -> value.add(String.format("<%%= data.%s %%>", item)));
 
@@ -278,9 +280,6 @@ public class SQLRider {
 
     private static String updateStatement(Params params, String db, String schema, List<List<String>> where) {
 
-        ModStructure structure = getStruct(schema);
-        Map<String, Map<String, String>> items = ((Map<String, Map<String, String>>) structure.getItems());
-
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("UPDATE `%s`.`%s` SET ", db, schema));
 
@@ -289,9 +288,7 @@ public class SQLRider {
         column.add("`updateAt` = <%= data.updateAt %>");
         column.add("`updateBy` = <%= data.updateBy %>");
 
-        items.keySet().stream()
-                .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
-                .forEach(item -> column.add(String.format("`%s` = <%%= data.%s %%>", item, item)));
+        params.getData().keySet().forEach(item -> column.add(String.format("`%s` = <%%= data.%s %%>", item, item)));
         builder.append((StringUtils.join(column, ",")));
 
         builder.append(getWhere(params, schema, where));
@@ -299,24 +296,39 @@ public class SQLRider {
     }
 
     private static String deleteStatement(Params params, String db, String schema, List<List<String>> where) {
-        return String.format("DELETE FROM `%s`.`%s` ", db, schema) + getWhere(params, schema, where);
+
+        // return String.format("DELETE FROM `%s`.`%s` ", db, schema) + getWhere(params, schema, where);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("UPDATE `%s`.`%s` SET ", db, schema));
+
+        // UPDATE语句 字段定义 （只做成字段值在data里存在，并且字段不等于_id的项目）
+        final List<String> column = Arrays.asList(
+                "`updateAt` = <%= data.updateAt %>",
+                "`updateBy` = <%= data.updateBy %>",
+                "`valid` = <%= data.valid %>"
+        );
+
+        builder.append((StringUtils.join(column, ",")));
+        builder.append(getWhere(params, schema, where));
+        return builder.toString();
     }
 
-    private static String compiler(String key, String operator, String value) {
+    private static String compiler(String schema, String key, String operator, String value) {
 
         switch (operator) {
             case "$eq":
-                return String.format("`%s` = condition.%s", key, value);
+                return String.format("`%s`.`%s` = <%%= condition.%s %%>", schema, key, value);
             case "$ne":
-                return String.format("`%s` <> condition.%s", key, value);
+                return String.format("`%s`.`%s` <> <%%= condition.%s %%>", schema, key, value);
             case "$gt":
-                return String.format("`%s`> condition.%s", key, value);
+                return String.format("`%s`.`%s`> <%%= condition.%s %%>", schema, key, value);
             case "$gte":
-                return String.format("`%s` >= condition.%s", key, value);
+                return String.format("`%s`.`%s` >= <%%= condition.%s %%>", schema, key, value);
             case "$lt":
-                return String.format("`%s` < condition.%s", key, value);
+                return String.format("`%s`.`%s` < <%%= condition.%s %%>", schema, key, value);
             case "$lte":
-                return String.format("`%s` <= condition.%s", key, value);
+                return String.format("`%s`.`%s` <= <%%= condition.%s %%>", schema, key, value);
         }
 
         throw new RuntimeException("Core has not yet supported the operator.");

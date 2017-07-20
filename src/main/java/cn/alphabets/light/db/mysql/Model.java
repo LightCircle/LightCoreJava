@@ -7,14 +7,12 @@ import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.*;
-import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import static javax.lang.model.type.TypeKind.INT;
 
 /**
  * Model
@@ -44,6 +42,8 @@ public class Model {
         PreparedStatement ps = null;
         SQLException exception = null;
         ResultSet rs = null;
+
+        logger.debug(sql);
 
         try {
             ps = this.db.prepareStatement(sql);
@@ -80,7 +80,7 @@ public class Model {
     public long count(String query, Document params) {
         List<Document> documents = this.list(query, params);
         if (documents != null && documents.size() > 0) {
-            return documents.get(0).getInteger(0);
+            return documents.get(0).getLong("COUNT");
         }
 
         return 0;
@@ -98,15 +98,17 @@ public class Model {
 
         Document params = new Document();
         if (data != null) {
-            params.put("data", data);
+            params.put("data", this.parseByValueType(data));
         }
         if (condition != null) {
-            params.put("condition", condition);
+            params.put("condition", this.parseByValueType(condition));
         }
 
         String sql = this.getSql(query, params);
         PreparedStatement ps = null;
         SQLException exception = null;
+
+        logger.debug(sql);
 
         try {
             ps = this.db.prepareStatement(sql);
@@ -149,7 +151,6 @@ public class Model {
         for (int i = 1; i <= meta.getColumnCount(); ++i) {
 
             String columnName = meta.getColumnName(i);
-            System.out.println(columnName);
             Object columnValue = this.parseByMetaType(
                     columnName,
                     meta.getColumnTypeName(i),
@@ -160,6 +161,27 @@ public class Model {
         return document;
     }
 
+
+    private Document parseByValueType(Document document) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        Document values = new Document();
+        document.forEach((key, val) -> {
+            if (val == null) {
+                values.put(key, "null");
+            } else if (val instanceof Date) {
+                values.put(key, String.format("'%s'", dateFormat.format((Date) val)));
+            } else if (val instanceof String) {
+                values.put(key, String.format("'%s'", val));
+            } else {
+                values.put(key, val);
+            }
+        });
+        return values;
+    }
+
+    // 对数据库检索出的数据进行类型转换
     private Object parseByMetaType(String name, String type, Object value) {
 
         if (name.equals("_id")) {

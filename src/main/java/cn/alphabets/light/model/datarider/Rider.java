@@ -102,8 +102,7 @@ public class Rider {
             }
         }
 
-        return new Params(condition, data, select, sort,
-                params.get_id(), params.getSkip(), params.getLimit(), params.getFiles(), board.getSchema(), clazz);
+        return Params.clone(params, condition, data, select, sort, board.getSchema(), clazz);
     }
 
     private static Document buildCondition(Context handler, ModBoard board, ModStructure structure, Params params) {

@@ -86,4 +86,44 @@ public class Controller {
         return new Singular(this.model.add(params.getScript(), confirmed));
     }
 
+    public <T extends ModCommon> Singular<T> update() {
+        logger.debug("[UPDATE] DB params : " + params.toString());
+
+        Document document = params.getData();
+        document.put("updateAt", new Date());
+        document.put("updateBy", this.uid);
+
+        Document confirmed = Entity.fromDocument(
+                document,
+                params.getClazz(),
+                this.handler.tz()).toDocument();
+
+        Document condition = params.getCondition();
+        if (condition == null || condition.size() == 0) {
+            throw DataRiderException.ParameterUnsatisfied("Update condition can not be empty.");
+        }
+
+        return new Singular(this.model.update(params.getScript(), confirmed, condition));
+    }
+
+    public Long remove() {
+        logger.debug("[REMOVE] DB params : " + params.toString());
+
+        Document document = new Document();
+        document.put("updateAt", new Date());
+        document.put("updateBy", this.uid);
+        document.put("valid", Constant.INVALID);
+
+        Document condition = params.getCondition();
+        if (condition == null || condition.size() == 0) {
+            throw DataRiderException.ParameterUnsatisfied("Remove condition can not be empty.");
+        }
+
+        return this.model.update(params.getScript(), document, condition);
+    }
+
+    public Long count() {
+        return this.model.count(params.getScript(), params.getCondition());
+    }
+
 }

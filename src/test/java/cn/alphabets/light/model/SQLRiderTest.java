@@ -3,6 +3,7 @@ package cn.alphabets.light.model;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.cache.CacheManager;
+import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModTest;
 import cn.alphabets.light.http.Context;
@@ -28,10 +29,11 @@ public class SQLRiderTest {
     public void setUp() {
         Environment.instance().args.local = true;
         CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
+        ConfigManager.INSTANCE.setUp();
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
-//    @Test
+    //@Test
     public void testCall() {
 
         ModBoard board = CacheManager.INSTANCE.getBoards()
@@ -44,7 +46,7 @@ public class SQLRiderTest {
         SQLRider.call(handler, Rider.getEntityType(board.getClass_(), board.getKind()), board.getAction());
     }
 
-    @Test
+    //@Test
     public void testAdd() {
 
         Document data = new Document();
@@ -54,4 +56,39 @@ public class SQLRiderTest {
         SQLRider.add(handler, ModTest.class);
     }
 
+    //@Test
+    public void testUpdate() {
+
+        Document data = new Document();
+        data.put("age", "40");
+
+        Document condition = new Document();
+        condition.put("age", 0);
+
+        handler.params.data(data).condition(condition);
+        SQLRider.update(handler, ModTest.class);
+    }
+
+    //@Test
+    public void testRemove() {
+        handler.params.id("2");
+        SQLRider.remove(handler, ModTest.class);
+    }
+
+    //@Test
+    public void testGet() {
+        handler.params.id("2");
+        Singular<ModTest> test = SQLRider.get(handler, ModTest.class);
+        System.out.println(test.item);
+    }
+
+    //@Test
+    public void testCount() {
+
+        Document condition = new Document();
+        condition.put("age", 40);
+
+        handler.params.condition(condition);
+        Long test = SQLRider.count(handler, ModTest.class);
+    }
 }
