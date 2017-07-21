@@ -37,7 +37,7 @@ public class Model {
 
     public List<Document> list(String query, Document params) {
 
-        String sql = this.getSql(query, new Document("condition", params));
+        String sql = this.getSql(query, new Document("condition", this.parseByValueType(params)));
 
         PreparedStatement ps = null;
         SQLException exception = null;
@@ -160,7 +160,6 @@ public class Model {
         }
         return document;
     }
-
 
     private Document parseByValueType(Document document) {
 

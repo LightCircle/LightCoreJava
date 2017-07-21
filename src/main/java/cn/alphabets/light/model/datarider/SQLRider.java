@@ -77,6 +77,7 @@ public class SQLRider extends Rider {
 
         Map<String, List<ModBoard.Filters>> group = board.getFilters()
                 .stream()
+                .filter(item -> params.getCondition().containsKey(item.getKey()))
                 .collect(Collectors.groupingBy(ModBoard.Filters::getGroup));
 
         group.values().forEach(item -> {
@@ -85,6 +86,7 @@ public class SQLRider extends Rider {
             where.add(and);
         });
 
+        // 生成SQL语句
         if (board.getType() == Constant.API_TYPE_LIST || board.getType() == Constant.API_TYPE_GET) {
             return selectStatement(params, handler.getDomain(), board.getSchema(), selects, where, sorts);
         }
