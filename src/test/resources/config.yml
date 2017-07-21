@@ -14,7 +14,7 @@ mongodb:
   auth: SCRAM-SHA-1
 
 mysql:
-  host: 127.0.0.1
+  host: 120.27.9.255
   port: 5306
   user: light
   pass: 2e35501c2b7e

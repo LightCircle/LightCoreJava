@@ -77,12 +77,8 @@
 //        String script = String.format("DELETE FROM `%s`.`%s` WHERE _id = <%%= condition._id %%>",
 //                this.domain, SESSION_COLLECTION_NAME);
 //
-//        this.model.remove(script, new Document("_id", id));
-//
-//        DeleteResult result = mongo.getCollection(SESSION_COLLECTION_NAME)
-//                .deleteOne(new Document("_id", new ObjectId(id)));
-//
-//        resultHandler.handle(Future.succeededFuture(result.wasAcknowledged()));
+//        long count = this.model.remove(script, new Document("_id", id));
+//        resultHandler.handle(Future.succeededFuture(count > 0));
 //    }
 //
 //    @Override
@@ -109,12 +105,15 @@
 //        //store isDestroyed
 //        updates.add(Updates.set("isDestroyed", session.isDestroyed()));
 //
-//        UpdateResult result = mongo.getCollection(SESSION_COLLECTION_NAME)
+//        String script = String.format("UPDATE `%s`.`%s` SET  WHERE _id = <%%= condition._id %%>",
+//                this.domain, SESSION_COLLECTION_NAME);
+//
+//        long count = mongo.getCollection(SESSION_COLLECTION_NAME)
 //                .updateOne(new Document("_id", new ObjectId(session.id()))
 //                        , Updates.combine(updates)
 //                        , new UpdateOptions().upsert(true));
 //
-//        resultHandler.handle(Future.succeededFuture(result.wasAcknowledged()));
+//        resultHandler.handle(Future.succeededFuture(count > 0));
 //    }
 //
 //    @Override

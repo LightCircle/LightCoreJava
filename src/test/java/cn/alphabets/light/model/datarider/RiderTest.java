@@ -7,6 +7,7 @@ import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.entity.ModTest;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
+import cn.alphabets.light.model.Singular;
 import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class RiderTest {
 
     private Context handler;
 
-    @Before
+    //@Before
     public void setUp() {
         Environment.instance().args.local = true;
         CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
@@ -27,9 +28,22 @@ public class RiderTest {
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
-    @Test
+    //@Test
     public void testList() {
         handler.params.condition(new Document("name", "lalala2"));
         Rider.list(handler, ModTest.class);
+    }
+
+    //@Test
+    public void testAdd() {
+        handler.params.data(new Document("name", "中文"));
+        Rider.add(handler, ModTest.class);
+    }
+
+    //@Test
+    public void testGet() {
+        handler.params.id("1");
+        Singular<ModTest> t = Rider.get(handler, ModTest.class);
+        System.out.println(t.item);
     }
 }

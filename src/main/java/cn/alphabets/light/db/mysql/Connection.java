@@ -30,7 +30,7 @@ public class Connection {
 
             instance = new BasicDataSource();
             instance.setDriverClassName("com.mysql.jdbc.Driver");
-            instance.setUrl(String.format("jdbc:mysql://%s:%s/%s",
+            instance.setUrl(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=UTF-8",
                     env.getMySQLHost(),
                     env.getMySQLPort(),
                     env.getAppName()
