@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 public class Model {
 
     private static final Logger logger = LoggerFactory.getLogger(Model.class);
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
     private Connection db;
 
     private Model() {
@@ -177,8 +179,6 @@ public class Model {
         return values;
     }
 
-    static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
     private Object parse(Object val) {
         if (val == null) {
             return "null";
@@ -191,7 +191,7 @@ public class Model {
         } else if (val instanceof String) {
             return String.format("'%s'", val);
         } else if (val instanceof List) {
-            List list = (List)((List) val).stream().map(this::parse).collect(Collectors.toList());
+            List list = (List) ((List) val).stream().map(this::parse).collect(Collectors.toList());
             return String.format("(%s)", StringUtils.join(list, ","));
         }
         return val;
