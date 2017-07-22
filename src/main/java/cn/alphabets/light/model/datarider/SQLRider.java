@@ -280,6 +280,14 @@ public class SQLRider extends Rider {
                 return String.format("`%s`.`%s` < <%%= condition.%s %%>", schema, key, value);
             case "$lte":
                 return String.format("`%s`.`%s` <= <%%= condition.%s %%>", schema, key, value);
+            case "$regex":
+                return String.format("`%s`.`%s` REGEXP <%%= condition.%s %%>", schema, key, value);
+            case "$in":
+                return String.format("`%s`.`%s` IN <%%= condition.%s %%>", schema, key, value);
+            case "$nin":
+                return String.format("`%s`.`%s` NOT IN <%%= condition.%s %%>", schema, key, value);
+            case "$exists":
+                return String.format("`%s`.`%s` IS NOT NULL", schema, key);
         }
 
         throw new RuntimeException("Core has not yet supported the operator.");

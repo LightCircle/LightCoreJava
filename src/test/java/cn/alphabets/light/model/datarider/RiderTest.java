@@ -12,6 +12,8 @@ import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * DataRiderTest
  * Created by lilin on 2016/11/13.
@@ -20,7 +22,7 @@ public class RiderTest {
 
     private Context handler;
 
-    //@Before
+    @Before
     public void setUp() {
         Environment.instance().args.local = true;
         CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
@@ -42,7 +44,13 @@ public class RiderTest {
 
     //@Test
     public void testGet() {
-        handler.params.id("1");
+
+        Document condition = new Document();
+        condition.put("name", "la.*");
+        condition.put("age", Arrays.asList(10, 20));
+        condition.put("birthday", true);
+
+        handler.params.condition(condition);
         Singular<ModTest> t = Rider.get(handler, ModTest.class);
         System.out.println(t.item);
     }

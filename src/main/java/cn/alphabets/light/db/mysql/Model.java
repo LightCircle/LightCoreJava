@@ -4,6 +4,7 @@ import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -14,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Model
@@ -170,26 +172,29 @@ public class Model {
     }
 
     private Document parseByValueType(Document document) {
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
         Document values = new Document();
-        document.forEach((key, val) -> {
-            if (val == null) {
-                values.put(key, "null");
-            } else if (val instanceof Boolean) {
-                values.put(key, ((boolean) val) ? 1 : 0);
-            } else if (val instanceof ObjectId) {
-                values.put(key, String.format("'%s'", ((ObjectId) val).toHexString()));
-            } else if (val instanceof Date) {
-                values.put(key, String.format("'%s'", dateFormat.format((Date) val)));
-            } else if (val instanceof String) {
-                values.put(key, String.format("'%s'", val));
-            } else {
-                values.put(key, val);
-            }
-        });
+        document.forEach((key, val) -> values.put(key, parse(val)));
         return values;
+    }
+
+    static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+    private Object parse(Object val) {
+        if (val == null) {
+            return "null";
+        } else if (val instanceof Boolean) {
+            return ((boolean) val) ? 1 : 0;
+        } else if (val instanceof ObjectId) {
+            return String.format("'%s'", ((ObjectId) val).toHexString());
+        } else if (val instanceof Date) {
+            return String.format("'%s'", dateFormat.format((Date) val));
+        } else if (val instanceof String) {
+            return String.format("'%s'", val);
+        } else if (val instanceof List) {
+            List list = (List)((List) val).stream().map(this::parse).collect(Collectors.toList());
+            return String.format("(%s)", StringUtils.join(list, ","));
+        }
+        return val;
     }
 
     // 对数据库检索出的数据进行类型转换
