@@ -129,11 +129,17 @@ public class SQLRider extends Rider {
         builder.append(String.format(" FROM `%s`.`%s`", db, schema));
         builder.append(getWhere(params, schema, where));
 
-
         // 排序
         if (sorts != null && sorts.size() > 0) {
             builder.append(" ORDER BY ");
             builder.append(StringUtils.join(sorts, ","));
+        }
+
+        // 行数限制
+        if (params.getSkip() > 0 || params.getLimit() > 0) {
+            builder.append(String.format(" LIMIT %d OFFSET %d ",
+                    params.getLimit() <= 0 ? Integer.MAX_VALUE : params.getLimit(),
+                    params.getSkip() < 0 ? 0 : params.getSkip()));
         }
 
         return builder.toString();

@@ -4,6 +4,7 @@ import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -144,7 +145,9 @@ public class Model {
 
     private String getSql(String sql, Document params) {
 
-        // TODO: condition.name.replace(/[ ;].*/g, ""); // 防止SQL注入
+        // escape sql （参数里的 escape 参照 parse 方法）
+        sql = sql.replaceAll(";", "");
+
         return Helper.loadInlineTemplate(sql, params);
     }
 
@@ -185,16 +188,20 @@ public class Model {
         } else if (val instanceof Boolean) {
             return ((boolean) val) ? 1 : 0;
         } else if (val instanceof ObjectId) {
-            return String.format("'%s'", ((ObjectId) val).toHexString());
+            return String.format("'%s'", escapeSql(((ObjectId) val).toHexString()));
         } else if (val instanceof Date) {
             return String.format("'%s'", dateFormat.format((Date) val));
         } else if (val instanceof String) {
-            return String.format("'%s'", val);
+            return String.format("'%s'", escapeSql(val));
         } else if (val instanceof List) {
             List list = (List) ((List) val).stream().map(this::parse).collect(Collectors.toList());
             return String.format("(%s)", StringUtils.join(list, ","));
         }
-        return val;
+        return escapeSql(String.valueOf(val));
+    }
+
+    private String escapeSql(Object sql) {
+        return ((String) sql).replaceAll("'", "''");
     }
 
     // 对数据库检索出的数据进行类型转换

@@ -50,6 +50,9 @@ public class RiderTest {
         condition.put("age", Arrays.asList(10, 20));
         condition.put("birthday", true);
 
+        handler.params.skip(1);
+        handler.params.limit(5);
+
         handler.params.condition(condition);
         Singular<ModTest> t = Rider.get(handler, ModTest.class);
         System.out.println(t.item);
