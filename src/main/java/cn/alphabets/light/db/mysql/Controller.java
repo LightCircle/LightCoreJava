@@ -87,9 +87,8 @@ public class Controller {
                 params.getClazz(),
                 this.handler.tz()).toDocument();
 
-        // TODO: 返回插入的项目
-        // SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'name' AND table_schema = 'schema'
-        return new Singular(this.model.add(params.getScript(), confirmed));
+        Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
+        return new Singular(ModCommon.fromDocument(this.model.add(params.getScript(), confirmed), type));
     }
 
     public <T extends ModCommon> Singular<T> update() {

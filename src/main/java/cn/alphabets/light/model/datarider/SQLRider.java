@@ -205,7 +205,7 @@ public class SQLRider extends Rider {
         column.add("`valid`");
 
         keys.stream()
-                .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
+                .filter(item -> params.getData().containsKey(item))
                 .forEach(item -> column.add(String.format("`%s`", item)));
         builder.append((StringUtils.join(column, ",")));
 
@@ -220,7 +220,7 @@ public class SQLRider extends Rider {
         value.add("<%= data.valid %>");
 
         keys.stream()
-                .filter(item -> !item.equals("_id") && params.getData().containsKey(item))
+                .filter(item -> params.getData().containsKey(item))
                 .forEach(item -> value.add(String.format("<%%= data.%s %%>", item)));
 
         builder.append(StringUtils.join(value, ","));

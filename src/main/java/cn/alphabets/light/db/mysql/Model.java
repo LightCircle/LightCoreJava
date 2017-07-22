@@ -5,6 +5,7 @@ import cn.alphabets.light.Helper;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -86,8 +87,16 @@ public class Model {
         return 0;
     }
 
-    public long add(String query, Document data) {
-        return this.update(query, data, null);
+    public Document add(String query, Document data) {
+        if (!data.containsKey("_id")) {
+            data.put("_id", new ObjectId());
+        }
+        long count = this.update(query, data, null);
+        if (count > 0) {
+            return data;
+        }
+
+        return null;
     }
 
     public long remove(String query, Document condition) {
@@ -152,7 +161,6 @@ public class Model {
 
             String columnName = meta.getColumnName(i);
             Object columnValue = this.parseByMetaType(
-                    columnName,
                     meta.getColumnTypeName(i),
                     rs.getObject(i));
 
@@ -169,6 +177,10 @@ public class Model {
         document.forEach((key, val) -> {
             if (val == null) {
                 values.put(key, "null");
+            } else if (val instanceof Boolean) {
+                values.put(key, ((boolean) val) ? 1 : 0);
+            } else if (val instanceof ObjectId) {
+                values.put(key, String.format("'%s'", ((ObjectId) val).toHexString()));
             } else if (val instanceof Date) {
                 values.put(key, String.format("'%s'", dateFormat.format((Date) val)));
             } else if (val instanceof String) {
@@ -181,12 +193,7 @@ public class Model {
     }
 
     // 对数据库检索出的数据进行类型转换
-    private Object parseByMetaType(String name, String type, Object value) {
-
-        if (name.equals("_id")) {
-            String val = "000000000000000000000000" + value;
-            return val.substring(val.length() - 24);
-        }
+    private Object parseByMetaType(String type, Object value) {
 
         switch (type) {
             case "DECIMAL":

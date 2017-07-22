@@ -70,6 +70,13 @@ public class Environment {
         instance = null;
     }
 
+    public boolean isRDB() {
+        if (this.args.local) {
+            return this.mysql != null;
+        }
+        return System.getenv(Constant.ENV_LIGHT_MYSQL_HOST) == null;
+    }
+
     /**
      * Command line parameters
      */

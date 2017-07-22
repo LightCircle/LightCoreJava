@@ -7,6 +7,7 @@ import cn.alphabets.light.http.CSRFHandler;
 import cn.alphabets.light.http.Dispatcher;
 import cn.alphabets.light.http.TimeoutHandler;
 import cn.alphabets.light.http.session.MongoSessionStoreImpl;
+import cn.alphabets.light.http.session.MySQLSessionStoreImpl;
 import cn.alphabets.light.http.session.SessionHandlerImpl;
 import cn.alphabets.light.job.JobManager;
 import cn.alphabets.light.model.Generator;
@@ -17,6 +18,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.*;
+import io.vertx.ext.web.sstore.SessionStore;
 
 
 /**
@@ -77,10 +79,10 @@ public class App {
 
         // Handle session, overtime 30 days
         long sessionTimeout = 1000L * 60 * 60 * ConfigManager.INSTANCE.getAppSessionTimeout();
-        router.route().handler(SessionHandlerImpl
-                .create(new MongoSessionStoreImpl(env.getAppName(), vertx))
-                .setNagHttps(false)
-                .setSessionTimeout(sessionTimeout));
+        SessionStore store = Environment.instance().isRDB()
+                ? new MySQLSessionStoreImpl(env.getAppName(), vertx)
+                : new MongoSessionStoreImpl(env.getAppName(), vertx);
+        router.route().handler(SessionHandlerImpl.create(store).setNagHttps(false).setSessionTimeout(sessionTimeout));
 
         // Handle CSRF token, overtime = session timeout
         router.route().handler(CSRFHandler
