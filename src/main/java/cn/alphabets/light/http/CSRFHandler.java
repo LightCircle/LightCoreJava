@@ -2,7 +2,6 @@ package cn.alphabets.light.http;
 
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.exception.BadRequestException;
-import cn.alphabets.light.exception.LightException;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.logging.Logger;

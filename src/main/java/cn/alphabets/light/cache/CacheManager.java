@@ -5,9 +5,16 @@ import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.entity.*;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.Plural;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+import org.bson.Document;
+import org.yaml.snakeyaml.Yaml;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * CacheManager
@@ -16,6 +23,8 @@ import java.util.List;
 public enum CacheManager {
 
     INSTANCE;
+
+    private static final Logger logger = LoggerFactory.getLogger(CacheManager.class);
 
     private List<ModConfiguration> configuration;
     private List<ModI18n> i18ns;
@@ -90,6 +99,33 @@ public enum CacheManager {
         params.setClazz(ModTenant.class);
         Plural<ModTenant> tenants = new Controller(handler, params).list();
         this.tenants = tenants.items;
+    }
+
+    @SuppressWarnings("unchecked")
+    void loadFromFile() {
+
+        long start = System.nanoTime();
+
+        this.configuration = (List<ModConfiguration>) loadYaml(Constant.SYSTEM_DB_CONFIG, ModConfiguration.class);
+        this.validators = (List<ModValidator>) loadYaml(Constant.SYSTEM_DB_VALIDATOR, ModValidator.class);
+        this.i18ns = (List<ModI18n>) loadYaml(Constant.SYSTEM_DB_I18N, ModI18n.class);
+        this.structures = (List<ModStructure>) loadYaml(Constant.SYSTEM_DB_STRUCTURE, ModStructure.class);
+        this.boards = (List<ModBoard>) loadYaml(Constant.SYSTEM_DB_BOARD, ModBoard.class);
+        this.routes = (List<ModRoute>) loadYaml(Constant.SYSTEM_DB_ROUTE, ModRoute.class);
+        this.functions = (List<ModFunction>) loadYaml(Constant.SYSTEM_DB_FUNCTION, ModFunction.class);
+        this.jobs = (List<ModJob>) loadYaml(Constant.SYSTEM_DB_JOB, ModJob.class);
+        this.tenants = (List<ModTenant>) loadYaml(Constant.SYSTEM_DB_TENANT, ModTenant.class);
+
+        logger.debug("Loading the settings takes time " + (System.nanoTime() - start / 1000000f));
+    }
+
+    @SuppressWarnings("unchecked")
+    Object loadYaml(String name, Class clazz) {
+        return new Yaml()
+                .loadAs(ClassLoader.getSystemResourceAsStream(String.format("settings/%s.yml", name)), List.class)
+                .stream()
+                .map(item -> Entity.fromDocument(new Document((Map) item), clazz))
+                .collect(Collectors.toList());
     }
 
     public List<ModConfiguration> getConfiguration() {

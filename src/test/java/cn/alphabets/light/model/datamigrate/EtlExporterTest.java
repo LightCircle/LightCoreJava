@@ -8,7 +8,6 @@ import cn.alphabets.light.entity.ModEtl;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
-import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.mock.MockRoutingContext;
 import cn.alphabets.light.model.Singular;
 import cn.alphabets.light.model.datarider.Rider;
@@ -17,8 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * EtlExporterTest

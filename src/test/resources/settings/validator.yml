@@ -1,0 +1,188 @@
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: $eq
+    parameter: ''
+  description: ''
+  group: /api/account/register
+  key: captcha
+  message: 验证码为必须项
+  name: 1a95c285
+  option: {}
+  rule: required
+  sanitize: ''
+  strict: true
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: $eq
+    parameter: ''
+  description: ''
+  group: /api/account/register
+  key: data.email
+  message: 邮件格式不正确
+  name: 1d9b3729
+  option: {}
+  rule: email
+  sanitize: ''
+  strict: false
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: $eq
+    parameter: ''
+  description: ''
+  group: /api/account/register
+  key: data.id
+  message: ID为必须项
+  name: 129b10b4
+  option: {}
+  rule: required
+  sanitize: ''
+  strict: true
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: $eq
+    parameter: ''
+  description: ''
+  group: /api/account/register
+  key: data.id
+  message: 该账户已经存在
+  name: 10841b00
+  option:
+    schema: user
+    conditions:
+      - parameter: id
+        value: $data.id
+  rule: unique
+  sanitize: ''
+  strict: false
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: $eq
+    parameter: ''
+  description: ''
+  group: /api/account/register
+  key: data.password
+  message: 密码为必须项
+  name: 129e663e
+  option: {}
+  rule: required
+  sanitize: ''
+  strict: true
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: $eq
+    parameter: ''
+  description: ''
+  group: /api/account/register
+  key: data.phone
+  message: 电话格式不正确
+  name: 1a1b5152
+  option: '^[\d -]*$'
+  rule: matches
+  sanitize: ''
+  strict: false
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: ''
+    parameter: ''
+  description: ''
+  group: i18n-imp
+  key: data.key
+  message: key重复
+  name: 1eebcf81
+  option:
+    schema: i18n
+    conditions:
+      - parameter: key
+        value: $data.key
+  rule: unique
+  sanitize: ''
+  strict: true
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: ''
+    parameter: ''
+  description: ''
+  group: i18n-imp
+  key: data.lang
+  message: XXX不正确
+  name: 15974dc9
+  option:
+    schema: i18n
+    conditions:
+      - parameter: type
+        value: $data.lang
+  rule: exists
+  sanitize: ''
+  strict: true
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: ''
+    parameter: ''
+  description: ''
+  group: i18n-imp
+  key: data.lang
+  message: 值太长了
+  name: 105ba890
+  option: '2'
+  rule: min
+  sanitize: ''
+  strict: true
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: ''
+    parameter: ''
+  description: ''
+  group: i18n-imp
+  key: data.type
+  message: type不存在
+  name: 1261889b
+  option: {}
+  rule: required
+  sanitize: ''
+  strict: true
+  version: 0.5.8
+- action: ''
+  class: ''
+  condition:
+    key: ''
+    operator: ''
+    parameter: ''
+  description: ''
+  group: i18n-imp
+  key: data.type
+  message: 长度不足
+  name: 15b4e2bd
+  option: '10'
+  rule: max
+  sanitize: ''
+  strict: true
+  version: 0.5.8

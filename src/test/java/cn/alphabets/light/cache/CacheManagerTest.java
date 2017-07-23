@@ -16,7 +16,7 @@ public class CacheManagerTest {
         Environment.instance().args.local = true;
     }
 
-    @Test
+    //@Test
     public void test() {
         CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
 
@@ -26,5 +26,10 @@ public class CacheManagerTest {
         Assert.assertTrue(CacheManager.INSTANCE.getStructures().size() > 0);
         Assert.assertTrue(CacheManager.INSTANCE.getBoards().size() > 0);
         Assert.assertTrue(CacheManager.INSTANCE.getRoutes().size() > 0);
+    }
+
+    @Test
+    public void testLoadFromFile() {
+        CacheManager.INSTANCE.loadFromFile();
     }
 }

@@ -23,7 +23,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.atteo.evo.inflector.English;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -31,7 +30,6 @@ import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

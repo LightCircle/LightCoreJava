@@ -9,8 +9,6 @@ import cn.alphabets.light.entity.ModTest;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
 import cn.alphabets.light.model.Singular;
-import cn.alphabets.light.model.datarider.Rider;
-import cn.alphabets.light.model.datarider.SQLRider;
 import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;

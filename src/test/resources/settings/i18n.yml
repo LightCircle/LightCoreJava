@@ -1,0 +1,371 @@
+- key: Account
+  lang:
+    en: Account
+    ja: アカウント
+    zh: 账户
+  type: body
+  version: 0.5.8
+- key: Login
+  lang:
+    en: Login
+    ja: ログイン
+    zh: 登陆
+  type: body
+  version: 0.5.8
+- key: Password
+  lang:
+    en: Password
+    ja: パスワード
+    zh: 密码
+  type: body
+  version: 0.5.8
+- key: Register
+  lang:
+    en: Register
+    ja: サインアップ
+    zh: 注册
+  type: body
+  version: 0.5.8
+- key: Verification code
+  lang:
+    en: Verification code
+    ja: 検証コード
+    zh: 验证码
+  type: body
+  version: 0.5.8
+- key: form.bind
+  lang:
+    en: Binding
+    ja: バインディング
+    zh: 绑定表
+  type: body
+  version: 0.5.8
+- key: form.column
+  lang:
+    en: Columns
+    ja: 列数
+    zh: 列数
+  type: body
+  version: 0.5.8
+- key: form.defaults
+  lang:
+    en: Default
+    ja: ディフォルト
+    zh: 缺省值
+  type: body
+  version: 0.5.8
+- key: form.description
+  lang:
+    en: Description
+    ja: コメント
+    zh: 描述
+  type: body
+  version: 0.5.8
+- key: form.guid
+  lang:
+    en: ID
+    ja: 識別子
+    zh: 唯一标识
+  type: body
+  version: 0.5.8
+- key: form.icon
+  lang:
+    en: Icon
+    ja: アイコン
+    zh: 图标
+  type: body
+  version: 0.5.8
+- key: form.iconAppend
+  lang:
+    en: Append
+    ja: 後頭
+    zh: 后置
+  type: body
+  version: 0.5.8
+- key: form.iconPrepend
+  lang:
+    en: Prepend
+    ja: 先頭
+    zh: 前置
+  type: body
+  version: 0.5.8
+- key: form.iconShow
+  lang:
+    en: Show
+    ja: 位置
+    zh: 位置
+  type: body
+  version: 0.5.8
+- key: form.name
+  lang:
+    en: Name
+    ja: 名称
+    zh: 名称
+  type: body
+  version: 0.5.8
+- key: form.optionStyle
+  lang:
+    en: Style
+    ja: 表示スタイル
+    zh: 显示风格
+  type: body
+  version: 0.5.8
+- key: form.optionStyleGrid
+  lang:
+    en: Grid
+    ja: グリッド
+    zh: 表格
+  type: body
+  version: 0.5.8
+- key: form.optionStyleLine
+  lang:
+    en: Line
+    ja: ライン
+    zh: 行
+  type: body
+  version: 0.5.8
+- key: form.optionStyleList
+  lang:
+    en: List
+    ja: リスト
+    zh: 列
+  type: body
+  version: 0.5.8
+- key: form.options
+  lang:
+    en: Options
+    ja: 項目
+    zh: 选项
+  type: body
+  version: 0.5.8
+- key: form.placeholder
+  lang:
+    en: Placeholder
+    ja: プレースホルダ
+    zh: 提示文
+  type: body
+  version: 0.5.8
+- key: form.public
+  lang:
+    en: Publish
+    ja: 公開
+    zh: 公开
+  type: body
+  version: 0.5.8
+- key: form.readonly
+  lang:
+    en: Readonly
+    ja: 読み取り専用
+    zh: 只读
+  type: body
+  version: 0.5.8
+- key: form.tag
+  lang:
+    en: Tag
+    ja: タグ
+    zh: 标签
+  type: body
+  version: 0.5.8
+- key: form.title
+  lang:
+    en: Title
+    ja: タイトル
+    zh: 标题
+  type: body
+  version: 0.5.8
+- key: cancel
+  lang:
+    en: Cancel
+    ja: キャンセル
+    zh: 取消
+  type: common
+  version: 0.5.8
+- key: ok
+  lang:
+    en: OK
+    ja: 確定
+    zh: 确定
+  type: common
+  version: 0.5.8
+- key: api test
+  lang:
+    en: API Test
+    ja: API テスト
+    zh: API 测试
+  type: menu
+  version: 0.5.8
+- key: application
+  lang:
+    en: Application
+    ja: アプリケーション
+    zh: 应用程序
+  type: menu
+  version: 0.5.8
+- key: code
+  lang:
+    en: Code
+    ja: コード
+    zh: 代码
+  type: menu
+  version: 0.5.8
+- key: config
+  lang:
+    en: App Config
+    ja: アプリ設定
+    zh: 应用设置
+  type: menu
+  version: 0.5.8
+- key: data
+  lang:
+    en: Data
+    ja: データ管理
+    zh: 数据管理
+  type: menu
+  version: 0.5.8
+- key: data api
+  lang:
+    en: Data API
+    ja: データ API
+    zh: 数据 API
+  type: menu
+  version: 0.5.8
+- key: etl
+  lang:
+    en: ETL
+    ja: ETL
+    zh: ETL
+  type: menu
+  version: 0.5.8
+- key: file
+  lang:
+    en: File
+    ja: ファイル
+    zh: 文件
+  type: menu
+  version: 0.5.8
+- key: form
+  lang:
+    en: Form
+    ja: フォーム
+    zh: 表单
+  type: menu
+  version: 0.5.8
+- key: i18n
+  lang:
+    en: Multi Language
+    ja: マルチ言語
+    zh: 多国语言
+  type: menu
+  version: 0.5.8
+- key: interface
+  lang:
+    en: Interface
+    ja: インターフェース
+    zh: 接口定义
+  type: menu
+  version: 0.5.8
+- key: job
+  lang:
+    en: Job
+    ja: ジョブ
+    zh: 定时任务
+  type: menu
+  version: 0.5.8
+- key: logic api
+  lang:
+    en: Logic API
+    ja: ロジック API
+    zh: 逻辑 API
+  type: menu
+  version: 0.5.8
+- key: markdown
+  lang:
+    en: Document
+    ja: ドキュメント
+    zh: 文档
+  type: menu
+  version: 0.5.8
+- key: menu
+  lang:
+    en: Menu
+    ja: メニュー
+    zh: 菜单
+  type: menu
+  version: 0.5.8
+- key: middleware
+  lang:
+    en: Middleware
+    ja: ミドルウェア
+    zh: 中间件
+  type: menu
+  version: 0.5.8
+- key: mongo
+  lang:
+    en: MongoDB
+    ja: MongoDB
+    zh: MongoDB
+  type: menu
+  version: 0.5.8
+- key: mysql
+  lang:
+    en: MySQL
+    ja: MySQL
+    zh: MySQL
+  type: menu
+  version: 0.5.8
+- key: registry
+  lang:
+    en: Registry
+    ja: レジストリー
+    zh: 镜像库
+  type: menu
+  version: 0.5.8
+- key: route
+  lang:
+    en: HTML Route
+    ja: HTMLルーター
+    zh: 页面路径
+  type: menu
+  version: 0.5.8
+- key: runtime
+  lang:
+    en: Runtime
+    ja: ランタイム
+    zh: 运行时
+  type: menu
+  version: 0.5.8
+- key: struct
+  lang:
+    en: Table
+    ja: テーブル定義
+    zh: 数据定义
+  type: menu
+  version: 0.5.8
+- key: system runtime
+  lang:
+    en: System Runtime
+    ja: システムランタイム
+    zh: 系统运行时
+  type: menu
+  version: 0.5.8
+- key: tools
+  lang:
+    en: Tools
+    ja: 開発ツール
+    zh: 开发工具
+  type: menu
+  version: 0.5.8
+- key: user runtime
+  lang:
+    en: Custom Runtime
+    ja: カスタマイズランタイム
+    zh: 自定义运行时
+  type: menu
+  version: 0.5.8
+- key: validator
+  lang:
+    en: Validator
+    ja: バリデーター
+    zh: 数据校验
+  type: menu
+  version: 0.5.8

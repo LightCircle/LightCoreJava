@@ -1,0 +1,2422 @@
+- description: 访问控制
+  extend: {}
+  items:
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    valid:
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    createAt:
+      type: Date
+      name: 创建时间
+      reserved: 1
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    type:
+      type: String
+      default: ''
+      description: 'function, route, board, file'
+    resource:
+      type: String
+      default: ''
+      description: 'URL, API, FileID等'
+    authes:
+      type: Array
+      default: ''
+      description: ''
+  kind: 2
+  lock: 0
+  public: 1
+  schema: access
+  version: 0.5.8
+  parent: ''
+- description: 应用程序
+  extend: {}
+  items:
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    extend:
+      default: ''
+      description: 负载均衡，缓存等扩展信息的保存
+      name: 扩展
+      reserved: 2
+      type: Object
+      contents:
+        lang:
+          type: String
+          default: node
+          description: 开发语言
+        runtime:
+          type: String
+          default: ''
+          description: 依赖镜像
+        instance:
+          type: Number
+          default: '2'
+          description: 启动实例数
+        db:
+          type: Object
+          default: '""'
+          description: 数据库账号信息
+        state:
+          type: String
+          default: ''
+          description: 运行状态
+        database:
+          type: String
+          default: mongodb
+          description: '数据库类型 : mysql | mongodb'
+    name:
+      description: ''
+      name: 名称
+      reserved: 2
+      type: String
+      default: ''
+    updateBy:
+      type: String
+      name: 更新者
+      reserved: 1
+    corp:
+      type: String
+      default: ''
+      description: 标识账户管理的服务器，开发组等
+      name: 账户识别码
+      reserved: 2
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    domain:
+      description: AppID
+      name: 应用程序标识
+      reserved: 2
+      type: String
+      default: ''
+    icon:
+      default: ''
+      description: ''
+      name: 图标
+      reserved: 2
+      type: String
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    ver:
+      default: ''
+      description: ''
+      name: 版本
+      reserved: 2
+      type: String
+    _id:
+      type: ObjectID
+      name: ID
+      reserved: 1
+    secret:
+      type: String
+      default: ''
+      description: 应用密钥
+  kind: 2
+  lock: 0
+  public: 1
+  schema: app
+  version: 0.5.8
+  parent: ''
+- description: 权限
+  extend: {}
+  items:
+    updateAt:
+      type: Date
+      name: 更新时间
+      reserved: 1
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    description:
+      name: 描述
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    name:
+      type: String
+      default: ''
+      description: ''
+      name: 名称
+      reserved: 2
+  kind: 2
+  lock: 0
+  public: 1
+  schema: authority
+  version: 0.5.8
+  parent: ''
+- description: API定义
+  lock: 0
+  extend: {}
+  items:
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    action:
+      default: ''
+      description: ''
+      name: 方法名
+      reserved: 2
+      type: String
+    path:
+      description: Class的相对路径
+      name: 路径
+      reserved: 2
+      type: String
+      default: ''
+    createAt:
+      type: Date
+      name: 创建时间
+      reserved: 1
+    filters:
+      name: 条件
+      reserved: 2
+      type: Array
+      contents:
+        default:
+          reserved: 2
+          type: String
+          default: ''
+          description: ''
+          name: 缺省值
+        group:
+          description: ''
+          name: '[或]分组'
+          reserved: 2
+          type: String
+          default: ''
+        key:
+          default: ''
+          description: ''
+          name: 字段
+          reserved: 2
+          type: String
+        operator:
+          default: $eq
+          description: '$eq, $ne, $gt, $gte, $lt, $lte, $in, $nin'
+          name: 比较
+          reserved: 2
+          type: String
+        parameter:
+          default: ''
+          description: ''
+          name: 参数名
+          reserved: 2
+          type: String
+        type:
+          type: String
+          name: 类型
+          reserved: 2
+          description: 参数的类型
+      default: ''
+      description: ''
+    type:
+      reserved: 2
+      type: Number
+      default: 4
+      description: '1:添加 2:更新 3:删除 4:检索 5:全文检索 6:单项检索 7:获取件数'
+      name: 类别
+    updateBy:
+      reserved: 1
+      type: String
+      name: 更新者
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    selects:
+      description: ''
+      name: 选择字段
+      reserved: 2
+      type: Array
+      contents:
+        key:
+          description: ''
+          name: 字段
+          reserved: 2
+          type: String
+          default: ''
+        select:
+          type: Boolean
+          default: 'false'
+          description: ''
+          name: 选中
+          reserved: 2
+        alias:
+          default: ''
+          description: ''
+          name: 字段别名
+          reserved: 2
+          type: String
+        fields:
+          default: ''
+          description: ''
+          name: 附加项 关联后选择的字段
+          reserved: 2
+          type: Array
+        format:
+          reserved: 2
+          type: String
+          default: ''
+          description: ''
+          name: 格式化
+        type:
+          type: String
+          name: 类型
+          reserved: 2
+          description: 缺省是structure里定义的类型，也可以指定画面处理用的类型，如File，User等
+        readonly:
+          type: Boolean
+          name: 只读
+          reserved: 2
+          description: 是否只读
+        display:
+          type: Boolean
+          name: 显示
+          reserved: 2
+          description: 是否显示
+        reserved:
+          type: Number
+          name: 预约字段
+          reserved: 2
+          description: 系统默认的预约字段，从structure定义拷贝来
+        schema:
+          type: String
+          default: ''
+          description: 附加项 关联表名
+        conditions:
+          type: Object
+          default: {}
+          description: 附加项 关联的条件
+      default: ''
+    sorts:
+      default: ''
+      description: ''
+      name: 排序
+      reserved: 2
+      type: Array
+      contents:
+        key:
+          type: String
+          default: ''
+          description: ''
+          name: 字段
+          reserved: 2
+        order:
+          default: ''
+          description: ASC DESC
+          name: 顺序
+          reserved: 2
+          type: String
+        dynamic:
+          default: ''
+          description: 'fix:静态 dynamic:动态'
+          name: 动态字段
+          reserved: 2
+          type: String
+        index:
+          default: ''
+          description: ''
+          name: 排序顺序
+          reserved: 2
+          type: Number
+    api:
+      description: ''
+      name: URL
+      reserved: 2
+      type: String
+      default: ''
+    class:
+      default: ''
+      description: ''
+      name: 类名称
+      reserved: 2
+      type: String
+    createBy:
+      type: String
+      name: 创建者
+      reserved: 1
+    description:
+      type: String
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+    schema:
+      default: ''
+      description: ''
+      name: Schema名
+      reserved: 2
+      type: String
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    script:
+      type: String
+      name: 脚本
+      reserved: 2
+      description: RDB时，保存SQL语句等
+    kind:
+      type: Number
+      default: 0
+      description: '0:用户数据型 1:用户逻辑型 2:系统数据型 3:系统逻辑型'
+    version:
+      type: String
+      default: ''
+      description: 版本
+    free:
+      type: Boolean
+      default: false
+      description: 是否为自定义api
+  kind: 2
+  public: 1
+  schema: board
+  version: 0.5.8
+  parent: ''
+- description: 分类
+  extend: {}
+  items:
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    group:
+      name: 数据分组
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    type:
+      type: String
+      default: ''
+      description: ''
+      name: 类型
+      reserved: 2
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      reserved: 1
+      type: String
+      name: 更新者
+    valid:
+      reserved: 1
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+    visible:
+      type: String
+      default: ''
+      description: ''
+      name: 表示非表示
+      reserved: 2
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    sort:
+      default: ''
+      description: ''
+      name: 排序
+      reserved: 2
+      type: String
+    name:
+      default: ''
+      description: ''
+      name: 分类名
+      reserved: 2
+      type: String
+    ancestors:
+      description: ''
+      name: 祖先
+      reserved: 2
+      type: Array
+      default: ''
+    categoryId:
+      default: ''
+      description: ''
+      name: 分类ID
+      reserved: 2
+      type: String
+    description:
+      default: ''
+      description: ''
+      name: 分类描述
+      reserved: 2
+      type: String
+    translation:
+      default: ''
+      description: ''
+      name: 翻译Key
+      reserved: 2
+      type: String
+    value:
+      default: ''
+      description: ''
+      name: 值
+      reserved: 2
+      type: String
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    parent:
+      default: ''
+      description: ''
+      name: 父ID
+      reserved: 2
+      type: String
+  kind: 2
+  lock: 0
+  public: 1
+  schema: category
+  version: 0.5.8
+  parent: ''
+- description: 代码
+  extend: {}
+  items:
+    app:
+      type: String
+      description: 应用程序标识
+      name: 应用
+      reserved: 2
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    name:
+      description: 代码名称
+      name: 名称
+      reserved: 2
+      type: String
+    source:
+      type: String
+      name: 代码
+      reserved: 2
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    valid:
+      name: 有效标识
+      reserved: 1
+      type: Number
+      description: '1:有效 0:无效'
+    _id:
+      type: ObjectID
+      name: ID
+      reserved: 1
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    type:
+      description: 文件类型
+      name: 类型
+      reserved: 2
+      type: String
+    md5:
+      type: String
+      default: ''
+      description: 文件的md5
+    lang:
+      type: String
+      default: ''
+      description: 语言 java node python
+  kind: 2
+  lock: 0
+  public: 1
+  schema: code
+  version: 0.5.8
+  parent: ''
+- description: 配置
+  extend: {}
+  items:
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    displayType:
+      default: ''
+      description: '0:文本框, 1:开关, 2:下拉框, 3:数组, 4:密码'
+      name: 值的展示类型
+      reserved: 2
+      type: Number
+    options:
+      description: ''
+      name: 选项（仅下拉框有效）
+      reserved: 2
+      type: Array
+      default: ''
+    type:
+      name: 父类型
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    key:
+      default: ''
+      description: ''
+      name: 参数名称
+      reserved: 2
+      type: String
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    value:
+      type: Object
+      default: ''
+      description: ''
+    valueType:
+      description: ''
+      name: 值的数据类型
+      reserved: 2
+      type: String
+      default: ''
+  kind: 2
+  lock: 0
+  public: 1
+  schema: configuration
+  version: 0.5.8
+  parent: ''
+- schema: counter
+  kind: 2
+  description: 计数器
+  public: 1
+  version: 0.5.8
+  items:
+    _id:
+      reserved: 1
+      type: ObjectID
+      name: ID
+    valid:
+      reserved: 1
+      type: Number
+      name: 有效标识
+      description: '1:有效 0:无效'
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    updateAt:
+      reserved: 1
+      type: Date
+      name: 更新时间
+    updateBy:
+      reserved: 1
+      type: String
+      name: 更新者
+    sequence:
+      type: Number
+      name: sequence
+      reserved: 2
+  lock: 0
+  extend: {}
+  parent: ''
+- schema: developer
+  description: 开发者
+  parent: user
+  items:
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      type: String
+      name: 更新者
+      reserved: 1
+    status:
+      default: ''
+      description: '锁定, 无效等'
+      name: 状态
+      reserved: 2
+      type: String
+    timezone:
+      default: ''
+      description: ''
+      name: 时区
+      reserved: 2
+      type: String
+    password:
+      type: String
+      default: ''
+      description: ''
+      name: 密码
+      reserved: 2
+    roles:
+      default: ''
+      description: ''
+      name: 所属角色
+      reserved: 2
+      type: Array
+    email:
+      type: String
+      default: ''
+      description: ''
+      name: 电子邮件地址
+      reserved: 2
+    extend:
+      default: ''
+      description: ''
+      name: 扩展
+      reserved: 2
+      type: Object
+    id:
+      default: ''
+      description: ''
+      name: 用户标识
+      reserved: 2
+      type: String
+    type:
+      default: ''
+      description: ''
+      name: 用户类型
+      reserved: 2
+      type: String
+    groups:
+      description: ''
+      name: 所属组
+      reserved: 2
+      type: Array
+      default: ''
+    lang:
+      name: 语言
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    name:
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+      name: 名称
+    outer:
+      description: 用户导入时使用
+      name: 外部ID
+      reserved: 2
+      type: String
+      default: ''
+    company:
+      type: String
+      default: ''
+      description: 公司
+    corp:
+      type: String
+      default: ''
+      description: 账户唯一标识
+    phone:
+      type: String
+      default: ''
+      description: 电话
+    openid:
+      type: String
+      default: ''
+      description: 微信用户唯一标识
+  kind: 2
+  lock: 0
+  version: 0.5.8
+  extend: {}
+  public: 1
+- description: 导入导出
+  extend: {}
+  items:
+    description:
+      name: 描述
+      reserved: 2
+      type: String
+    schema:
+      type: String
+      default: ''
+      description: 对象表名
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    type:
+      type: String
+      default: ''
+      description: excel、csv、json、rdb
+    charset:
+      name: 编码
+      reserved: 2
+      type: String
+      key: charset
+      _id: charset
+      default: ''
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    kind:
+      type: String
+      default: ''
+      description: import，export
+    class:
+      type: String
+      default: ''
+      description: 类名称
+    mappings:
+      type: Array
+      default: ''
+      description: 项目映射
+      contents:
+        key:
+          type: String
+          default: ''
+          description: 字段
+        col:
+          type: Number
+          default: ''
+          description: 列
+        schema:
+          type: String
+          default: ''
+          description: 关联表
+        conditions:
+          type: Object
+          default: ''
+          description: 关联条件
+        sanitize:
+          type: Object
+          default: ''
+          description: 加工
+        title:
+          type: String
+          default: ''
+          description: 列标题
+        variable:
+          type: String
+          default: ''
+          description: 引用名称
+        fields:
+          type: Array
+          default: []
+          description: 关联选择
+      key: mapping
+      _id: mapping
+    name:
+      type: String
+      default: ''
+      description: 名称
+    primitive:
+      type: String
+      default: ''
+      description: 临时表 保存加工前数据
+    processed:
+      type: String
+      default: ''
+      description: 临时表 保存加工后数据
+    allowError:
+      type: Boolean
+      default: false
+      description: 跳过错误数据
+    allowUpdate:
+      type: Boolean
+      default: ''
+      description: 允许更新
+    uniqueKey:
+      type: Array
+      default: ''
+      description: allowUpdate时使用的数据Key
+    allowErrorMax:
+      type: Number
+      default: 0
+      description: 最大允许错误数
+    filters:
+      type: Array
+      default: ''
+      description: 导出条件
+      contents:
+        key:
+          type: String
+          default: ''
+          description: 字段
+        operator:
+          type: String
+          default: ''
+          description: 比较
+        parameter:
+          type: String
+          default: ''
+          description: 参数
+  kind: 2
+  lock: 0
+  public: 1
+  schema: etl
+  version: 0.5.8
+  parent: ''
+- description: 文件
+  extend: {}
+  items:
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    contentType:
+      default: ''
+      description: 文件类型
+      name: 类型
+      reserved: 2
+      type: String
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    fileId:
+      type: ObjectID
+      default: ''
+      description: GridFS的ID
+      name: 文件ID
+      reserved: 2
+    path:
+      default: ''
+      description: 逻辑路径
+      name: 路径
+      reserved: 2
+      type: String
+    name:
+      description: 文件名
+      name: 名称
+      reserved: 2
+      type: String
+      default: ''
+    type:
+      default: ''
+      description: 文件分类
+      name: 类型
+      reserved: 2
+      type: String
+    updateAt:
+      type: Date
+      name: 更新时间
+      reserved: 1
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    length:
+      name: 大小
+      reserved: 2
+      type: Number
+      default: ''
+      description: 文件大小
+    kind:
+      type: String
+      default: file
+      description: '文件夹 : folder, 文件 : file'
+  kind: 2
+  lock: 0
+  public: 1
+  schema: file
+  version: 0.5.8
+  parent: ''
+- schema: form
+  kind: 2
+  description: 表单
+  public: 1
+  version: 0.5.8
+  items:
+    _id:
+      type: ObjectID
+      description: ID
+    valid:
+      type: Number
+      description: '有效标识 1:有效 0:无效'
+      default: 1
+    createAt:
+      type: Date
+      description: 创建时间
+    createBy:
+      type: String
+      description: 创建者
+    updateAt:
+      type: Date
+      description: 更新时间
+    updateBy:
+      type: String
+      description: 更新者
+    name:
+      type: String
+      description: 模版名称
+    description:
+      type: String
+      description: 描述
+    column:
+      type: Number
+      description: 表单列数
+    schema:
+      type: String
+      description: 表单数据存储的表
+    public:
+      type: Boolean
+      description: 公开
+    id:
+      type: String
+      description: 模板ID（多版本共用）
+    ver:
+      type: String
+      description: 版本号
+    active:
+      type: Boolean
+      description: 有效标识
+    type:
+      type: String
+      description: 表单类型
+    items:
+      type: Array
+      default: ''
+      description: ''
+      contents:
+        type:
+          type: String
+          description: 类型
+        name:
+          type: String
+          description: 组件ID
+        title:
+          type: String
+          description: 标题
+        description:
+          type: String
+          description: 描述
+        defaults:
+          type: Object
+          description: 默认值
+        disabled:
+          type: Boolean
+          description: 不可编辑
+        row:
+          type: Number
+          description: 行
+        col:
+          type: Number
+          description: 列
+        rowSpan:
+          type: Number
+          description: 跨行数
+        colSpan:
+          type: Number
+          description: 跨列数
+        path:
+          type: String
+          description: 路径
+        option:
+          type: Array
+          description: 选择型选项
+        blockIcon:
+          type: String
+          description: 图标
+        selectStyle:
+          type: String
+          description: 选择框 风格
+        textPlaceholder:
+          type: String
+          description: 文本 说明
+        textIcon:
+          type: String
+          default: ''
+          description: 文本 图标
+        textIconAppend:
+          type: String
+          default: ''
+          description: 文本 图标位置
+        textRows:
+          type: Number
+          default: ''
+          description: 文本 行数
+        labelSize:
+          type: String
+          default: ''
+          description: 线 宽度
+        labelColor:
+          type: String
+          default: ''
+          description: 线 颜色
+        validator:
+          type: Object
+          default: {}
+          description: 校验规则
+  lock: 0
+  extend: {}
+  parent: ''
+- description: 功能菜单
+  lock: 0
+  extend: {}
+  items:
+    order:
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+      name: 顺序
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    description:
+      type: String
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+    menu:
+      default: ''
+      description: ''
+      name: 菜单标识
+      reserved: 2
+      type: String
+    type:
+      description: '1:一级菜单 2:二级菜单'
+      name: 菜单类型
+      reserved: 2
+      type: String
+      default: ''
+    updateAt:
+      type: Date
+      name: 更新时间
+      reserved: 1
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    url:
+      default: ''
+      description: ''
+      name: URL
+      reserved: 2
+      type: String
+    icon:
+      description: ''
+      name: 图标
+      reserved: 2
+      type: String
+      default: ''
+    kind:
+      default: ''
+      description: 菜单分组
+      name: 分类
+      reserved: 2
+      type: String
+    parent:
+      name: 父菜单
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    valid:
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+    version:
+      type: String
+      default: ''
+      description: 版本
+    status:
+      type: String
+      default: '1'
+      description: '1:可见 2:不可见'
+  kind: 2
+  public: 1
+  schema: function
+  version: 0.5.8
+  parent: ''
+- description: 组
+  extend: {}
+  items:
+    outer:
+      default: ''
+      description: 组导入时使用
+      name: 外部ID
+      reserved: 2
+      type: String
+    owners:
+      name: 管理者
+      reserved: 2
+      type: Array
+      default: ''
+      description: ''
+    type:
+      type: String
+      default: ''
+      description: ''
+      name: 组类型
+      reserved: 2
+    visible:
+      default: '2'
+      description: '1:私密 2:公开'
+      name: 可见
+      reserved: 2
+      type: String
+    name:
+      description: ''
+      name: 组标识
+      reserved: 2
+      type: String
+      default: ''
+    roles:
+      name: 角色
+      reserved: 2
+      type: Array
+      default: ''
+      description: ''
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+    createBy:
+      type: String
+      name: 创建者
+      reserved: 1
+    extend:
+      reserved: 2
+      type: Object
+      default: ''
+      description: ''
+      name: 扩展
+    parent:
+      default: ''
+      description: ''
+      name: 父组
+      reserved: 2
+      type: String
+    sort:
+      type: String
+      default: ''
+      description: ''
+      name: 排序
+      reserved: 2
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    valid:
+      name: 有效标识
+      reserved: 1
+      type: Number
+      description: '1:有效 0:无效'
+    status:
+      name: 状态
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+  kind: 2
+  lock: 0
+  public: 1
+  schema: group
+  version: 0.5.8
+  parent: ''
+- description: 多国语词条
+  extend: {}
+  items:
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    key:
+      description: ''
+      name: Key
+      reserved: 2
+      type: String
+      default: ''
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      type: String
+      name: 更新者
+      reserved: 1
+    valid:
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    lang:
+      default: ''
+      description: '例 {zh: 中文名, en: Chinese}'
+      name: 翻译
+      reserved: 2
+      type: Object
+    type:
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+      name: 分类
+    version:
+      type: String
+      default: ''
+      description: 版本
+  kind: 2
+  lock: 0
+  public: 1
+  schema: i18n
+  version: 0.5.8
+  parent: ''
+- description: 任务管理
+  lock: 0
+  extend: {}
+  items:
+    createBy:
+      type: String
+      name: 创建者
+      reserved: 1
+    name:
+      type: String
+      default: ''
+      description: ''
+      name: 名称
+      reserved: 2
+    run:
+      default: ''
+      description: 'STARTED, PAUSED'
+      name: 运行状态
+      reserved: 2
+      type: String
+    schedule:
+      default: ''
+      description: 秒 分 时 日 月 星期
+      name: 时间
+      reserved: 2
+      type: String
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    limit:
+      default: ''
+      description: ''
+      name: 限制时间
+      reserved: 2
+      type: Date
+    status:
+      default: ''
+      description: 'FAILED, COMPLETED'
+      name: 状态
+      reserved: 2
+      type: String
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    count:
+      default: ''
+      description: ''
+      name: 限制次数
+      reserved: 2
+      type: Number
+    last:
+      type: Date
+      default: ''
+      description: ''
+      name: 最终执行
+      reserved: 2
+    extend:
+      reserved: 2
+      type: Object
+      default: ''
+      description: ''
+      name: 扩展
+    step:
+      contents:
+        script:
+          default: ''
+          description: '例子: ls -ln'
+          name: 脚本
+          reserved: 2
+          type: String
+        type:
+          description: 'script:脚本 action:类'
+          name: 类型
+          reserved: 2
+          type: String
+          default: script
+        action:
+          default: ''
+          description: ''
+          name: 方法
+          reserved: 2
+          type: String
+        class:
+          default: ''
+          description: ''
+          name: 类
+          reserved: 2
+          type: String
+        index:
+          default: ''
+          description: ''
+          name: 顺序
+          reserved: 2
+          type: Number
+        params:
+          name: 参数
+          reserved: 2
+          type: Object
+          default: ''
+          description: ''
+      default: ''
+      description: ''
+      name: 步骤
+      reserved: 2
+      type: Array
+  kind: 2
+  public: 1
+  schema: job
+  version: 0.5.8
+  parent: ''
+- schema: jsessions
+  description: ''
+  items:
+    _id:
+      type: ObjectID
+      description: ID
+    valid:
+      type: Number
+      description: '有效标识(1:有效 0:无效)'
+      default: 1
+    createAt:
+      type: Date
+      description: 创建时间
+    createBy:
+      type: String
+      description: 创建者
+    updateAt:
+      type: Date
+      description: 更新时间
+    updateBy:
+      type: String
+      description: 更新者
+    rawData:
+      type: String
+      default: ''
+      description: ''
+    lastAccessed:
+      type: Number
+      default: ''
+      description: ''
+    timeoutMS:
+      type: Number
+      default: ''
+      description: ''
+    isDestroyed:
+      type: Boolean
+      default: false
+      description: ''
+    uid:
+      type: String
+      default: ''
+      description: ''
+  kind: 4
+  lock: 0
+  version: 0.5.8
+  extend: {}
+  public: 1
+  parent: ''
+- schema: log
+  description: 日志
+  parent: ''
+  items:
+    _id:
+      type: ObjectID
+      description: ID
+    valid:
+      type: Number
+      description: '有效标识(1:有效 0:无效)'
+      default: 1
+    createAt:
+      type: Date
+      description: 创建时间
+    createBy:
+      type: String
+      description: 创建者
+    updateAt:
+      type: Date
+      description: 更新时间
+    updateBy:
+      type: String
+      description: 更新者
+    transaction:
+      type: String
+      default: ''
+      description: 事物
+    content:
+      type: Object
+      default: ''
+      description: 内容
+  kind: 2
+  lock: 0
+  version: 0.5.8
+  extend: {}
+  public: 1
+- description: 文本
+  extend: {}
+  items:
+    body:
+      description: ''
+      name: 内容
+      reserved: 2
+      type: String
+      default: ''
+    createAt:
+      type: Date
+      name: 创建时间
+      reserved: 1
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    option:
+      contents:
+        breaks:
+          default: ''
+          description: ''
+          name: 跳转
+          reserved: 2
+          type: Boolean
+        html:
+          reserved: 2
+          type: Boolean
+          default: ''
+          description: true则允许html输入
+          name: HTML
+        linkify:
+          description: ''
+          name: 链接
+          reserved: 2
+          type: String
+          default: ''
+      default: ''
+      description: ''
+      name: 选项
+      reserved: 2
+      type: Object
+    title:
+      default: ''
+      description: ''
+      name: 标题
+      reserved: 2
+      type: String
+    _id:
+      type: ObjectID
+      name: ID
+      reserved: 1
+    html:
+      type: String
+      default: ''
+      description: ''
+      name: HTML
+      reserved: 2
+    type:
+      type: Number
+      default: ''
+      description: ''
+      name: '类型 1:文件 2:文件夹'
+      reserved: 2
+    parent:
+      type: String
+      default: ''
+      description: ''
+      name: 文件夹
+      reserved: 2
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      reserved: 1
+      type: String
+      name: 更新者
+    valid:
+      reserved: 1
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+  kind: 2
+  lock: 0
+  public: 1
+  schema: markdown
+  version: 0.5.8
+  parent: ''
+- description: 地区
+  extend: {}
+  items:
+    invisible:
+      description: ''
+      name: 不可见
+      reserved: 2
+      type: Number
+      default: '0'
+    name:
+      name: 名称
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    parent:
+      type: String
+      default: ''
+      description: ''
+      name: 父地区
+      reserved: 2
+    sort:
+      default: ''
+      description: ''
+      name: 排序因子（一般为降序）
+      reserved: 2
+      type: Number
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+  kind: 2
+  lock: 0
+  public: 1
+  schema: place
+  version: 0.5.8
+  parent: ''
+- description: 角色
+  extend: {}
+  items:
+    name:
+      default: ''
+      description: ''
+      name: 角色名
+      reserved: 2
+      type: String
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    _id:
+      reserved: 1
+      type: ObjectID
+      name: ID
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    updateAt:
+      type: Date
+      name: 更新时间
+      reserved: 1
+    valid:
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+    authority:
+      default: ''
+      description: authority的数组
+      name: 权限
+      reserved: 2
+      type: Array
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+  kind: 2
+  lock: 0
+  public: 1
+  schema: role
+  version: 0.5.8
+  parent: ''
+- description: 路径定义
+  lock: 0
+  extend: {}
+  items:
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    createAt:
+      type: Date
+      name: 创建时间
+      reserved: 1
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    url:
+      default: ''
+      description: URL
+      name: URL
+      reserved: 2
+      type: String
+    template:
+      reserved: 2
+      type: String
+      default: ''
+      description: 渲染画面
+      name: 模板
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    valid:
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+    action:
+      description: 逻辑处理方法
+      name: 方法
+      reserved: 2
+      type: String
+      default: ''
+    class:
+      name: 类名
+      reserved: 2
+      type: String
+      default: ''
+      description: 逻辑处理类
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    version:
+      type: String
+      default: ''
+      description: 版本
+  kind: 2
+  public: 1
+  schema: route
+  version: 0.5.8
+  parent: ''
+- schema: setting
+  kind: 2
+  description: "\b设定文件（保存Tenant别的设定内容）"
+  public: 1
+  version: 0.5.8
+  items:
+    _id:
+      reserved: 1
+      type: ObjectID
+      name: ID
+    valid:
+      reserved: 1
+      type: Number
+      name: 有效标识
+      description: '1:有效 0:无效'
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    updateAt:
+      reserved: 1
+      type: Date
+      name: 更新时间
+    updateBy:
+      reserved: 1
+      type: String
+      name: 更新者
+    key:
+      type: String
+      name: 参数名称
+      reserved: 2
+    value:
+      type: String
+      name: 值
+      reserved: 2
+    description:
+      type: String
+      name: 描述
+      reserved: 2
+    type:
+      type: String
+      name: 父类型
+      reserved: 2
+  lock: 0
+  extend: {}
+  parent: ''
+- description: Schema定义
+  lock: 0
+  extend: {}
+  items:
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    lock:
+      default: 0
+      description: '1:锁定 0:开放'
+      name: 更新锁
+      reserved: 2
+      type: Number
+    schema:
+      default: ''
+      description: ''
+      name: schema名称
+      reserved: 2
+      type: String
+    version:
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+      name: 版本
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    extend:
+      name: 扩展
+      reserved: 2
+      type: Object
+      default: ''
+      description: ''
+    items:
+      reserved: 2
+      type: Object
+      default: ''
+      description: ''
+      name: 字段
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    public:
+      default: 1
+      description: |-
+        1:公开
+        0:非公开
+      name: 公开标识
+      reserved: 2
+      type: Number
+    updateBy:
+      reserved: 1
+      type: String
+      name: 更新者
+    valid:
+      reserved: 1
+      type: Number
+      description: '1:有效 0:无效'
+      name: 有效标识
+    parent:
+      type: String
+      default: ''
+      description: 父表名称
+    kind:
+      type: Number
+      default: 0
+      description: '0:用户表 2:系统表'
+  kind: 2
+  public: 1
+  schema: structure
+  version: 0.5.8
+  parent: ''
+- description: 标签
+  extend: {}
+  items:
+    createAt:
+      type: Date
+      name: 创建时间
+      reserved: 1
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    name:
+      default: ''
+      description: ''
+      name: 名称
+      reserved: 2
+      type: String
+    type:
+      description: ''
+      name: 有效范围
+      reserved: 2
+      type: String
+      default: ''
+    _id:
+      type: ObjectID
+      name: ID
+      reserved: 1
+    counter:
+      reserved: 2
+      type: Number
+      default: ''
+      description: ''
+      name: 使用次数
+    valid:
+      name: 有效标识
+      reserved: 1
+      type: Number
+      description: '1:有效 0:无效'
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+  kind: 2
+  lock: 0
+  public: 1
+  schema: tag
+  version: 0.5.8
+  parent: ''
+- description: Multi-Tenant定义
+  lock: 0
+  extend: {}
+  items:
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    description:
+      name: 描述
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    logo:
+      type: String
+      default: ''
+      description: ''
+      name: 公司LOGO
+      reserved: 2
+    name:
+      default: ''
+      description: ''
+      name: 名称
+      reserved: 2
+      type: String
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    code:
+      default: ''
+      description: ''
+      name: Tenant标识
+      reserved: 2
+      type: String
+    createAt:
+      name: 创建时间
+      reserved: 1
+      type: Date
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+  kind: 2
+  public: 1
+  schema: tenant
+  version: 0.5.8
+  parent: ''
+- schema: test
+  description: 测试
+  items:
+    _id:
+      type: ObjectID
+      description: ID
+    valid:
+      type: Number
+      description: '有效标识(1:有效 0:无效)'
+      default: 1
+    createAt:
+      type: Date
+      description: 创建时间
+    createBy:
+      type: String
+      description: 创建者
+    updateAt:
+      type: Date
+      description: 更新时间
+    updateBy:
+      type: String
+      description: 更新者
+    name:
+      type: String
+      default: ''
+      description: 名称
+    age:
+      type: Number
+      default: ''
+      description: 年龄
+    birthday:
+      type: Date
+      default: ''
+      description: 生日
+    developer:
+      type: Boolean
+      default: false
+      description: 是否为开发者
+  kind: 4
+  lock: 0
+  version: 0.5.8
+  extend: {}
+  public: 1
+  parent: ''
+- description: 用户
+  lock: 0
+  extend: {}
+  items:
+    status:
+      default: ''
+      description: '锁定, 无效等'
+      name: 状态
+      reserved: 2
+      type: String
+    timezone:
+      default: ''
+      description: ''
+      name: 时区
+      reserved: 2
+      type: String
+    password:
+      type: String
+      default: ''
+      description: ''
+      name: 密码
+      reserved: 2
+    roles:
+      default: ''
+      description: ''
+      name: 所属角色
+      reserved: 2
+      type: Array
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    email:
+      type: String
+      default: ''
+      description: ''
+      name: 电子邮件地址
+      reserved: 2
+    extend:
+      default: ''
+      description: ''
+      name: 扩展
+      reserved: 2
+      type: Object
+    id:
+      default: ''
+      description: ''
+      name: 用户标识
+      reserved: 2
+      type: String
+    type:
+      default: ''
+      description: ''
+      name: 用户类型
+      reserved: 2
+      type: String
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    groups:
+      description: ''
+      name: 所属组
+      reserved: 2
+      type: Array
+      default: ''
+    lang:
+      name: 语言
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    name:
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+      name: 名称
+    outer:
+      description: 用户导入时使用
+      name: 外部ID
+      reserved: 2
+      type: String
+      default: ''
+    updateBy:
+      type: String
+      name: 更新者
+      reserved: 1
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+  kind: 2
+  public: 1
+  schema: user
+  version: 0.5.8
+  parent: ''
+- description: 校验规则
+  extend: {}
+  items:
+    class:
+      default: ''
+      description: ''
+      name: 自定义类
+      reserved: 2
+      type: String
+    message:
+      default: ''
+      description: ''
+      name: 消息
+      reserved: 2
+      type: String
+    name:
+      name: 名称
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+    action:
+      type: String
+      default: ''
+      description: ''
+      name: 自定义方法
+      reserved: 2
+    condition:
+      contents:
+        operator:
+          default: ''
+          description: ''
+          name: 操作符
+          reserved: 2
+          type: String
+        parameter:
+          default: ''
+          description: ''
+          name: 参数
+          reserved: 2
+          type: String
+        key:
+          type: String
+          default: ''
+          description: 对象
+      default: ''
+      description: 进行校验的前提条件
+      name: 条件
+      reserved: 2
+      type: Object
+    group:
+      reserved: 2
+      type: String
+      default: ''
+      description: ''
+      name: 分类
+    updateAt:
+      name: 更新时间
+      reserved: 1
+      type: Date
+    _id:
+      name: ID
+      reserved: 1
+      type: ObjectID
+    description:
+      default: ''
+      description: ''
+      name: 描述
+      reserved: 2
+      type: String
+    key:
+      type: String
+      default: ''
+      description: 校验对象
+    sanitize:
+      description: 对校验前的数据进行转换
+      name: 转换
+      reserved: 2
+      type: String
+      default: ''
+    valid:
+      description: '1:有效 0:无效'
+      name: 有效标识
+      reserved: 1
+      type: Number
+    createAt:
+      type: Date
+      name: 创建时间
+      reserved: 1
+    createBy:
+      name: 创建者
+      reserved: 1
+      type: String
+    option:
+      type: Object
+      default: ''
+      description: 校验规则附加参数
+    rule:
+      default: ''
+      description: 规则组合时为数组
+      name: 规则
+      reserved: 2
+      type: String
+    updateBy:
+      name: 更新者
+      reserved: 1
+      type: String
+    strict:
+      type: Boolean
+      default: true
+      description: 严格校验 - false 时对空项目不做检查
+    version:
+      type: String
+      default: ''
+      description: 版本
+  kind: 2
+  lock: 0
+  public: 1
+  schema: validator
+  version: 0.5.8
+  parent: ''

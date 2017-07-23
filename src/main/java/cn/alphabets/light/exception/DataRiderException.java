@@ -1,7 +1,5 @@
 package cn.alphabets.light.exception;
 
-import cn.alphabets.light.entity.ModBoard;
-
 /**
  * Created by luohao on 2016/12/1.
  */

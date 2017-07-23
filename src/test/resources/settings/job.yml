@@ -1,0 +1,17 @@
+- name: aaabbb
+  step:
+    - index: 0
+      type: action
+      class: system
+      action: test
+      params: hello
+  schedule: 00 */10 * * * *
+  limit: 2017-07-01T00:00:00.000Z
+  count: 0
+  status: COMPLETED
+  run: PAUSED
+  extend:
+    result:
+      595786f73f94a70f1b11d959: null
+  last: 2017-07-02T10:15:00.914Z
+  version: 0.5.8
