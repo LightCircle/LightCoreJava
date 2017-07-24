@@ -96,7 +96,7 @@ public class Model {
     }
 
     public Document add(String query, Document data) {
-        if (!data.containsKey("_id") || data.getObjectId("_id") == null) {
+        if (!data.containsKey("_id") || data.get("_id") == null) {
             data.put("_id", new ObjectId());
         }
         long count = this.update(query, data, null);
