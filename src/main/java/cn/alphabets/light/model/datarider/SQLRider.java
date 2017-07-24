@@ -49,29 +49,28 @@ public class SQLRider extends Rider {
     Params adaptToBoard(Context handler, Class clazz, ModBoard board, Params params) {
 
         String parent = getStruct(board.getSchema()).getParent();
-        String schema = StringUtils.isEmpty(parent) ? board.getSchema() : parent;
-
-        String script = buildScript(handler, board, params, parent, schema);
-        Params newParams = Params.clone(params, script, board.getSchema(), clazz);
 
         // 继承表，没有指定type那么添加当前表名为默认的type
         if (!StringUtils.isEmpty(parent)) {
-            if (!newParams.getCondition().containsKey("type")) {
+            if (!params.getCondition().containsKey("type")) {
                 params.getCondition().put("type", board.getSchema());
             }
-            if (!newParams.getData().containsKey("type")) {
+            if (!params.getData().containsKey("type")) {
                 params.getData().put("type", board.getSchema());
             }
         }
 
-        return newParams;
+        String script = buildScript(handler, board, params, parent);
+        return Params.clone(params, script, board.getSchema(), clazz);
     }
 
-    private String buildScript(Context handler, ModBoard board, Params params, String parent, String schema) {
+    private String buildScript(Context handler, ModBoard board, Params params, String parent) {
 
         if (!StringUtils.isEmpty(board.getScript())) {
             return board.getScript();
         }
+
+        String schema = StringUtils.isEmpty(parent) ? board.getSchema() : parent;
 
         // SELECT
         List<String> selects = new ArrayList<>();
@@ -112,7 +111,7 @@ public class SQLRider extends Rider {
         }
 
         if (board.getType() == Constant.API_TYPE_ADD) {
-            return insertStatement(params, handler.getDomain(), parent, schema);
+            return insertStatement(params, handler.getDomain(), parent, board.getSchema());
         }
 
         if (board.getType() == Constant.API_TYPE_UPDATE) {
@@ -230,7 +229,7 @@ public class SQLRider extends Rider {
         Set<String> keys = items.keySet();
 
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("INSERT INTO `%s`.`%s` (", db, schema));
+        builder.append(String.format("INSERT INTO `%s`.`%s` (", db, StringUtils.isEmpty(parent) ? schema : parent));
 
         // INSERT语句 字段定义 （只做成字段值在data里存在，并且字段不等于_id的项目）
         final List<String> column = new ArrayList<>();

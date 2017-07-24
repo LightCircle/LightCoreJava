@@ -265,10 +265,38 @@ public class Entity implements Serializable {
             Constant.SYSTEM_DB_BOARD,
             Constant.SYSTEM_DB_ROUTE,
             Constant.SYSTEM_DB_TENANT,
-            Constant.SYSTEM_DB_FILE,
             Constant.SYSTEM_DB_ETL,
-            Constant.SYSTEM_DB_SETTING,
+            Constant.SYSTEM_DB_JOB,
             Constant.SYSTEM_DB_FUNCTION,
             Constant.SYSTEM_DB_CODE
+    );
+
+    @JsonIgnore
+    public static List<String> light = Arrays.asList(
+            Constant.SYSTEM_DB_BOARD,
+            Constant.SYSTEM_DB_CONFIG,
+            Constant.SYSTEM_DB_VALIDATOR,
+            Constant.SYSTEM_DB_I18N,
+            Constant.SYSTEM_DB_STRUCTURE,
+            Constant.SYSTEM_DB_BOARD,
+            Constant.SYSTEM_DB_ROUTE,
+            Constant.SYSTEM_DB_TENANT,
+            Constant.SYSTEM_DB_ETL,
+            Constant.SYSTEM_DB_JOB,
+            Constant.SYSTEM_DB_FUNCTION,
+            Constant.SYSTEM_DB_CODE,
+            "access",
+            "authority",
+            "category",
+            "file",
+            "form",
+            "group",
+            "markdown",
+            "place",
+            "role",
+            "setting",
+            "tag",
+            "user",
+            "counter"
     );
 }

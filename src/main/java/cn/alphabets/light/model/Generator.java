@@ -111,9 +111,13 @@ public class Generator {
 
     private TypeSpec.Builder mainClass(String parent, String className) {
 
+        String superClassPackage = Entity.light.contains(parent)
+                ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
+                : Environment.instance().getPackages() + ".entity";
+
         TypeName superClass = StringUtils.isEmpty(parent)
                 ? type(ModCommon.class)
-                : ClassName.get("", Constant.MODEL_PREFIX + WordUtils.capitalize(parent));
+                : ClassName.get(superClassPackage, Constant.MODEL_PREFIX + WordUtils.capitalize(parent));
 
         return TypeSpec.classBuilder(Constant.MODEL_PREFIX + WordUtils.capitalize(className))
                 .addModifiers(Modifier.PUBLIC)

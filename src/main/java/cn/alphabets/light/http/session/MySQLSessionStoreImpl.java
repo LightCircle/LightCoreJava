@@ -22,11 +22,9 @@ public class MySQLSessionStoreImpl implements SessionStore {
     private static final String SESSION_COLLECTION_NAME = "jsessions";
     private String domain;
     private Vertx vertx;
-    private Model model;
 
     public MySQLSessionStoreImpl(String domain, Vertx vertx) {
         this.domain = domain;
-        this.model = new Model(domain, Constant.SYSTEM_DB_PREFIX);
         this.vertx = vertx;
     }
 
@@ -46,7 +44,7 @@ public class MySQLSessionStoreImpl implements SessionStore {
         String script = String.format("SELECT * FROM `%s`.`%s` WHERE `_id` = <%%= condition._id %%>",
                 this.domain, SESSION_COLLECTION_NAME);
 
-        Document doc = this.model.get(script, new Document("_id", id));
+        Document doc = this.model().get(script, new Document("_id", id));
         Session session = SessionImpl.fromDoc(doc);
         if (session != null && System.currentTimeMillis() - session.lastAccessed() > session.timeout()) {
             this.delete(session.id(), result -> {
@@ -62,7 +60,7 @@ public class MySQLSessionStoreImpl implements SessionStore {
         String script = String.format("DELETE FROM `%s`.`%s` WHERE `_id` = <%%= condition._id %%>",
                 this.domain, SESSION_COLLECTION_NAME);
 
-        long count = this.model.remove(script, new Document("_id", id));
+        long count = this.model().remove(script, new Document("_id", id));
         resultHandler.handle(Future.succeededFuture(count > 0));
     }
 
@@ -100,7 +98,7 @@ public class MySQLSessionStoreImpl implements SessionStore {
 
         String script = String.format("SELECT COUNT(1) as COUNT FROM `%s`.`%s` WHERE `_id` = <%%= condition._id %%>",
                 this.domain, SESSION_COLLECTION_NAME);
-        long count = this.model.count(script, new Document("_id", session.id()));
+        long count = this.model().count(script, new Document("_id", session.id()));
         if (count > 0) {
             script = String.format("UPDATE `%s`.`%s` SET " +
                             "`_id` = <%%= data._id %%>, `rawData` = <%%= data.rawData %%>, " +
@@ -109,7 +107,7 @@ public class MySQLSessionStoreImpl implements SessionStore {
                             "WHERE `_id` = <%%= condition._id %%>",
                     this.domain, SESSION_COLLECTION_NAME);
 
-            count = this.model.update(script, updates, new Document("_id", session.id()));
+            count = this.model().update(script, updates, new Document("_id", session.id()));
             resultHandler.handle(Future.succeededFuture(count > 0));
         } else {
             script = String.format(
@@ -120,7 +118,7 @@ public class MySQLSessionStoreImpl implements SessionStore {
                             "<%%= data.isDestroyed %%>, <%%= data.uid %%>" +
                             ")",
                     this.domain, SESSION_COLLECTION_NAME);
-            this.model.add(script, updates);
+            this.model().add(script, updates);
             resultHandler.handle(Future.succeededFuture(true));
         }
     }
@@ -128,7 +126,7 @@ public class MySQLSessionStoreImpl implements SessionStore {
     @Override
     public void clear(Handler<AsyncResult<Boolean>> resultHandler) {
         String script = String.format("DELETE FROM `%s`.`%s`", this.domain, SESSION_COLLECTION_NAME);
-        this.model.remove(script, new Document());
+        this.model().remove(script, new Document());
         resultHandler.handle(Future.succeededFuture(true));
     }
 
@@ -138,12 +136,16 @@ public class MySQLSessionStoreImpl implements SessionStore {
         String script = String.format("SELECT COUNT(1) as COUNT FROM `%s`.`%s`",
                 this.domain, SESSION_COLLECTION_NAME);
 
-        long count = this.model.count(script, new Document());
+        long count = this.model().count(script, new Document());
         resultHandler.handle(Future.succeededFuture((int) count));
     }
 
     @Override
     public void close() {
+    }
+
+    private Model model() {
+        return new Model(this.domain, Constant.SYSTEM_DB_PREFIX);
     }
 }
 

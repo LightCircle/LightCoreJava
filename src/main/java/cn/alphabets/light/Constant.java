@@ -42,11 +42,9 @@ public class Constant {
     public static final String SYSTEM_DB_ROUTE = "route";
     public static final String SYSTEM_DB_TENANT = "tenant";
     public static final String SYSTEM_DB_FUNCTION = "function";
-    public static final String SYSTEM_DB_FILE = "file";
     public static final String SYSTEM_DB_JOB = "job";
     public static final String SYSTEM_DB_COUNTER = "counter";
     public static final String SYSTEM_DB_ETL = "etl";
-    public static final String SYSTEM_DB_SETTING = "setting";
     public static final String SYSTEM_DB_CODE = "code";
 
 

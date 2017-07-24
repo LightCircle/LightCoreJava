@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -115,7 +116,7 @@ public class Model {
 
         Document params = new Document();
         if (data != null) {
-            params.put("data", this.parseByValueType(data));
+            params.put("data", this.parseByValueType(data, true));
         }
         if (condition != null) {
             params.put("condition", this.parseByValueType(condition));
@@ -206,12 +207,16 @@ public class Model {
     }
 
     private Document parseByValueType(Document document) {
+        return this.parseByValueType(document, false);
+    }
+
+    private Document parseByValueType(Document document, boolean isData) {
         Document values = new Document();
-        document.forEach((key, val) -> values.put(key, parse(val)));
+        document.forEach((key, val) -> values.put(key, parse(val, isData)));
         return values;
     }
 
-    private Object parse(Object val) {
+    private Object parse(Object val, boolean isData) {
         if (val == null) {
             return "null";
         } else if (val instanceof Boolean) {
@@ -223,8 +228,16 @@ public class Model {
         } else if (val instanceof String) {
             return String.format("'%s'", escapeSql(val));
         } else if (val instanceof List) {
-            List list = (List) ((List) val).stream().map(this::parse).collect(Collectors.toList());
+            // List作为数据时，因为MySQL没办法支持存储列表，所以将列表变成字符串
+            if (isData) {
+                return String.format("'%s'", StringUtils.join((List) val, ","));
+            }
+
+            // 如果是条件，List通常用在 IN 操作符内，所以要将列表变成字符串并加上括号
+            List list = (List) ((List) val).stream().map(item -> this.parse(item, isData)).collect(Collectors.toList());
             return String.format("(%s)", StringUtils.join(list, ","));
+        } else if (val instanceof Map) {
+            return String.format("'%s'", escapeSql(new Document((Map) val).toJson()));
         }
         return escapeSql(String.valueOf(val));
     }
