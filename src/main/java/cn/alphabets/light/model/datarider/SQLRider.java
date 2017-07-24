@@ -49,13 +49,13 @@ public class SQLRider extends Rider {
     Params adaptToBoard(Context handler, Class clazz, ModBoard board, Params params) {
 
         String parent = getStruct(board.getSchema()).getParent();
-        String schema = parent == null ? board.getSchema() : parent;
+        String schema = StringUtils.isEmpty(parent) ? board.getSchema() : parent;
 
         String script = buildScript(handler, board, params, parent, schema);
         Params newParams = Params.clone(params, script, board.getSchema(), clazz);
 
         // 继承表，没有指定type那么添加当前表名为默认的type
-        if (parent != null) {
+        if (!StringUtils.isEmpty(parent)) {
             if (!newParams.getCondition().containsKey("type")) {
                 params.getCondition().put("type", board.getSchema());
             }
@@ -190,7 +190,7 @@ public class SQLRider extends Rider {
             list.add(String.format("`%s`.`valid` = 1", schema));
 
             // 有父表，添加type条件
-            if (parent != null) {
+            if (!StringUtils.isEmpty(parent)) {
                 list.add(String.format("`%s`.`type` = <%%= condition.type %%>", schema));
             }
 
@@ -208,7 +208,7 @@ public class SQLRider extends Rider {
                         list.add(String.format("`%s`.`valid` = 1", schema));
 
                         // 有父表，添加type条件
-                        if (parent != null) {
+                        if (!StringUtils.isEmpty(parent)) {
                             list.add(String.format("`%s`.`type` = <%%= condition.type %%>", schema));
                         }
 

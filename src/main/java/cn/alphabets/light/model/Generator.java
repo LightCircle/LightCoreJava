@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.squareup.javapoet.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -110,7 +111,7 @@ public class Generator {
 
     private TypeSpec.Builder mainClass(String parent, String className) {
 
-        TypeName superClass = parent == null
+        TypeName superClass = StringUtils.isEmpty(parent)
                 ? type(ModCommon.class)
                 : ClassName.get("", Constant.MODEL_PREFIX + WordUtils.capitalize(parent));
 
