@@ -47,11 +47,27 @@ public class SQLRider extends Rider {
     }
 
     Params adaptToBoard(Context handler, Class clazz, ModBoard board, Params params) {
-        String script = buildScript(handler, board, params);
-        return Params.clone(params, script, board.getSchema(), clazz);
+
+        String parent = getStruct(board.getSchema()).getParent();
+        String schema = parent == null ? board.getSchema() : parent;
+
+        String script = buildScript(handler, board, params, parent, schema);
+        Params newParams = Params.clone(params, script, board.getSchema(), clazz);
+
+        // 继承表，没有指定type那么添加当前表名为默认的type
+        if (parent != null) {
+            if (!newParams.getCondition().containsKey("type")) {
+                params.getCondition().put("type", board.getSchema());
+            }
+            if (!newParams.getData().containsKey("type")) {
+                params.getData().put("type", board.getSchema());
+            }
+        }
+
+        return newParams;
     }
 
-    private String buildScript(Context handler, ModBoard board, Params params) {
+    private String buildScript(Context handler, ModBoard board, Params params, String parent, String schema) {
 
         if (!StringUtils.isEmpty(board.getScript())) {
             return board.getScript();
@@ -61,7 +77,7 @@ public class SQLRider extends Rider {
         List<String> selects = new ArrayList<>();
         board.getSelects().forEach(item -> {
             if (item.getSelect()) {
-                selects.add(String.format("`%s`.`%s`", board.getSchema(), item.getKey()));
+                selects.add(String.format("`%s`.`%s`", schema, item.getKey()));
             }
         });
 
@@ -70,7 +86,7 @@ public class SQLRider extends Rider {
         board.getSorts().stream()
                 .sorted(Comparator.comparingInt(item -> Integer.parseInt(item.getOrder())))
                 .forEach(item ->
-                        sorts.add(String.format("`%s`.`%s` %s", board.getSchema(), item.getKey(), item.getOrder())));
+                        sorts.add(String.format("`%s`.`%s` %s", schema, item.getKey(), item.getOrder())));
 
         // WHERE
         List<List<String>> where = new ArrayList<>();
@@ -82,29 +98,29 @@ public class SQLRider extends Rider {
 
         group.values().forEach(item -> {
             List<String> and = new ArrayList<>();
-            item.forEach(i -> and.add(compiler(board.getSchema(), i.getKey(), i.getOperator(), i.getParameter())));
+            item.forEach(i -> and.add(compiler(schema, i.getKey(), i.getOperator(), i.getParameter())));
             where.add(and);
         });
 
         // 生成SQL语句
         if (board.getType() == Constant.API_TYPE_LIST || board.getType() == Constant.API_TYPE_GET) {
-            return selectStatement(params, handler.getDomain(), board.getSchema(), selects, where, sorts);
+            return selectStatement(params, handler.getDomain(), parent, schema, selects, where, sorts);
         }
 
         if (board.getType() == Constant.API_TYPE_COUNT) {
-            return selectStatement(params, handler.getDomain(), board.getSchema(), null, where, null);
+            return selectStatement(params, handler.getDomain(), parent, schema, null, where, null);
         }
 
         if (board.getType() == Constant.API_TYPE_ADD) {
-            return insertStatement(params, handler.getDomain(), board.getSchema());
+            return insertStatement(params, handler.getDomain(), parent, schema);
         }
 
         if (board.getType() == Constant.API_TYPE_UPDATE) {
-            return updateStatement(params, handler.getDomain(), board.getSchema(), where);
+            return updateStatement(params, handler.getDomain(), parent, schema, where);
         }
 
         if (board.getType() == Constant.API_TYPE_REMOVE) {
-            return deleteStatement(params, handler.getDomain(), board.getSchema(), where);
+            return deleteStatement(params, handler.getDomain(), parent, schema, where);
         }
 
         logger.warn("Type is not recognized");
@@ -112,7 +128,7 @@ public class SQLRider extends Rider {
     }
 
     private String selectStatement(
-            Params params, String db, String schema,
+            Params params, String db, String parent, String schema,
             List<String> selects, List<List<String>> where, List<String> sorts) {
 
         StringBuilder builder = new StringBuilder();
@@ -127,7 +143,7 @@ public class SQLRider extends Rider {
         }
 
         builder.append(String.format(" FROM `%s`.`%s`", db, schema));
-        builder.append(getWhere(params, schema, where));
+        builder.append(getWhere(params, parent, schema, where));
 
         // 排序
         if (sorts != null && sorts.size() > 0) {
@@ -145,7 +161,7 @@ public class SQLRider extends Rider {
         return builder.toString();
     }
 
-    private String getWhere(Params params, String schema, List<List<String>> where) {
+    private String getWhere(Params params, String parent, String schema, List<List<String>> where) {
 
         StringBuilder builder = new StringBuilder();
 
@@ -173,6 +189,11 @@ public class SQLRider extends Rider {
             List<String> list = where.get(0);
             list.add(String.format("`%s`.`valid` = 1", schema));
 
+            // 有父表，添加type条件
+            if (parent != null) {
+                list.add(String.format("`%s`.`type` = <%%= condition.type %%>", schema));
+            }
+
             builder.append(StringUtils.join(list, " AND "));
         }
 
@@ -180,8 +201,17 @@ public class SQLRider extends Rider {
         if (where != null && where.size() > 1) {
             List<String> or = where.stream()
                     .map(item -> {
+
                         List<String> list = new ArrayList<>(item);
+
+                        // 只获取有效的项目
                         list.add(String.format("`%s`.`valid` = 1", schema));
+
+                        // 有父表，添加type条件
+                        if (parent != null) {
+                            list.add(String.format("`%s`.`type` = <%%= condition.type %%>", schema));
+                        }
+
                         return StringUtils.join(list, " AND ");
                     })
                     .collect(Collectors.toList());
@@ -193,7 +223,7 @@ public class SQLRider extends Rider {
         return builder.toString();
     }
 
-    private String insertStatement(Params params, String db, String schema) {
+    private String insertStatement(Params params, String db, String parent, String schema) {
 
         ModStructure structure = getStruct(schema);
         Map<String, Map<String, String>> items = ((Map<String, Map<String, String>>) structure.getItems());
@@ -204,6 +234,7 @@ public class SQLRider extends Rider {
 
         // INSERT语句 字段定义 （只做成字段值在data里存在，并且字段不等于_id的项目）
         final List<String> column = new ArrayList<>();
+        column.add("`_id`");
         column.add("`createAt`");
         column.add("`createBy`");
         column.add("`updateAt`");
@@ -219,6 +250,7 @@ public class SQLRider extends Rider {
 
         // INSERT语句 值定义
         final List<String> value = new ArrayList<>();
+        value.add("<%= data._id %>");
         value.add("<%= data.createAt %>");
         value.add("<%= data.createBy %>");
         value.add("<%= data.updateAt %>");
@@ -235,7 +267,7 @@ public class SQLRider extends Rider {
         return builder.toString();
     }
 
-    private String updateStatement(Params params, String db, String schema, List<List<String>> where) {
+    private String updateStatement(Params params, String db, String parent, String schema, List<List<String>> where) {
 
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("UPDATE `%s`.`%s` SET ", db, schema));
@@ -248,11 +280,11 @@ public class SQLRider extends Rider {
         params.getData().keySet().forEach(item -> column.add(String.format("`%s` = <%%= data.%s %%>", item, item)));
         builder.append((StringUtils.join(column, ",")));
 
-        builder.append(getWhere(params, schema, where));
+        builder.append(getWhere(params, parent, schema, where));
         return builder.toString();
     }
 
-    private String deleteStatement(Params params, String db, String schema, List<List<String>> where) {
+    private String deleteStatement(Params params, String db, String parent, String schema, List<List<String>> where) {
 
         // return String.format("DELETE FROM `%s`.`%s` ", db, schema) + getWhere(params, schema, where);
 
@@ -267,7 +299,7 @@ public class SQLRider extends Rider {
         );
 
         builder.append((StringUtils.join(column, ",")));
-        builder.append(getWhere(params, schema, where));
+        builder.append(getWhere(params, parent, schema, where));
         return builder.toString();
     }
 

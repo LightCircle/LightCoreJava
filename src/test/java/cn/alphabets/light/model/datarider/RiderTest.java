@@ -57,4 +57,10 @@ public class RiderTest {
         Singular<ModTest> t = Rider.get(handler, ModTest.class);
         System.out.println(t.item);
     }
+
+    //@Test
+    public void testRemove() {
+        handler.params.id("59757ded431e061cf21b745e");
+        Rider.remove(handler, ModTest.class);
+    }
 }

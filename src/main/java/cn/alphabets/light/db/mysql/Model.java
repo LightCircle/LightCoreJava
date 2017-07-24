@@ -92,7 +92,7 @@ public class Model {
     }
 
     public Document add(String query, Document data) {
-        if (!data.containsKey("_id")) {
+        if (!data.containsKey("_id") || data.getObjectId("_id") == null) {
             data.put("_id", new ObjectId());
         }
         long count = this.update(query, data, null);
@@ -210,6 +210,9 @@ public class Model {
             case "DECIMAL":
                 return ((BigDecimal) value).longValue();
             case "DATETIME":
+                if (value == null) {
+                    return null;
+                }
                 return new java.util.Date(((Timestamp) value).getTime());
             case "BIGINT":
             case "VARCHAR":
