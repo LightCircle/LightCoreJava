@@ -27,6 +27,8 @@ public class Model {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     private Connection db;
+    private String domain;
+    private String code;
 
     private Model() {
     }
@@ -34,6 +36,8 @@ public class Model {
     public Model(String domain, String code) {
         try {
             // TODO: 暂不支持domain和code
+            this.domain = domain;
+            this.code = code;
             this.db = cn.alphabets.light.db.mysql.Connection.instance(Environment.instance());
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -140,6 +144,32 @@ public class Model {
                 }
             }
         }
+    }
+
+    public long increase(String type) {
+
+        String select = String.format("SELECT `sequence` + 1 AS sequence " +
+                "FROM `%s`.`counter` WHERE `type` = <%%= condition.type %%>", this.domain);
+
+        String update = String.format("UPDATE `%s`.`counter` " +
+                "SET `sequence` = `sequence` + 1 WHERE `type` = <%%= condition.type %%>", this.domain);
+
+        String insert = String.format("INSERT INTO `%s`.`counter` (`_id`, `valid`, `type`, `sequence`) VALUES (" +
+                "<%%= data._id %%>, 1, <%%= data.type %%>, <%%= data.sequence %%>)", this.domain);
+
+        Document condition = new Document("type", type);
+        Document document = this.get(select, condition);
+        if (document == null) {
+            Document data = new Document();
+            data.put("_id", new ObjectId());
+            data.put("type", type);
+            data.put("sequence", 1);
+            this.add(insert, data);
+            return 1;
+        }
+
+        this.update(update, new Document(), condition);
+        return document.getLong("sequence");
     }
 
     private String getSql(String sql, Document params) {
