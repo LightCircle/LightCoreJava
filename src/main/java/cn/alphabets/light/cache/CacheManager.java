@@ -1,6 +1,7 @@
 package cn.alphabets.light.cache;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.Environment;
 import cn.alphabets.light.db.mongo.Controller;
 import cn.alphabets.light.entity.*;
 import cn.alphabets.light.http.Context;
@@ -43,6 +44,12 @@ public enum CacheManager {
      */
     public void setUp(String domain) {
 
+        if (Environment.instance().app.isLocal() && Environment.instance().isRDB()) {
+            logger.debug("Load settings from the file.");
+            loadFromFile();
+            return;
+        }
+
         Params params = new Params();
         Context handler = new Context(params, domain, Constant.SYSTEM_DB_PREFIX, null);
 
@@ -51,54 +58,63 @@ public enum CacheManager {
         params.setClazz(ModConfiguration.class);
         Plural<ModConfiguration> configuration = new Controller(handler, params).list();
         this.configuration = configuration.items;
+        logger.debug("Configuration count : " + this.configuration.size());
 
         // validator
         params.setTable(Constant.SYSTEM_DB_VALIDATOR);
         params.setClazz(ModValidator.class);
         Plural<ModValidator> validators = new Controller(handler, params).list();
         this.validators = validators.items;
+        logger.debug("validators count : " + this.validators.size());
 
         // i18n
         params.setTable(Constant.SYSTEM_DB_I18N);
         params.setClazz(ModI18n.class);
         Plural<ModI18n> i18ns = new Controller(handler, params).list();
         this.i18ns = i18ns.items;
+        logger.debug("i18ns count : " + this.i18ns.size());
 
         // structure
         params.setTable(Constant.SYSTEM_DB_STRUCTURE);
         params.setClazz(ModStructure.class);
         Plural<ModStructure> structures = new Controller(handler, params).list();
         this.structures = structures.items;
+        logger.debug("structures count : " + this.structures.size());
 
         // board
         params.setTable(Constant.SYSTEM_DB_BOARD);
         params.setClazz(ModBoard.class);
         Plural<ModBoard> boards = new Controller(handler, params).list();
         this.boards = boards.items;
+        logger.debug("boards count : " + this.boards.size());
 
         // route
         params.setTable(Constant.SYSTEM_DB_ROUTE);
         params.setClazz(ModValidator.class);
         Plural<ModRoute> routes = new Controller(handler, params).list();
         this.routes = routes.items;
+        logger.debug("routes count : " + this.routes.size());
 
         // function
         params.setTable(Constant.SYSTEM_DB_FUNCTION);
         params.setClazz(ModFunction.class);
         Plural<ModFunction> functions = new Controller(handler, params).list();
         this.functions = functions.items;
+        logger.debug("functions count : " + this.functions.size());
 
         // job
         params.setTable(Constant.SYSTEM_DB_JOB);
         params.setClazz(ModJob.class);
         Plural<ModJob> jobs = new Controller(handler, params).list();
         this.jobs = jobs.items;
+        logger.debug("jobs count : " + this.jobs.size());
 
         // tenant
         params.setTable(Constant.SYSTEM_DB_TENANT);
         params.setClazz(ModTenant.class);
         Plural<ModTenant> tenants = new Controller(handler, params).list();
         this.tenants = tenants.items;
+        logger.debug("tenants count : " + this.tenants.size());
     }
 
     @SuppressWarnings("unchecked")
@@ -115,6 +131,16 @@ public enum CacheManager {
         this.functions = (List<ModFunction>) loadYaml(Constant.SYSTEM_DB_FUNCTION, ModFunction.class);
         this.jobs = (List<ModJob>) loadYaml(Constant.SYSTEM_DB_JOB, ModJob.class);
         this.tenants = (List<ModTenant>) loadYaml(Constant.SYSTEM_DB_TENANT, ModTenant.class);
+
+        logger.debug("Configuration count : " + this.configuration.size());
+        logger.debug("validators count : " + this.validators.size());
+        logger.debug("i18ns count : " + this.i18ns.size());
+        logger.debug("structures count : " + this.structures.size());
+        logger.debug("boards count : " + this.boards.size());
+        logger.debug("routes count : " + this.routes.size());
+        logger.debug("functions count : " + this.functions.size());
+        logger.debug("jobs count : " + this.jobs.size());
+        logger.debug("tenants count : " + this.tenants.size());
 
         logger.debug("Loading the settings takes time " + (System.nanoTime() - start / 1000000f));
     }

@@ -83,6 +83,7 @@ public class App {
                 ? new MySQLSessionStoreImpl(env.getAppName(), vertx)
                 : new MongoSessionStoreImpl(env.getAppName(), vertx);
         router.route().handler(SessionHandlerImpl.create(store).setNagHttps(false).setSessionTimeout(sessionTimeout));
+        logger.debug(Environment.instance().isRDB() ? "Use MySQL session storage" : "Use Mongo session storage");
 
         // Handle CSRF token, overtime = session timeout
         router.route().handler(CSRFHandler
