@@ -44,7 +44,7 @@ public enum CacheManager {
      */
     public void setUp(String domain) {
 
-        if (Environment.instance().app.isLocal() && Environment.instance().isRDB()) {
+        if (Environment.instance().app.isLocal()) {
             logger.debug("Load settings from the file.");
             loadFromFile();
             return;
