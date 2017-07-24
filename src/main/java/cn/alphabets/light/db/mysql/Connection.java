@@ -28,19 +28,31 @@ public class Connection {
             logger.info("pass : " + env.getMySQLPass());
             logger.info("db   : " + env.getAppName());
 
-            instance = new BasicDataSource();
-            instance.setDriverClassName("com.mysql.jdbc.Driver");
-            instance.setUrl(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=UTF-8",
-                    env.getMySQLHost(),
-                    env.getMySQLPort(),
-                    env.getAppName()
-            ));
-
-            instance.setUsername(env.getMySQLUser());
-            instance.setPassword(env.getMySQLPass());
+            createDataSource(env);
         }
 
-        return instance.getConnection();
+        java.sql.Connection connection = instance.getConnection();
+
+        // renew connection
+        if (connection.isClosed()) {
+            createDataSource(env);
+            connection = instance.getConnection();
+        }
+
+        return connection;
+    }
+
+    private static void createDataSource(Environment env) {
+        instance = new BasicDataSource();
+        instance.setDriverClassName("com.mysql.jdbc.Driver");
+        instance.setUrl(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=UTF-8",
+                env.getMySQLHost(),
+                env.getMySQLPort(),
+                env.getAppName()
+        ));
+
+        instance.setUsername(env.getMySQLUser());
+        instance.setPassword(env.getMySQLPass());
     }
 
 }
