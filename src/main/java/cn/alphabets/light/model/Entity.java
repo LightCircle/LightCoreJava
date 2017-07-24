@@ -239,8 +239,8 @@ public class Entity implements Serializable {
     public static Class getEntityType(String structure) {
         String className = Constant.MODEL_PREFIX + WordUtils.capitalize(structure);
 
-        // 如果前缀是系统表，那么包名称使用 cn.alphabets.light，否则使用用户定义的包名
-        String packageName = system.contains(structure)
+        // 如果是light平台表，那么包名称使用 cn.alphabets.light，否则使用用户定义的包名
+        String packageName = light.contains(structure)
                 ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
                 : Environment.instance().getPackages() + ".entity";
 

@@ -8,6 +8,7 @@ import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModTest;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.mock.MockRoutingContext;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.Singular;
 import org.bson.Document;
 import org.junit.Before;
@@ -42,7 +43,7 @@ public class SQLRiderTest {
                 .get(0);
 
         handler.params.condition(new Document("name", "test"));
-        SQLRider.call(handler, Rider.getEntityType(board.getClass_(), board.getKind()), board.getAction());
+        SQLRider.call(handler, Entity.getEntityType(board.getClass_()), board.getAction());
     }
 
     //@Test

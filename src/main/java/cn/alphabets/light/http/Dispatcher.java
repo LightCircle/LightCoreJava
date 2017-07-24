@@ -12,6 +12,7 @@ import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.exception.LightException;
 import cn.alphabets.light.http.exception.MethodNotFoundException;
 import cn.alphabets.light.http.exception.ProcessingException;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.Error;
 import cn.alphabets.light.model.datarider.Rider;
 import io.vertx.core.Handler;
@@ -163,7 +164,7 @@ public class Dispatcher {
                 }
 
                 // Try lookup rider class
-                data = Rider.call(handler, Rider.getEntityType(className, board.getKind()), actionName);
+                data = Rider.call(handler, Entity.getEntityType(className), actionName);
 
                 new Result(data).send(ctx);
             }, false);

@@ -159,36 +159,6 @@ public abstract class Rider {
         return getStruct(name);
     }
 
-    /**
-     * 获取Entity的类型
-     * - name为系统表，或kind为系统api时，返回cn.alphabets.light.entity包下的类型
-     * - 否则返回用户包下的类型
-     *
-     * @param name 表名称
-     * @param kind api类型
-     * @return Entity类型
-     */
-    public static Class getEntityType(String name, Long kind) {
-
-        boolean usingLightEntity = Entity.system.contains(name) || Constant.KIND_BOARD_SYSTEM_DATA.equals(kind);
-
-        String packageName = usingLightEntity
-                ? Constant.DEFAULT_PACKAGE_NAME + ".entity"
-                : Environment.instance().getPackages() + ".entity";
-
-        String className = Constant.MODEL_PREFIX + WordUtils.capitalize(name);
-
-        try {
-            return Class.forName(packageName + "." + className);
-        } catch (ClassNotFoundException e) {
-            try {
-                return Class.forName(Constant.DEFAULT_PACKAGE_NAME + ".entity." + className);
-            } catch (ClassNotFoundException e1) {
-                throw DataRiderException.EntityClassNotFound(packageName + "." + className);
-            }
-        }
-    }
-
     static Object reserved(Context handler, String keyword) {
 
         if ("$uid".equals(keyword)) {
