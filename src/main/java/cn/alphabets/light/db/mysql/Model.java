@@ -47,6 +47,8 @@ public class Model {
 
     public List<Document> list(String query, Document params) {
 
+        long startTime = System.nanoTime();
+
         String sql = this.getSql(query, new Document("condition", this.parseByValueType(params)));
 
         PreparedStatement ps = null;
@@ -58,7 +60,10 @@ public class Model {
         try {
             ps = this.db.prepareStatement(sql);
             rs = ps.executeQuery();
-            return getEntitiesFromResultSet(rs);
+            List<Document> result = getEntitiesFromResultSet(rs);
+
+            logger.debug("SQL statement execution time : " + (System.nanoTime() - startTime) / 1000000000.0);
+            return result;
         } catch (SQLException e) {
             exception = e;
             throw new RuntimeException(exception);
@@ -114,6 +119,8 @@ public class Model {
 
     public long update(String query, Document data, Document condition) {
 
+        long startTime = System.nanoTime();
+
         Document params = new Document();
         if (data != null) {
             params.put("data", this.parseByValueType(data, true));
@@ -130,7 +137,10 @@ public class Model {
 
         try {
             ps = this.db.prepareStatement(sql);
-            return ps.executeUpdate();
+            long result = ps.executeUpdate();
+
+            logger.debug("SQL statement execution time : " + (System.nanoTime() - startTime) / 1000000000.0);
+            return result;
         } catch (SQLException e) {
             exception = e;
             throw new RuntimeException(exception);
