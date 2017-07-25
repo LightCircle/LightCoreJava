@@ -92,7 +92,7 @@ public class SQLRider extends Rider {
 
         Map<String, List<ModBoard.Filters>> group = board.getFilters()
                 .stream()
-                .filter(item -> params.getCondition().containsKey(item.getKey()))
+                .filter(item -> params.getCondition().containsKey(item.getParameter()))
                 .collect(Collectors.groupingBy(ModBoard.Filters::getGroup));
 
         group.values().forEach(item -> {
