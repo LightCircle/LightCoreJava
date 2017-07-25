@@ -45,7 +45,7 @@ public class Connection {
     private static void createDataSource(Environment env) {
         instance = new BasicDataSource();
         instance.setDriverClassName("com.mysql.jdbc.Driver");
-        instance.setUrl(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=UTF-8",
+        instance.setUrl(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=UTF-8&useSSL=true",
                 env.getMySQLHost(),
                 env.getMySQLPort(),
                 env.getAppName()
@@ -53,6 +53,10 @@ public class Connection {
 
         instance.setUsername(env.getMySQLUser());
         instance.setPassword(env.getMySQLPass());
+
+        instance.setInitialSize(5);
+        instance.setMaxIdle(10);
+        instance.setMaxTotal(100);
     }
 
 }

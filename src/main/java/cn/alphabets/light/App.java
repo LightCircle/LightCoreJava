@@ -2,6 +2,7 @@ package cn.alphabets.light;
 
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
+import cn.alphabets.light.db.mysql.Connection;
 import cn.alphabets.light.http.AuthHandler;
 import cn.alphabets.light.http.CSRFHandler;
 import cn.alphabets.light.http.Dispatcher;
@@ -19,6 +20,8 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.*;
 import io.vertx.ext.web.sstore.SessionStore;
+
+import java.sql.SQLException;
 
 
 /**
@@ -44,6 +47,15 @@ public class App {
         Environment env = Environment.instance();
         CacheManager.INSTANCE.setUp(env.getAppName());
         ConfigManager.INSTANCE.setUp();
+
+        // Initialize the RDB connection
+        if (env.isRDB()) {
+            try {
+                Connection.instance(env);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         // Used to generate a Mod file.
         // command line argument : -generate
