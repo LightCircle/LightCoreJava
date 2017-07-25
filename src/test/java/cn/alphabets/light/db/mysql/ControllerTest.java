@@ -28,7 +28,7 @@ public class ControllerTest {
     public void testList() {
 
         Params params = new Params();
-        params.setScript("select * from test");
+        params.script("select * from test");
         params.setTable("test");
 
         Controller ctrl = new Controller(handler, params);

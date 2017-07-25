@@ -30,9 +30,10 @@ public class RiderTest {
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
-    //@Test
+    @Test
     public void testList() {
-        handler.params.condition(new Document("name", "lalala2"));
+        handler.params.limit(1);
+        handler.params.condition(new Document("name", "lalala"));
         Rider.list(handler, ModTest.class);
     }
 

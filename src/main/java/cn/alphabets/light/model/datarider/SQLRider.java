@@ -66,9 +66,9 @@ public class SQLRider extends Rider {
 
     private String buildScript(Context handler, ModBoard board, Params params, String parent) {
 
-        if (!StringUtils.isEmpty(board.getScript())) {
-            return board.getScript();
-        }
+//        if (!StringUtils.isEmpty(board.getScript())) {
+//            return board.getScript();
+//        }
 
         String schema = StringUtils.isEmpty(parent) ? board.getSchema() : parent;
 

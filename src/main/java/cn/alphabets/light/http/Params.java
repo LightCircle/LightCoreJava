@@ -191,8 +191,9 @@ public class Params {
         return script;
     }
 
-    public void setScript(String script) {
+    public Params script(String script) {
         this.script = script;
+        return this;
     }
 
     public Class<? extends ModCommon> getClazz() {

@@ -54,10 +54,31 @@ public class Controller {
         List<Document> items = this.model.list(params.getScript(), params.getCondition());
 
         Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
-        return new Plural<>((long) items.size(), items
+        Plural<T> result = new Plural<>((long) items.size(), items
                 .stream()
                 .map(document -> (T) ModCommon.fromDocument(document, type))
                 .collect(Collectors.toList()));
+
+
+        // 如果设定了limit值，并且获取的件数等于limit值（可能有更多的值）时，获取件数
+        if (params.getLimit() > 0 && items.size() >= params.getLimit()) {
+            result.totalItems = this.countList();
+        }
+
+        return result;
+    }
+
+    private long countList() {
+
+        // 使用List脚本的条件，获取数据的件数（在原有script基础上删除LIMIT和OFFSET语句，然后检索件数）
+        String sql = params.getScript();
+        sql = sql.replaceAll("LIMIT[ ]*\\d*", "");
+        sql = sql.replaceAll("OFFSET[ ]*\\d*", "");
+        sql = String.format("SELECT COUNT(1) AS COUNT FROM (%s) AS T", sql);
+
+        params.limit(0);
+        params.script(sql);
+        return this.count();
     }
 
 
