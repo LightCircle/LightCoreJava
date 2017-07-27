@@ -269,10 +269,12 @@ public class Model {
                 return new java.util.Date(((Timestamp) value).getTime());
             case "BIGINT":
             case "VARCHAR":
+            case "TINYINT":
             case "INT":
                 return value;
         }
 
+        logger.debug("type : " + type);
         throw new RuntimeException("Core has not yet supported the data type.");
     }
 }
