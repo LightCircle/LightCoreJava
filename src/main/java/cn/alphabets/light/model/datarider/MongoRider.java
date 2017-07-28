@@ -149,29 +149,6 @@ public class MongoRider extends Rider {
     }
 
     /**
-     * 通过查找 structure 中的定义，来识别给定字段的类型
-     *
-     * @param structure ModStructure
-     * @param parameter 要识别类型的字段名
-     * @return 类型名称
-     */
-    private String detectValueType(ModStructure structure, String parameter) {
-
-        Map<String, Map> items = (Map<String, Map>) structure.getItems();
-
-        // 多层结构的数据，可以包含.标识符，如 address.city
-        if (parameter.contains(".")) {
-
-            String[] array = parameter.split("\\.");
-            Map<String, Map> subTypeInfo = (Map<String, Map>) items.get(array[0]).get("contents");
-
-            return subTypeInfo.get(array[1]).get("type").toString().toLowerCase();
-        } else {
-            return items.get(parameter).get("type").toString().trim().toLowerCase();
-        }
-    }
-
-    /**
      * build select
      * <p>
      * if select is passed from client, use the passed select

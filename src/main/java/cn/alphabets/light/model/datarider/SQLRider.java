@@ -10,6 +10,7 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
 import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -61,14 +62,38 @@ public class SQLRider extends Rider {
         }
 
         String script = buildScript(handler, board, params, parent);
-        return Params.clone(params, script, board.getSchema(), clazz);
+        Params newParams = Params.clone(params, script, board.getSchema(), clazz);
+
+        // 进行类型转换（MySQL不支持多层嵌套的数据，所以只简单的对第一层数据进行转换）
+        parseType(handler, board, newParams);
+
+        return newParams;
+    }
+
+    private void parseType(Context handler, ModBoard board, Params params) {
+
+        TypeConverter converter = new TypeConverter(handler);
+        ModStructure struct = getStruct(board.getSchema());
+
+        Document condition = params.getCondition();
+        board.getFilters().forEach(filter -> {
+
+            String parameter = filter.getKey();
+            String key = filter.getParameter();
+            String type = detectValueType(struct, parameter);
+
+            if (condition.containsKey(parameter)) {
+                condition.put(key, converter.convert(type, condition.get(key)));
+            }
+        });
+
     }
 
     private String buildScript(Context handler, ModBoard board, Params params, String parent) {
 
-//        if (!StringUtils.isEmpty(board.getScript())) {
-//            return board.getScript();
-//        }
+        if (!StringUtils.isEmpty(board.getScript())) {
+            return board.getScript();
+        }
 
         String schema = StringUtils.isEmpty(parent) ? board.getSchema() : parent;
 
