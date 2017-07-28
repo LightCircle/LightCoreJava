@@ -61,7 +61,7 @@ public class Controller {
 
 
         // 如果设定了limit值，并且获取的件数等于limit值（可能有更多的值）时，获取件数
-        if (params.getLimit() > 0 && items.size() >= params.getLimit()) {
+        if (params.getLimit() > 0 && items.size() >= (params.getSkip() + params.getLimit())) {
             result.totalItems = this.countList();
         }
 
