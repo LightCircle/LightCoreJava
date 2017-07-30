@@ -2,6 +2,7 @@ package cn.alphabets.light;
 
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
+import cn.alphabets.light.db.mysql.Connection;
 import cn.alphabets.light.entity.ModCode;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.BadRequestException;
@@ -25,6 +26,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,9 +196,17 @@ class Push {
 
     public static void main(String[] args) {
 
-        Environment.initialize(args);
+        Environment env = Environment.initialize(args);
         CacheManager.INSTANCE.setUp(Environment.instance().getAppName());
         ConfigManager.INSTANCE.setUp();
+
+        if (env.isRDB()) {
+            try {
+                Connection.instance(env);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 //        new Push().pullSource();
 //        new Push().buildJava();

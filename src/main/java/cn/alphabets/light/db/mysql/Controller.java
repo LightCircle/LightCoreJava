@@ -1,16 +1,22 @@
 package cn.alphabets.light.db.mysql;
 
 import cn.alphabets.light.Constant;
+import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
+import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +47,6 @@ public class Controller {
         }
         this.model = new Model(handler.domain(), handler.getCode());
     }
-
 
     public <T extends ModCommon> Plural<T> list() {
 
@@ -81,7 +86,6 @@ public class Controller {
         return this.count();
     }
 
-
     public <T extends ModCommon> Singular<T> get() {
         logger.debug("[GET] DB params : " + params.toString());
 
@@ -90,7 +94,6 @@ public class Controller {
         Class<ModCommon> type = Entity.getEntityType(this.params.getTable());
         return new Singular(ModCommon.fromDocument(document, type));
     }
-
 
     public <T extends ModCommon> Singular<T> add() {
         logger.debug("[ADD] DB params : " + params.toString());
@@ -151,4 +154,41 @@ public class Controller {
         return this.model.count(params.getScript(), params.getCondition());
     }
 
+    public Singular<ModFile> writeFile(RequestFile file) {
+
+        String insert = String.format(
+                "INSERT INTO `%s`.`file` (" +
+                        "`_id`, `valid`, `createAt`, `createBy`, `data`" +
+                        ") VALUES (" +
+                        "<%%= data._id %%>, 1, <%%= data.createAt %%>, <%%= data.createBy %%>, ?)",
+                handler.domain());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            IOUtils.copy(new FileInputStream(new java.io.File(file.getFilePath())), baos);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Document document = new Document();
+        document.put("createAt", new Date());
+        document.put("createBy", this.uid);
+        document.put("valid", Constant.VALID);
+        document.put("data", baos.toByteArray());
+
+        document = this.model.writeFile(insert, document);
+        return new Singular<>(ModFile.fromDocument(document, ModFile.class));
+    }
+
+    public ByteArrayOutputStream readFile() {
+
+        String select = String.format(
+                "SELECT `_id`, `data` FROM `%s`.`file` WHERE `_id` = <%%= condition._id %%> AND `valid` = 1",
+                handler.domain());
+
+        byte[] bytes = this.model.readFile(select, params.getCondition());
+        ByteArrayOutputStream stream = new ByteArrayOutputStream(bytes.length);
+        stream.write(bytes, 0, bytes.length);
+        return stream;
+    }
 }

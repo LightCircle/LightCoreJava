@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.*;
@@ -30,6 +31,7 @@ public class Model {
     private Connection db;
     private String domain;
     private String code;
+    private byte[] binary;
 
     private Model() {
     }
@@ -137,6 +139,9 @@ public class Model {
 
         try {
             ps = this.db.prepareStatement(sql);
+            if (this.binary != null) {
+                ps.setBlob(1, new ByteArrayInputStream(this.binary));
+            }
             long result = ps.executeUpdate();
 
             logger.debug("SQL statement execution time : " + (System.nanoTime() - startTime) / 1000000000.0);
@@ -181,6 +186,17 @@ public class Model {
 
         this.update(update, new Document(), condition);
         return document.getLong("sequence");
+    }
+
+    public Document writeFile(String script, Document data) {
+        this.binary = (byte[]) data.get("data");
+        data.remove("data");
+        return this.add(script, data);
+    }
+
+    public byte[] readFile(String script, Document condition) {
+        this.get(script, condition);
+        return this.binary;
     }
 
     private String getSql(String sql, Document params) {
@@ -272,6 +288,9 @@ public class Model {
             case "TINYINT":
             case "INT":
                 return value;
+            case "MEDIUMBLOB":
+                this.binary = (byte[]) value;
+                return null;
         }
 
         logger.debug("type : " + type);

@@ -49,6 +49,8 @@ public class ModBoard extends ModCommon {
 
   private String version;
 
+  private Boolean free;
+
   public String getAction() {
     return this.action;
   }
@@ -151,6 +153,14 @@ public class ModBoard extends ModCommon {
 
   public void setVersion(String version) {
     this.version = version;
+  }
+
+  public Boolean getFree() {
+    return this.free;
+  }
+
+  public void setFree(Boolean free) {
+    this.free = free;
   }
 
   @JsonIgnoreProperties(

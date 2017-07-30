@@ -7,6 +7,7 @@ import cn.alphabets.light.model.serializer.ObjectIdSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.lang.Long;
+import java.lang.Object;
 import java.lang.String;
 import org.bson.types.ObjectId;
 
@@ -38,6 +39,8 @@ public class ModFile extends ModCommon {
   private Long length;
 
   private String kind;
+
+  private Object data;
 
   public String getContentType() {
     return this.contentType;
@@ -101,5 +104,13 @@ public class ModFile extends ModCommon {
 
   public void setKind(String kind) {
     this.kind = kind;
+  }
+
+  public Object getData() {
+    return this.data;
+  }
+
+  public void setData(Object data) {
+    this.data = data;
   }
 }

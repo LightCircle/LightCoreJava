@@ -1,7 +1,9 @@
 package cn.alphabets.light.model;
 
+import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.db.mongo.Controller;
+import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.exception.LightException;
@@ -9,16 +11,17 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
 import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.datarider.Rider;
+import cn.alphabets.light.model.datarider.SQLRider;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -52,6 +55,11 @@ public class File {
         List<ModFile> result = new ArrayList<>();
         files.forEach(file -> {
 
+//            if (Environment.instance().isRDB()) {
+//                result.add(addToMySQL(handler, file));
+//                return;
+//            }
+
             GridFSFile gfsFile = new Controller(handler).writeFileToGrid(file);
 
             // set file information
@@ -83,6 +91,36 @@ public class File {
         });
 
         return new Plural<>((long) result.size(), result);
+    }
+
+    ModFile addToMySQL(Context handler, RequestFile file) {
+
+        Document source = handler.params.getData();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try {
+            IOUtils.copy(new FileInputStream(new java.io.File(file.getFilePath())), baos);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // set file information
+        ModFile info = new ModFile();
+        info.setName(file.getFileName());
+        info.setContentType(file.getContentType());
+        info.setLength((long) baos.size());
+        info.setData(baos);
+
+        // copy option information
+        info.setKind(source.getString("kind"));
+        info.setDescription(source.getString("description"));
+        info.setType(source.getString("type"));
+        info.setPath(source.getString("path"));
+
+//        ModBoard board = Rider.getBoard(ModFile.class, "add");
+//        Object result = new SQLRider().call(handler, ModFile.class, board, new Params().data(info));
+//        return ((Singular<ModFile>)result).item;
+        return null;
     }
 
     /**
