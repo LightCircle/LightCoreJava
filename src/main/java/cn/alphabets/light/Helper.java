@@ -2,6 +2,8 @@ package cn.alphabets.light;
 
 import cn.alphabets.light.validator.MPath;
 import io.vertx.core.http.HttpServerRequest;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -54,6 +56,18 @@ public class Helper {
     static {
         ISO_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         ISO_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
+    public static String fileMD5(String file) {
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+            return DigestUtils.md5Hex(IOUtils.toByteArray(inputStream));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
     }
 
     public static String randomGUID4() {

@@ -42,6 +42,7 @@ public class Environment {
         environment.args.initArgs(args);
         if (environment.args.local) {
             instance = new Yaml().loadAs(ClassLoader.getSystemResourceAsStream("config.yml"), Environment.class);
+            instance.args.initArgs(args);
         } else {
             instance = environment;
         }

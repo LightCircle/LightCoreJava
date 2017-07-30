@@ -331,7 +331,9 @@ public class Model {
         ModFile file = new ModFile();
         file.setName(fs.getFilename());
         file.setLength(fs.getLength());
-        file.setContentType(fs.getMetadata().getString("contentType"));
+        if (fs.getMetadata() != null) {
+            file.setContentType(fs.getMetadata().getString("contentType"));
+        }
         file.setFileId(fileId);
 
         return file;

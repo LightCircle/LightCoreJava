@@ -60,3 +60,6 @@ res().putHeader(CONTENT_TYPE, "application/json").end(json);
 - 登陆到sonatype，依次Close -> Release
   https://oss.sonatype.org/
   需要一个小时，才能反映到Repository
+  
+- 编译命令行中 指定版本
+  mvn -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 package -Djar.finalName=app
