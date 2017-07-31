@@ -166,9 +166,12 @@ public class File {
 
         if (Environment.instance().isRDB()) {
             saveFileFromMySQL(handler, file);
-            return;
+        } else {
+            saveFileFromMongo(handler, file);
         }
+    }
 
+    public void saveFileFromMongo(Context handler, ModFile file) {
         Controller ctrl = new Controller(handler, new Params().id(file.getFileId()));
 
         try {
@@ -181,10 +184,12 @@ public class File {
         }
     }
 
-    void saveFileFromMySQL(Context handler, ModFile file) {
+    public void saveFileFromMySQL(Context handler, ModFile file) {
 
-        Params params = handler.params;
-        cn.alphabets.light.db.mysql.Controller ctrl = new cn.alphabets.light.db.mysql.Controller(handler, params);
+        cn.alphabets.light.db.mysql.Controller ctrl = new cn.alphabets.light.db.mysql.Controller(
+                handler,
+                new Params().id(file.getFileId() == null ? file.get_id() : file.getFileId()));
+
         ByteArrayOutputStream stream = ctrl.readFile();
 
         try {

@@ -3,7 +3,7 @@ package cn.alphabets.light;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mysql.Connection;
-import cn.alphabets.light.db.mysql.Controller;
+import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModCode;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.BadRequestException;
@@ -13,6 +13,7 @@ import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.File;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
+import cn.alphabets.light.model.datarider.MongoRider;
 import cn.alphabets.light.model.datarider.Rider;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -20,12 +21,16 @@ import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static cn.alphabets.light.Constant.DEFAULT_JOB_USER_ID;
@@ -39,6 +44,35 @@ class Push {
 
     private static final Logger logger = LoggerFactory.getLogger(Push.class);
     private static final String JAR_NAME = "/app.jar";
+
+    public static void main(String[] args) {
+
+        Environment env = Environment.initialize(args);
+        CacheManager.INSTANCE.setUp(Environment.instance().getAppName());
+        ConfigManager.INSTANCE.setUp();
+
+        if (env.isRDB()) {
+            try {
+                Connection.instance(env);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        List<String> list = Arrays.asList(args);
+        Push push = new Push();
+        String workdir = String.format("/data/%s", Environment.instance().getAppName());
+
+        if (list.contains("-build")) {
+            push.pullSource(workdir);
+            push.buildJava(workdir);
+            push.exec(workdir);
+        }
+
+        if (list.contains("-pull")) {
+            push.pullJar(workdir);
+        }
+    }
 
     /**
      * Perform the upload operation
@@ -110,21 +144,21 @@ class Push {
     }
 
     // 从MongoDB下载代码
-    void pullSource() {
+    void pullSource(String path) {
 
         String appName = Environment.instance().getAppName();
         Params defaults = new Params(new org.bson.Document());
         Context handler = new Context(defaults, appName, SYSTEM_DB_PREFIX, DEFAULT_JOB_USER_ID);
 
-        // get code data
         Document condition = new Document("lang", "java");
         Document select = new Document("name", 1).append("type", 1).append("source", 1);
         Params params = new Params().condition(condition).select(select);
 
-        Plural<ModCode> codes = Rider.list(handler, ModCode.class, params);
+        // find code data （需要从MongoDB下载，所以没有使用Rider）
+        Plural<ModCode> codes = this.getCodeList(handler, params);
         codes.items.forEach(code -> {
 
-            String fullName = String.format("/data/%s%s", appName, code.getName());
+            String fullName = String.format("%s%s", path, code.getName());
             Path folder = Paths.get(fullName).getParent();
 
             try {
@@ -145,18 +179,18 @@ class Push {
             }
 
             // get file data
-            Singular<ModFile> file = Rider.get(handler, ModFile.class, new Params().id(new ObjectId(code.getSource())));
+            Singular<ModFile> file = this.getFile(handler, new Params().id(new ObjectId(code.getSource())));
             file.item.setPath(fullName);
-            new File().saveFile(handler, file.item);
+            new File().saveFileFromMongo(handler, file.item);
         });
     }
 
     // 使用mvn编译java代码，并打包成jar文件
-    void buildJava() {
+    void buildJava(String path) {
 
         String mvn = "/opt/apache-maven-3.3.9/bin/mvn";
         String params = "-Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 package -Djar.finalName=app";
-        String cmd = String.format("%s -f /data/%s/pom.xml %s ", mvn, Environment.instance().getAppName(), params);
+        String cmd = String.format("%s -f %s/pom.xml %s ", mvn, path, params);
 
         ByteArrayOutputStream success = new ByteArrayOutputStream();
         ByteArrayOutputStream error = new ByteArrayOutputStream();
@@ -192,23 +226,18 @@ class Push {
         }
     }
 
-    public static void main(String[] args) {
+    private Plural<ModCode> getCodeList(Context handler, Params params) {
+        ModBoard board = Rider.getBoard(ModCode.class, "list");
+        return (Plural<ModCode>)new MongoRider().call(handler, ModCode.class, board, params);
+    }
 
-        Environment env = Environment.initialize(args);
-        CacheManager.INSTANCE.setUp(Environment.instance().getAppName());
-        ConfigManager.INSTANCE.setUp();
+    private Singular<ModCode> getCode(Context handler, Params params) {
+        ModBoard board = Rider.getBoard(ModCode.class, "get");
+        return (Singular<ModCode>)new MongoRider().call(handler, ModCode.class, board, params);
+    }
 
-        if (env.isRDB()) {
-            try {
-                Connection.instance(env);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-//        new Push().pullSource();
-//        new Push().buildJava();
-//        new Push().exec(String.format("/data/%s", Environment.instance().getAppName()));
-//        new Push().pullJar("/data");
+    private Singular<ModFile> getFile(Context handler, Params params) {
+        ModBoard board = Rider.getBoard(ModFile.class, "get");
+        return (Singular<ModFile>)new MongoRider().call(handler, ModFile.class, board, params);
     }
 }

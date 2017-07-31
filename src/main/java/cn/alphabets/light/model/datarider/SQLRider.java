@@ -32,7 +32,7 @@ public class SQLRider extends Rider {
      * @param params DBParams
      * @return db operation result
      */
-    Object call(Context handler, Class clazz, ModBoard board, Params params) {
+    public Object call(Context handler, Class clazz, ModBoard board, Params params) {
 
         Params newParams = adaptToBoard(handler, clazz, board, params == null ? handler.params : params);
         Controller controller = new Controller(handler, newParams);

@@ -1,7 +1,6 @@
 package cn.alphabets.light.model.datarider;
 
 
-import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.entity.ModBoard;
@@ -9,7 +8,6 @@ import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.exception.DataRiderException;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
-import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
@@ -37,7 +35,7 @@ public abstract class Rider {
             "", "add", "update", "remove", "list", "search", "get", "count"
     );
 
-    abstract Object call(Context handler, Class clazz, ModBoard board, Params params);
+    public abstract Object call(Context handler, Class clazz, ModBoard board, Params params);
 
     abstract Params adaptToBoard(Context handler, Class clazz, ModBoard board, Params params);
 
@@ -125,7 +123,7 @@ public abstract class Rider {
      * @param method board method
      * @return board
      */
-    static ModBoard getBoard(Class clazz, String method) {
+    public static ModBoard getBoard(Class clazz, String method) {
 
         // TODO: 支持URL参数，如 /api/user/:id
 
