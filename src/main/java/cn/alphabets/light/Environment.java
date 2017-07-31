@@ -178,6 +178,18 @@ public class Environment {
         return "true".equals(master.toLowerCase());
     }
 
+    public boolean isLocal() {
+        if (this.args.local) {
+            return this.app.isLocal();
+        }
+
+        String local = System.getenv(Constant.ENV_LIGHT_APP_LOCAL);
+        if (local == null) {
+            return false;
+        }
+        return "true".equals(local.toLowerCase());
+    }
+
     public String getMySQLHost() {
         if (this.args.local) {
             return this.mysql.getHost();
