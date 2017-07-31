@@ -204,7 +204,7 @@ public class Environment {
         if (this.args.local) {
             return this.mysql.getPass();
         }
-        return System.getenv(Constant.ENV_LIGHT_MONGO_PASS);
+        return System.getenv(Constant.ENV_LIGHT_MYSQL_PASS);
     }
 
 }
