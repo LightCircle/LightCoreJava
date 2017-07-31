@@ -3,7 +3,6 @@ package cn.alphabets.light.model;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.db.mongo.Controller;
-import cn.alphabets.light.entity.ModBoard;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.exception.LightException;
@@ -11,17 +10,17 @@ import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
 import cn.alphabets.light.http.RequestFile;
 import cn.alphabets.light.model.datarider.Rider;
-import cn.alphabets.light.model.datarider.SQLRider;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -55,10 +54,11 @@ public class File {
         List<ModFile> result = new ArrayList<>();
         files.forEach(file -> {
 
-//            if (Environment.instance().isRDB()) {
-//                result.add(addToMySQL(handler, file));
-//                return;
-//            }
+            // RDB 的文件支持
+            if (Environment.instance().isRDB()) {
+                result.add(addToMySQL(handler, file));
+                return;
+            }
 
             GridFSFile gfsFile = new Controller(handler).writeFileToGrid(file);
 
@@ -95,32 +95,25 @@ public class File {
 
     ModFile addToMySQL(Context handler, RequestFile file) {
 
-        Document source = handler.params.getData();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Params params = handler.params;
+        cn.alphabets.light.db.mysql.Controller ctrl = new cn.alphabets.light.db.mysql.Controller(handler, params);
 
-        try {
-            IOUtils.copy(new FileInputStream(new java.io.File(file.getFilePath())), baos);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ModFile info = ctrl.writeFile(file).item;
+        Document source = handler.params.getData();
 
         // set file information
-        ModFile info = new ModFile();
         info.setName(file.getFileName());
         info.setContentType(file.getContentType());
-        info.setLength((long) baos.size());
-        info.setData(baos);
 
-        // copy option information
+        // set option information
         info.setKind(source.getString("kind"));
         info.setDescription(source.getString("description"));
         info.setType(source.getString("type"));
         info.setPath(source.getString("path"));
 
-//        ModBoard board = Rider.getBoard(ModFile.class, "add");
-//        Object result = new SQLRider().call(handler, ModFile.class, board, new Params().data(info));
-//        return ((Singular<ModFile>)result).item;
-        return null;
+        // update meta info
+        Rider.update(handler, ModFile.class, new Params().data(info).id(info.get_id()));
+        return info;
     }
 
     /**
@@ -171,6 +164,11 @@ public class File {
      */
     public void saveFile(Context handler, ModFile file) {
 
+        if (Environment.instance().isRDB()) {
+            saveFileFromMySQL(handler, file);
+            return;
+        }
+
         Controller ctrl = new Controller(handler, new Params().id(file.getFileId()));
 
         try {
@@ -179,6 +177,19 @@ public class File {
             outputStream.close();
         } catch (IOException e) {
             logger.error("error read file : ", e);
+            throw new RuntimeException("File not exist.");
+        }
+    }
+
+    void saveFileFromMySQL(Context handler, ModFile file) {
+
+        Params params = handler.params;
+        cn.alphabets.light.db.mysql.Controller ctrl = new cn.alphabets.light.db.mysql.Controller(handler, params);
+        ByteArrayOutputStream stream = ctrl.readFile();
+
+        try {
+            stream.writeTo(new FileOutputStream(file.getPath()));
+        } catch (IOException e) {
             throw new RuntimeException("File not exist.");
         }
     }
@@ -256,14 +267,12 @@ public class File {
             return;
         }
 
-
         ByteArrayOutputStream content = ctrl.readStreamFromGrid(offset, end - offset + 1);
 
         handler.res().putHeader(CONTENT_RANGE, "bytes " + offset + "-" + end + "/" + file.getLength())
                 .setStatusCode(PARTIAL_CONTENT.code())
                 .write(Buffer.buffer(content.toByteArray()))
                 .end();
-
 
     }
 

@@ -3,6 +3,7 @@ package cn.alphabets.light;
 import cn.alphabets.light.cache.CacheManager;
 import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.db.mysql.Connection;
+import cn.alphabets.light.db.mysql.Controller;
 import cn.alphabets.light.entity.ModCode;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.exception.BadRequestException;
@@ -13,12 +14,9 @@ import cn.alphabets.light.model.File;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
 import cn.alphabets.light.model.datarider.Rider;
-import com.sun.tools.doclint.Env;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.model.Model;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -103,8 +101,8 @@ class Push {
         Singular<ModCode> code = Rider.get(handler, ModCode.class, params);
 
         // get file data
-        params = new Params().id(new ObjectId(code.item.getSource()));
-        Singular<ModFile> file = Rider.get(handler, ModFile.class, params);
+        handler.params.id(new ObjectId(code.item.getSource()));
+        Singular<ModFile> file = Rider.get(handler, ModFile.class);
         file.item.setPath(path + JAR_NAME);
 
         // save file

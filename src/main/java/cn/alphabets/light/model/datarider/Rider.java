@@ -56,11 +56,10 @@ public abstract class Rider {
     }
 
     static Rider getRider(Class clazz) {
-        ModStructure struct = getStruct(clazz);
-        boolean isRDB = struct.getKind().equals(Constant.STRUCT_KIND_MYSQL_SYSTEM)
-                || struct.getKind().equals(Constant.STRUCT_KIND_MYSQL_USER);
-
-        return isRDB ? new SQLRider() : new MongoRider();
+//        ModStructure struct = getStruct(clazz);
+//        boolean isRDB = struct.getKind().equals(Constant.STRUCT_KIND_MYSQL_SYSTEM)
+//                || struct.getKind().equals(Constant.STRUCT_KIND_MYSQL_USER);
+        return Environment.instance().isRDB() ? new SQLRider() : new MongoRider();
     }
 
     public static <T extends ModCommon> Plural<T> list(Context handler, Class clazz) {

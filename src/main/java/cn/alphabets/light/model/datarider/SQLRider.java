@@ -301,7 +301,9 @@ public class SQLRider extends Rider {
         column.add("`updateAt` = <%= data.updateAt %>");
         column.add("`updateBy` = <%= data.updateBy %>");
 
-        params.getData().keySet().forEach(item -> column.add(String.format("`%s` = <%%= data.%s %%>", item, item)));
+        params.getData().keySet()
+                .stream().filter(item -> params.getData().get(item) != null)
+                .forEach(item -> column.add(String.format("`%s` = <%%= data.%s %%>", item, item)));
         builder.append((StringUtils.join(column, ",")));
 
         builder.append(getWhere(params, parent, schema, where));

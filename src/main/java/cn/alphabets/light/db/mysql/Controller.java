@@ -170,11 +170,14 @@ public class Controller {
             throw new RuntimeException(e);
         }
 
+        byte[] bytes = baos.toByteArray();
         Document document = new Document();
         document.put("createAt", new Date());
         document.put("createBy", this.uid);
         document.put("valid", Constant.VALID);
-        document.put("data", baos.toByteArray());
+        document.put("data", bytes);
+        document.put("length", bytes.length);
+        document.put("kind", "file");
 
         document = this.model.writeFile(insert, document);
         return new Singular<>(ModFile.fromDocument(document, ModFile.class));
