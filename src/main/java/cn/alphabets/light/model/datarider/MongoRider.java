@@ -41,7 +41,8 @@ public class MongoRider extends Rider {
         String methodName = METHOD.get(board.getType().intValue());
 
         try {
-            return controller.getClass().getMethod(methodName).invoke(controller);
+            Object result = controller.getClass().getMethod(methodName).invoke(controller);
+            return OptionsBuilder.fetchOptions(handler, result, board);
         } catch (InvocationTargetException e) {
             throw DataRiderException.ControllerMethodCallFailed(methodName, e.getTargetException());
         } catch (NoSuchMethodException | IllegalAccessException e) {
