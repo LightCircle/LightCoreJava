@@ -64,7 +64,7 @@ class Push {
         String workdir = String.format("/data/%s", Environment.instance().getAppName());
 
         if (list.contains("-build")) {
-            push.pullSource(workdir);
+//            push.pullSource(workdir);
             push.buildJava(workdir);
             push.exec(workdir);
         }
@@ -189,7 +189,7 @@ class Push {
     void buildJava(String path) {
 
         String mvn = "/opt/apache-maven-3.3.9/bin/mvn";
-        String params = "-Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 package -Djar.finalName=app";
+        String params = "-Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 package -Djar.finalName=app -Dproject.build.sourceEncoding=UTF-8";
         String cmd = String.format("%s -f %s/pom.xml %s ", mvn, path, params);
 
         ByteArrayOutputStream success = new ByteArrayOutputStream();
