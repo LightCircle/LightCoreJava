@@ -1,4 +1,48 @@
-- description: 访问控制
+- _id: 597596b52ce483bf9a507997
+  schema: a
+  description: aaa
+  parent: counter
+  items:
+    _id:
+      reserved: 1
+      type: ObjectID
+      name: ID
+    valid:
+      reserved: 1
+      type: Number
+      name: 有效标识
+      description: '1:有效 0:无效'
+    createAt:
+      reserved: 1
+      type: Date
+      name: 创建时间
+    createBy:
+      reserved: 1
+      type: String
+      name: 创建者
+    updateAt:
+      reserved: 1
+      type: Date
+      name: 更新时间
+    updateBy:
+      reserved: 1
+      type: String
+      name: 更新者
+    sequence:
+      type: Number
+      name: sequence
+      reserved: 2
+    type:
+      type: String
+      default: ''
+      description: 分类
+  kind: 4
+  lock: 0
+  version: 0.5.8
+  extend: {}
+  public: 1
+- _id: 594e9ab38835ecdf0285627d
+  description: 访问控制
   extend: {}
   items:
     updateBy:
@@ -50,7 +94,8 @@
   schema: access
   version: 0.5.8
   parent: ''
-- description: 应用程序
+- _id: 594e9ab38835ecdf0285627e
+  description: 应用程序
   extend: {}
   items:
     createAt:
@@ -155,7 +200,8 @@
   schema: app
   version: 0.5.8
   parent: ''
-- description: 权限
+- _id: 594e9ab38835ecdf0285627f
+  description: 权限
   extend: {}
   items:
     updateAt:
@@ -201,7 +247,8 @@
   schema: authority
   version: 0.5.8
   parent: ''
-- description: API定义
+- _id: 594e9ab38835ecdf02856280
+  description: API定义
   lock: 0
   extend: {}
   items:
@@ -432,7 +479,8 @@
   schema: board
   version: 0.5.8
   parent: ''
-- description: 分类
+- _id: 594e9ab38835ecdf02856281
+  description: 分类
   extend: {}
   items:
     createBy:
@@ -532,7 +580,8 @@
   schema: category
   version: 0.5.8
   parent: ''
-- description: 代码
+- _id: 594e9ab38835ecdf02856282
+  description: 代码
   extend: {}
   items:
     app:
@@ -593,7 +642,8 @@
   schema: code
   version: 0.5.8
   parent: ''
-- description: 配置
+- _id: 594e9ab38835ecdf02856283
+  description: 配置
   extend: {}
   items:
     _id:
@@ -667,7 +717,8 @@
   schema: configuration
   version: 0.5.8
   parent: ''
-- schema: counter
+- _id: 594e9ab38835ecdf02856284
+  schema: counter
   kind: 2
   description: 计数器
   public: 1
@@ -702,10 +753,15 @@
       type: Number
       name: sequence
       reserved: 2
+    type:
+      type: String
+      default: ''
+      description: 分类
   lock: 0
   extend: {}
   parent: ''
-- schema: developer
+- _id: 594e9ab38835ecdf02856285
+  schema: developer
   description: 开发者
   parent: user
   items:
@@ -827,7 +883,8 @@
   version: 0.5.8
   extend: {}
   public: 1
-- description: 导入导出
+- _id: 594e9ab38835ecdf02856286
+  description: 导入导出
   extend: {}
   items:
     description:
@@ -972,7 +1029,8 @@
   schema: etl
   version: 0.5.8
   parent: ''
-- description: 文件
+- _id: 594e9ab38835ecdf02856287
+  description: 文件
   extend: {}
   items:
     valid:
@@ -1046,13 +1104,18 @@
       type: String
       default: file
       description: '文件夹 : folder, 文件 : file'
+    data:
+      type: Object
+      default: {}
+      description: 内容（RDB时使用）
   kind: 2
   lock: 0
   public: 1
   schema: file
   version: 0.5.8
   parent: ''
-- schema: form
+- _id: 594e9ab38835ecdf02856288
+  schema: form
   kind: 2
   description: 表单
   public: 1
@@ -1181,7 +1244,8 @@
   lock: 0
   extend: {}
   parent: ''
-- description: 功能菜单
+- _id: 594e9ab38835ecdf02856289
+  description: 功能菜单
   lock: 0
   extend: {}
   items:
@@ -1271,7 +1335,8 @@
   schema: function
   version: 0.5.8
   parent: ''
-- description: 组
+- _id: 594e9ab38835ecdf0285628a
+  description: 组
   extend: {}
   items:
     outer:
@@ -1371,7 +1436,8 @@
   schema: group
   version: 0.5.8
   parent: ''
-- description: 多国语词条
+- _id: 594e9ab38835ecdf0285628b
+  description: 多国语词条
   extend: {}
   items:
     createBy:
@@ -1427,7 +1493,8 @@
   schema: i18n
   version: 0.5.8
   parent: ''
-- description: 任务管理
+- _id: 594e9ab38835ecdf0285628c
+  description: 任务管理
   lock: 0
   extend: {}
   items:
@@ -1552,7 +1619,8 @@
   schema: job
   version: 0.5.8
   parent: ''
-- schema: jsessions
+- _id: 5971bc2c81ada5eed7085520
+  schema: jsessions
   description: ''
   items:
     _id:
@@ -1600,7 +1668,8 @@
   extend: {}
   public: 1
   parent: ''
-- schema: log
+- _id: 594e9ab38835ecdf0285628d
+  schema: log
   description: 日志
   parent: ''
   items:
@@ -1636,7 +1705,8 @@
   version: 0.5.8
   extend: {}
   public: 1
-- description: 文本
+- _id: 594e9ab38835ecdf0285628e
+  description: 文本
   extend: {}
   items:
     body:
@@ -1725,7 +1795,8 @@
   schema: markdown
   version: 0.5.8
   parent: ''
-- description: 地区
+- _id: 594e9ab38835ecdf0285628f
+  description: 地区
   extend: {}
   items:
     invisible:
@@ -1783,7 +1854,8 @@
   schema: place
   version: 0.5.8
   parent: ''
-- description: 角色
+- _id: 594e9ab38835ecdf02856290
+  description: 角色
   extend: {}
   items:
     name:
@@ -1835,7 +1907,8 @@
   schema: role
   version: 0.5.8
   parent: ''
-- description: 路径定义
+- _id: 594e9ab38835ecdf02856291
+  description: 路径定义
   lock: 0
   extend: {}
   items:
@@ -1903,7 +1976,8 @@
   schema: route
   version: 0.5.8
   parent: ''
-- schema: setting
+- _id: 594e9ab38835ecdf02856292
+  schema: setting
   kind: 2
   description: "\b设定文件（保存Tenant别的设定内容）"
   public: 1
@@ -1953,7 +2027,8 @@
   lock: 0
   extend: {}
   parent: ''
-- description: Schema定义
+- _id: 594e9ab38835ecdf02856293
+  description: Schema定义
   lock: 0
   extend: {}
   items:
@@ -2039,7 +2114,8 @@
   schema: structure
   version: 0.5.8
   parent: ''
-- description: 标签
+- _id: 594e9ab38835ecdf02856294
+  description: 标签
   extend: {}
   items:
     createAt:
@@ -2091,7 +2167,8 @@
   schema: tag
   version: 0.5.8
   parent: ''
-- description: Multi-Tenant定义
+- _id: 594e9ab38835ecdf02856295
+  description: Multi-Tenant定义
   lock: 0
   extend: {}
   items:
@@ -2149,7 +2226,8 @@
   schema: tenant
   version: 0.5.8
   parent: ''
-- schema: test
+- _id: 596ee30181ada5eed7085444
+  schema: test
   description: 测试
   items:
     _id:
@@ -2193,7 +2271,8 @@
   extend: {}
   public: 1
   parent: ''
-- description: 用户
+- _id: 594e9ab38835ecdf02856296
+  description: 用户
   lock: 0
   extend: {}
   items:
@@ -2299,7 +2378,8 @@
   schema: user
   version: 0.5.8
   parent: ''
-- description: 校验规则
+- _id: 594e9ab38835ecdf02856297
+  description: 校验规则
   extend: {}
   items:
     class:

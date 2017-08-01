@@ -194,7 +194,7 @@ public class Environment {
         if (this.args.local) {
             return this.mysql.getHost();
         }
-        return System.getenv(Constant.ENV_LIGHT_MONGO_HOST);
+        return System.getenv(Constant.ENV_LIGHT_MYSQL_HOST);
     }
 
     public int getMySQLPort() {

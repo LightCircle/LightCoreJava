@@ -1,4 +1,360 @@
-- action: add
+- _id: 597596b52ce483bf9a50799a
+  action: add
+  api: /api/a/add
+  class: a
+  description: Add
+  filters: []
+  free: false
+  kind: 0
+  path: ''
+  schema: a
+  script: ''
+  selects:
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: _id
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: valid
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createAt
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createBy
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateAt
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateBy
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: sequence
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: type
+      schema: ''
+      select: false
+  sorts: []
+  type: 1
+  version: 0.5.8
+- _id: 597596b52ce483bf9a507998
+  action: get
+  api: /api/a/get
+  class: a
+  description: Get
+  filters: []
+  free: false
+  kind: 0
+  path: ''
+  schema: a
+  script: ''
+  selects:
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: _id
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: valid
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createAt
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createBy
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateAt
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateBy
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: sequence
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: type
+      schema: ''
+      select: true
+  sorts: []
+  type: 6
+  version: 0.5.8
+- _id: 597596b52ce483bf9a507999
+  action: list
+  api: /api/a/list
+  class: a
+  description: List
+  filters: []
+  free: false
+  kind: 0
+  path: ''
+  schema: a
+  script: ''
+  selects:
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: _id
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: valid
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createAt
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createBy
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateAt
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateBy
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: sequence
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: type
+      schema: ''
+      select: true
+  sorts: []
+  type: 4
+  version: 0.5.8
+- _id: 597596b52ce483bf9a50799c
+  action: remove
+  api: /api/a/remove
+  class: a
+  description: Remove
+  filters: []
+  free: false
+  kind: 0
+  path: ''
+  schema: a
+  script: ''
+  selects:
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: _id
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: valid
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createAt
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createBy
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateAt
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateBy
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: sequence
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: type
+      schema: ''
+      select: false
+  sorts: []
+  type: 3
+  version: 0.5.8
+- _id: 597596b52ce483bf9a50799b
+  action: update
+  api: /api/a/update
+  class: a
+  description: Update
+  filters: []
+  free: false
+  kind: 0
+  path: ''
+  schema: a
+  script: ''
+  selects:
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: _id
+      schema: ''
+      select: true
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: valid
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createAt
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: createBy
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateAt
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: updateBy
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: sequence
+      schema: ''
+      select: false
+    - alias: ''
+      conditions: {}
+      fields: []
+      format: ''
+      key: type
+      schema: ''
+      select: false
+  sorts: []
+  type: 2
+  version: 0.5.8
+- _id: 594e9ab48835ecdf0285629e
+  action: add
   api: /api/access/add
   class: access
   description: 添加访问控制
@@ -6,17 +362,7 @@
   kind: 2
   path: ''
   schema: access
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -71,7 +417,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf0285629f
+  action: get
   api: /api/access/get
   class: access
   description: 获取访问控制信息
@@ -79,17 +426,7 @@
   kind: 2
   path: ''
   schema: access
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -150,7 +487,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562a0
+  action: list
   api: /api/access/list
   class: access
   description: 访问控制一览
@@ -163,17 +501,7 @@
   kind: 2
   path: ''
   schema: access
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -228,7 +556,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562a1
+  action: remove
   api: /api/access/remove
   class: access
   description: 删除访问控制
@@ -236,17 +565,7 @@
   kind: 2
   path: ''
   schema: access
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -301,7 +620,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562a2
+  action: update
   api: /api/access/update
   class: access
   description: 更新访问控制
@@ -309,17 +629,7 @@
   kind: 2
   path: ''
   schema: access
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -374,7 +684,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: captcha
+- _id: 594e9ab48835ecdf028562a3
+  action: captcha
   api: /api/account/captcha
   class: account
   description: 验证码
@@ -382,22 +693,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: login
+- _id: 594e9ab48835ecdf028562a4
+  action: login
   api: /api/account/login
   class: account
   description: 登陆
@@ -435,22 +737,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 1
   version: 0.5.8
-- action: logout
+- _id: 594e9ab48835ecdf028562a5
+  action: logout
   api: /api/account/logout
   class: account
   description: 注销
@@ -458,22 +751,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: register
+- _id: 594e9ab48835ecdf028562a6
+  action: register
   api: /api/account/register
   class: account
   description: 注册账户
@@ -517,22 +801,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 1
   version: 0.5.8
-- action: shift
+- _id: 594e9ab48835ecdf028562a7
+  action: shift
   api: /api/account/shift
   class: account
   description: 切换应用
@@ -546,22 +821,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: token
+- _id: 594e9ab48835ecdf028562a8
+  action: token
   api: /api/account/token
   class: account
   description: 获取平台的访问Token
@@ -587,22 +853,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 1
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562a9
+  action: add
   api: /api/app/add
   class: app
   description: Add
@@ -610,17 +867,7 @@
   kind: 2
   path: ''
   schema: app
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -690,7 +937,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: copy
+- _id: 595276e00671c23e7a5b5e7c
+  action: copy
   api: /api/app/copy
   class: app
   description: 拷贝应用程序
@@ -700,22 +948,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 1
   version: 0.5.8
-- action: dashboard
+- _id: 594e9ab48835ecdf028562aa
+  action: dashboard
   api: /api/app/dashboard
   class: app
   description: Dashboard信息
@@ -723,22 +962,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: dbaccount
+- _id: 594e9ab48835ecdf028562ab
+  action: dbaccount
   api: /api/app/dbaccount
   class: app
   description: 创建 删除数据库账户
@@ -764,22 +994,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 1
   version: 0.5.8
-- action: developer
+- _id: 594e9ab48835ecdf028562ac
+  action: developer
   api: /api/app/developer
   class: app
   description: 开发者一览
@@ -787,22 +1008,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562ad
+  action: get
   api: /api/app/get
   class: app
   description: Get
@@ -815,17 +1027,7 @@
   kind: 2
   path: ''
   schema: app
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -925,7 +1127,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: invite
+- _id: 594e9ab48835ecdf028562ae
+  action: invite
   api: /api/app/invite
   class: app
   description: 要请开发者
@@ -933,22 +1136,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 1
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562af
+  action: list
   api: /api/app/list
   class: app
   description: 一览
@@ -961,17 +1155,7 @@
   kind: 2
   path: ''
   schema: app
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1045,7 +1229,8 @@
       order: desc
   type: 4
   version: 0.5.8
-- action: reject
+- _id: 594e9ab48835ecdf028562b0
+  action: reject
   api: /api/app/reject
   class: app
   description: 移除开发者
@@ -1059,22 +1244,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 3
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562b1
+  action: remove
   api: /api/app/remove
   class: app
   description: Remove
@@ -1082,17 +1258,7 @@
   kind: 2
   path: ''
   schema: app
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1162,7 +1328,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: switch
+- _id: 594e9ab48835ecdf028562b2
+  action: switch
   api: /api/app/switch
   class: app
   description: 切换工作区
@@ -1176,22 +1343,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562b3
+  action: update
   api: /api/app/update
   class: app
   description: Update
@@ -1199,17 +1357,7 @@
   kind: 2
   path: ''
   schema: app
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1279,7 +1427,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: workspace
+- _id: 594e9ab48835ecdf028562b4
+  action: workspace
   api: /api/app/workspace
   class: app
   description: Workspace一览
@@ -1287,22 +1436,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562b5
+  action: add
   api: /api/authority/add
   class: authority
   description: 添加权限
@@ -1310,17 +1450,7 @@
   kind: 2
   path: ''
   schema: authority
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1365,7 +1495,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562b6
+  action: get
   api: /api/authority/get
   class: authority
   description: 获取权限
@@ -1373,17 +1504,7 @@
   kind: 2
   path: ''
   schema: authority
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1428,7 +1549,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562b7
+  action: list
   api: /api/authority/list
   class: authority
   description: 权限一览
@@ -1441,17 +1563,7 @@
   kind: 2
   path: ''
   schema: authority
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1500,7 +1612,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562b8
+  action: remove
   api: /api/authority/remove
   class: authority
   description: 删除权限
@@ -1508,17 +1621,7 @@
   kind: 2
   path: ''
   schema: authority
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1563,7 +1666,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562b9
+  action: update
   api: /api/authority/update
   class: authority
   description: 更新权限
@@ -1571,17 +1675,7 @@
   kind: 2
   path: ''
   schema: authority
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1626,7 +1720,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562ba
+  action: add
   api: /api/board/add
   class: board
   description: Add
@@ -1634,17 +1729,7 @@
   kind: 2
   path: ''
   schema: board
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -1835,7 +1920,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562bb
+  action: get
   api: /api/board/get
   class: board
   description: Get
@@ -1853,17 +1939,7 @@
   kind: 2
   path: ''
   schema: board
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -2054,7 +2130,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562bc
+  action: list
   api: /api/board/list
   class: board
   description: List
@@ -2077,17 +2154,7 @@
   kind: 2
   path: ''
   schema: board
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -2282,7 +2349,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562bd
+  action: remove
   api: /api/board/remove
   class: board
   description: Remove
@@ -2304,17 +2372,7 @@
   kind: 2
   path: ''
   schema: board
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -2505,7 +2563,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562be
+  action: update
   api: /api/board/update
   class: board
   description: Update
@@ -2513,17 +2572,7 @@
   kind: 2
   path: ''
   schema: board
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -2714,7 +2763,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562bf
+  action: add
   api: /api/category/add
   class: category
   description: Add
@@ -2722,17 +2772,7 @@
   kind: 2
   path: ''
   schema: category
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -2822,7 +2862,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf028562c0
+  action: count
   api: /api/category/count
   class: category
   description: count
@@ -2830,17 +2871,7 @@
   kind: 2
   path: ''
   schema: category
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -2933,7 +2964,8 @@
   sorts: []
   type: 7
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562c1
+  action: get
   api: /api/category/get
   class: category
   description: Get
@@ -2956,17 +2988,7 @@
   kind: 2
   path: ''
   schema: category
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3059,7 +3081,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562c2
+  action: list
   api: /api/category/list
   class: category
   description: List
@@ -3087,17 +3110,7 @@
   kind: 2
   path: ''
   schema: category
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3194,7 +3207,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562c3
+  action: remove
   api: /api/category/remove
   class: category
   description: Remove
@@ -3202,17 +3216,7 @@
   kind: 2
   path: ''
   schema: category
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3302,7 +3306,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562c4
+  action: update
   api: /api/category/update
   class: category
   description: Update
@@ -3310,17 +3315,7 @@
   kind: 2
   path: ''
   schema: category
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3410,7 +3405,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562c5
+  action: add
   api: /api/code/add
   class: code
   description: Add
@@ -3418,17 +3414,7 @@
   kind: 2
   path: ''
   schema: code
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3493,7 +3479,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562c6
+  action: get
   api: /api/code/get
   class: code
   description: Get
@@ -3506,17 +3493,7 @@
   kind: 2
   path: ''
   schema: code
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3581,7 +3558,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562c7
+  action: list
   api: /api/code/list
   class: code
   description: List
@@ -3599,17 +3577,7 @@
   kind: 2
   path: ''
   schema: code
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3674,7 +3642,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562c8
+  action: remove
   api: /api/code/remove
   class: code
   description: Remove
@@ -3695,17 +3664,7 @@
   kind: 2
   path: ''
   schema: code
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3770,7 +3729,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562c9
+  action: update
   api: /api/code/update
   class: code
   description: Update
@@ -3787,17 +3747,7 @@
   kind: 2
   path: ''
   schema: code
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3862,7 +3812,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562ca
+  action: add
   api: /api/configuration/add
   class: configuration
   description: Add
@@ -3870,17 +3821,7 @@
   kind: 2
   path: ''
   schema: configuration
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -3950,7 +3891,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562cb
+  action: get
   api: /api/configuration/get
   class: configuration
   description: Get
@@ -3968,17 +3910,7 @@
   kind: 2
   path: ''
   schema: configuration
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4048,7 +3980,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562cc
+  action: list
   api: /api/configuration/list
   class: configuration
   description: List
@@ -4061,17 +3994,7 @@
   kind: 2
   path: ''
   schema: configuration
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4149,7 +4072,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562cd
+  action: remove
   api: /api/configuration/remove
   class: configuration
   description: Remove
@@ -4167,17 +4091,7 @@
   kind: 2
   path: ''
   schema: configuration
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4247,7 +4161,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562ce
+  action: update
   api: /api/configuration/update
   class: configuration
   description: Update
@@ -4265,17 +4180,7 @@
   kind: 2
   path: ''
   schema: configuration
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4345,7 +4250,24 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: run
+- _id: 597f37c0cceed600120b4729
+  action: build
+  api: /api/container/build
+  class: container
+  description: 编译Java应用
+  filters:
+    - parameter: id
+      type: String
+  free: false
+  kind: 3
+  path: ''
+  schema: ''
+  selects: []
+  sorts: []
+  type: 2
+  version: 0.5.8
+- _id: 594e9ab48835ecdf028562cf
+  action: run
   api: /api/container/run
   class: container
   description: 创建并启动
@@ -4359,22 +4281,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 2
   version: 0.5.8
-- action: stop
+- _id: 594e9ab48835ecdf028562d0
+  action: stop
   api: /api/container/stop
   class: container
   description: 停止并删除
@@ -4388,22 +4301,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 2
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562d1
+  action: update
   api: /api/container/update
   class: container
   description: 更新应用
@@ -4417,22 +4321,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562d2
+  action: add
   api: /api/developer/add
   class: developer
   description: Add
@@ -4440,17 +4335,7 @@
   kind: 2
   path: ''
   schema: developer
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4565,7 +4450,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562d3
+  action: get
   api: /api/developer/get
   class: developer
   description: Get
@@ -4588,17 +4474,7 @@
   kind: 2
   path: ''
   schema: developer
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4713,7 +4589,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562d4
+  action: list
   api: /api/developer/list
   class: developer
   description: List
@@ -4731,17 +4608,7 @@
   kind: 2
   path: ''
   schema: developer
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4861,7 +4728,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562d5
+  action: remove
   api: /api/developer/remove
   class: developer
   description: Remove
@@ -4869,17 +4737,7 @@
   kind: 2
   path: ''
   schema: developer
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -4994,7 +4852,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562d6
+  action: update
   api: /api/developer/update
   class: developer
   description: Update
@@ -5007,17 +4866,7 @@
   kind: 2
   path: ''
   schema: developer
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -5132,7 +4981,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: markdown
+- _id: 594e9ab48835ecdf028562d7
+  action: markdown
   api: /api/document/markdown
   class: document
   description: Markdown
@@ -5140,22 +4990,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: code
+- _id: 594e9ab48835ecdf028562d8
+  action: code
   api: /api/download/code
   class: download
   description: 代码打包下载
@@ -5163,22 +5004,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: i18n
+- _id: 594e9ab48835ecdf028562d9
+  action: i18n
   api: /api/download/i18n
   class: download
   description: 下载i18n的JSON文件
@@ -5186,22 +5018,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: setting
+- _id: 594e9ab48835ecdf028562da
+  action: setting
   api: /api/download/setting
   class: download
   description: 下载api等设置数据
@@ -5209,22 +5032,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562db
+  action: add
   api: /api/etl/add
   class: etl
   description: Add
@@ -5232,17 +5046,7 @@
   kind: 2
   path: ''
   schema: etl
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -5395,7 +5199,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: exec
+- _id: 594e9ab48835ecdf028562dc
+  action: exec
   api: /api/etl/exec
   class: etl
   description: 执行
@@ -5409,22 +5214,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562dd
+  action: get
   api: /api/etl/get
   class: etl
   description: Get
@@ -5437,17 +5233,7 @@
   kind: 2
   path: ''
   schema: etl
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -5602,7 +5388,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562de
+  action: list
   api: /api/etl/list
   class: etl
   description: List
@@ -5620,17 +5407,7 @@
   kind: 2
   path: ''
   schema: etl
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -5785,7 +5562,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562df
+  action: remove
   api: /api/etl/remove
   class: etl
   description: Remove
@@ -5793,17 +5571,7 @@
   kind: 2
   path: ''
   schema: etl
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -5956,7 +5724,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562e0
+  action: update
   api: /api/etl/update
   class: etl
   description: Update
@@ -5964,17 +5733,7 @@
   kind: 2
   path: ''
   schema: etl
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6127,7 +5886,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562e1
+  action: add
   api: /api/file/add
   class: file
   description: Add
@@ -6135,17 +5895,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6217,10 +5967,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf028562e2
+  action: count
   api: /api/file/count
   class: file
   description: count
@@ -6228,17 +5982,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6310,10 +6054,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 7
   version: 0.5.8
-- action: download
+- _id: 594e9ab48835ecdf028562e3
+  action: download
   api: /api/file/download
   class: file
   description: File Download
@@ -6326,17 +6074,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6408,10 +6146,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 6
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562e4
+  action: get
   api: /api/file/get
   class: file
   description: Get
@@ -6419,17 +6161,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6501,10 +6233,14 @@
       format: ''
       key: valid
       select: true
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 6
   version: 0.5.8
-- action: image
+- _id: 594e9ab48835ecdf028562e5
+  action: image
   api: /api/file/image
   class: file
   description: Image Download
@@ -6512,17 +6248,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6594,10 +6320,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562e6
+  action: list
   api: /api/file/list
   class: file
   description: List
@@ -6625,17 +6355,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6707,6 +6427,9 @@
       format: ''
       key: valid
       select: true
+    - fields: []
+      key: data
+      select: false
   sorts:
     - dynamic: fix
       index: 0
@@ -6714,7 +6437,8 @@
       order: desc
   type: 4
   version: 0.5.8
-- action: pdf
+- _id: 594e9ab48835ecdf028562e7
+  action: pdf
   api: /api/file/pdf
   class: file
   description: PDF下载
@@ -6722,17 +6446,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6804,10 +6518,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 6
   version: 0.5.8
-- action: qrcode
+- _id: 594e9ab48835ecdf028562e8
+  action: qrcode
   api: /api/file/qrcode
   class: file
   description: 生成qrcode
@@ -6815,17 +6533,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6897,10 +6605,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 6
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562e9
+  action: remove
   api: /api/file/remove
   class: file
   description: Remove
@@ -6908,17 +6620,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -6990,10 +6692,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562ea
+  action: update
   api: /api/file/update
   class: file
   description: Update
@@ -7001,17 +6707,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -7083,10 +6779,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562eb
+  action: add
   api: /api/file/upload
   class: file
   description: 直接上传，不生成meta信息
@@ -7094,17 +6794,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -7176,10 +6866,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 1
   version: 0.5.8
-- action: zip
+- _id: 594e9ab48835ecdf028562ec
+  action: zip
   api: /api/file/zip
   class: file
   description: Zip Download
@@ -7187,17 +6881,7 @@
   kind: 2
   path: ''
   schema: file
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -7269,10 +6953,14 @@
       format: ''
       key: kind
       select: false
+    - fields: []
+      key: data
+      select: false
   sorts: []
   type: 6
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562ed
+  action: add
   api: /api/form/add
   class: form
   description: Add
@@ -7280,17 +6968,7 @@
   kind: 2
   path: ''
   schema: form
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -7426,7 +7104,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562ee
+  action: get
   api: /api/form/get
   class: form
   description: Get
@@ -7434,17 +7113,7 @@
   kind: 2
   path: ''
   schema: form
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -7580,7 +7249,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562ef
+  action: list
   api: /api/form/list
   class: form
   description: List
@@ -7588,17 +7258,7 @@
   kind: 2
   path: ''
   schema: form
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -7741,7 +7401,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562f0
+  action: remove
   api: /api/form/remove
   class: form
   description: Remove
@@ -7749,17 +7410,7 @@
   kind: 2
   path: ''
   schema: form
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -7895,7 +7546,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562f1
+  action: update
   api: /api/form/update
   class: form
   description: Update
@@ -7903,17 +7555,7 @@
   kind: 2
   path: ''
   schema: form
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8049,7 +7691,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562f2
+  action: add
   api: /api/function/add
   class: function
   description: Add
@@ -8057,17 +7700,7 @@
   kind: 2
   path: ''
   schema: function
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8152,7 +7785,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562f3
+  action: get
   api: /api/function/get
   class: function
   description: 详细
@@ -8160,17 +7794,7 @@
   kind: 2
   path: ''
   schema: function
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8255,7 +7879,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562f4
+  action: list
   api: /api/function/list
   class: function
   description: 一览
@@ -8278,17 +7903,7 @@
   kind: 2
   path: ''
   schema: function
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8377,7 +7992,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562f5
+  action: remove
   api: /api/function/remove
   class: function
   description: remove
@@ -8390,17 +8006,7 @@
   kind: 2
   path: ''
   schema: function
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8485,7 +8091,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562f6
+  action: update
   api: /api/function/update
   class: function
   description: 更新
@@ -8493,17 +8100,7 @@
   kind: 2
   path: ''
   schema: function
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8588,7 +8185,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562f7
+  action: add
   api: /api/group/add
   class: group
   description: add
@@ -8596,17 +8194,7 @@
   kind: 2
   path: ''
   schema: group
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8696,7 +8284,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf028562f8
+  action: count
   api: /api/group/count
   class: group
   description: count
@@ -8704,17 +8293,7 @@
   kind: 2
   path: ''
   schema: group
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8806,7 +8385,8 @@
   sorts: []
   type: 7
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562f9
+  action: get
   api: /api/group/get
   class: group
   description: get
@@ -8819,17 +8399,7 @@
   kind: 2
   path: ''
   schema: group
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -8921,7 +8491,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562fa
+  action: list
   api: /api/group/list
   class: group
   description: List
@@ -8944,17 +8515,7 @@
   kind: 2
   path: ''
   schema: group
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9046,7 +8607,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf028562fb
+  action: remove
   api: /api/group/remove
   class: group
   description: remove
@@ -9054,17 +8616,7 @@
   kind: 2
   path: ''
   schema: group
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9154,7 +8706,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf028562fc
+  action: update
   api: /api/group/update
   class: group
   description: update
@@ -9162,17 +8715,7 @@
   kind: 2
   path: ''
   schema: group
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9262,7 +8805,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf028562fd
+  action: add
   api: /api/i18n/add
   class: i18n
   description: Add
@@ -9270,17 +8814,7 @@
   kind: 2
   path: ''
   schema: i18n
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9335,7 +8869,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf028562fe
+  action: get
   api: /api/i18n/get
   class: i18n
   description: Get
@@ -9343,17 +8878,7 @@
   kind: 2
   path: ''
   schema: i18n
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9408,7 +8933,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf028562ff
+  action: list
   api: /api/i18n/list
   class: i18n
   description: List
@@ -9426,17 +8952,7 @@
   kind: 2
   path: ''
   schema: i18n
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9499,7 +9015,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856300
+  action: remove
   api: /api/i18n/remove
   class: i18n
   description: Remove
@@ -9507,17 +9024,7 @@
   kind: 2
   path: ''
   schema: i18n
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9572,7 +9079,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856301
+  action: update
   api: /api/i18n/update
   class: i18n
   description: Update
@@ -9580,17 +9088,7 @@
   kind: 2
   path: ''
   schema: i18n
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9645,7 +9143,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856302
+  action: add
   api: /api/job/add
   class: job
   description: Add
@@ -9653,17 +9152,7 @@
   kind: 2
   path: ''
   schema: job
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9768,7 +9257,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856303
+  action: get
   api: /api/job/get
   class: job
   description: Get
@@ -9776,17 +9266,7 @@
   kind: 2
   path: ''
   schema: job
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -9891,7 +9371,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: immediate
+- _id: 59579a8db285e92f187dc1ed
+  action: immediate
   api: /api/job/immediate
   class: job
   description: 立即执行定时任务
@@ -9899,22 +9380,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856304
+  action: list
   api: /api/job/list
   class: job
   description: List
@@ -9926,17 +9398,7 @@
   kind: 2
   path: ''
   schema: job
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10041,7 +9503,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856305
+  action: remove
   api: /api/job/remove
   class: job
   description: Remove
@@ -10049,17 +9512,7 @@
   kind: 2
   path: ''
   schema: job
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10164,7 +9617,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856306
+  action: update
   api: /api/job/update
   class: job
   description: Update
@@ -10172,17 +9626,7 @@
   kind: 2
   path: ''
   schema: job
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10287,7 +9731,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 5971bc2c81ada5eed7085523
+  action: add
   api: /api/jsessions/add
   class: jsessions
   description: Add
@@ -10296,6 +9741,7 @@
   kind: 0
   path: ''
   schema: jsessions
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -10357,7 +9803,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 5971bc2c81ada5eed7085521
+  action: get
   api: /api/jsessions/get
   class: jsessions
   description: Get
@@ -10366,6 +9813,7 @@
   kind: 0
   path: ''
   schema: jsessions
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -10427,7 +9875,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 5971bc2c81ada5eed7085522
+  action: list
   api: /api/jsessions/list
   class: jsessions
   description: List
@@ -10436,6 +9885,7 @@
   kind: 0
   path: ''
   schema: jsessions
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -10497,7 +9947,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 5971bc2c81ada5eed7085525
+  action: remove
   api: /api/jsessions/remove
   class: jsessions
   description: Remove
@@ -10506,6 +9957,7 @@
   kind: 0
   path: ''
   schema: jsessions
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -10567,7 +10019,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 5971bc2c81ada5eed7085524
+  action: update
   api: /api/jsessions/update
   class: jsessions
   description: Update
@@ -10576,6 +10029,7 @@
   kind: 0
   path: ''
   schema: jsessions
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -10637,7 +10091,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856307
+  action: add
   api: /api/log/add
   class: log
   description: Add
@@ -10645,17 +10100,7 @@
   kind: 2
   path: ''
   schema: log
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10700,7 +10145,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856308
+  action: get
   api: /api/log/get
   class: log
   description: Get
@@ -10713,17 +10159,7 @@
   kind: 2
   path: ''
   schema: log
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10768,7 +10204,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856309
+  action: list
   api: /api/log/list
   class: log
   description: List
@@ -10781,17 +10218,7 @@
   kind: 2
   path: ''
   schema: log
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10840,7 +10267,8 @@
       order: desc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf0285630a
+  action: remove
   api: /api/log/remove
   class: log
   description: Remove
@@ -10853,17 +10281,7 @@
   kind: 2
   path: ''
   schema: log
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10908,7 +10326,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf0285630b
+  action: update
   api: /api/log/update
   class: log
   description: Update
@@ -10916,17 +10335,7 @@
   kind: 2
   path: ''
   schema: log
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -10971,7 +10380,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf0285630c
+  action: add
   api: /api/markdown/add
   class: markdown
   description: Add
@@ -10979,17 +10389,7 @@
   kind: 2
   path: ''
   schema: markdown
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11044,7 +10444,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf0285630d
+  action: get
   api: /api/markdown/get
   class: markdown
   description: Get
@@ -11062,17 +10463,7 @@
   kind: 2
   path: ''
   schema: markdown
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11127,7 +10518,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf0285630e
+  action: list
   api: /api/markdown/list
   class: markdown
   description: List
@@ -11150,17 +10542,7 @@
   kind: 2
   path: ''
   schema: markdown
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11235,7 +10617,8 @@
       order: desc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf0285630f
+  action: remove
   api: /api/markdown/remove
   class: markdown
   description: Remove
@@ -11243,17 +10626,7 @@
   kind: 2
   path: ''
   schema: markdown
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11308,7 +10681,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856310
+  action: update
   api: /api/markdown/update
   class: markdown
   description: Update
@@ -11316,17 +10690,7 @@
   kind: 2
   path: ''
   schema: markdown
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11381,7 +10745,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856311
+  action: list
   api: /api/menu/list
   class: menu
   description: 获取菜单一览
@@ -11395,22 +10760,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856312
+  action: add
   api: /api/place/add
   class: place
   description: Add
@@ -11418,17 +10774,7 @@
   kind: 2
   path: ''
   schema: place
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11483,7 +10829,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf02856313
+  action: count
   api: /api/place/count
   class: place
   description: count
@@ -11496,17 +10843,7 @@
   kind: 2
   path: ''
   schema: place
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11562,7 +10899,8 @@
   sorts: []
   type: 7
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856314
+  action: get
   api: /api/place/get
   class: place
   description: Get
@@ -11570,17 +10908,7 @@
   kind: 2
   path: ''
   schema: place
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11638,7 +10966,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856315
+  action: list
   api: /api/place/list
   class: place
   description: List
@@ -11656,17 +10985,7 @@
   kind: 2
   path: ''
   schema: place
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11722,7 +11041,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856316
+  action: remove
   api: /api/place/remove
   class: place
   description: Remove
@@ -11730,17 +11050,7 @@
   kind: 2
   path: ''
   schema: place
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11795,7 +11105,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856317
+  action: update
   api: /api/place/update
   class: place
   description: Update
@@ -11803,17 +11114,7 @@
   kind: 2
   path: ''
   schema: place
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11868,7 +11169,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856318
+  action: list
   api: /api/registry/list
   class: registry
   description: 镜像库镜像一览
@@ -11876,22 +11178,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: tags
+- _id: 594fec9faca8ee3b398830bb
+  action: tags
   api: /api/registry/tags
   class: registry
   description: 获取Tag一览
@@ -11899,22 +11192,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856319
+  action: add
   api: /api/role/add
   class: role
   description: 新建权限
@@ -11922,17 +11206,7 @@
   kind: 2
   path: ''
   schema: role
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -11982,7 +11256,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf0285631a
+  action: count
   api: /api/role/count
   class: role
   description: count
@@ -11990,17 +11265,7 @@
   kind: 2
   path: ''
   schema: role
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12050,7 +11315,8 @@
   sorts: []
   type: 7
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf0285631b
+  action: get
   api: /api/role/get
   class: role
   description: 查看角色
@@ -12058,17 +11324,7 @@
   kind: 2
   path: ''
   schema: role
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12118,7 +11374,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf0285631c
+  action: list
   api: /api/role/list
   class: role
   description: 角色一览
@@ -12136,17 +11393,7 @@
   kind: 2
   path: ''
   schema: role
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12196,7 +11443,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf0285631d
+  action: remove
   api: /api/role/remove
   class: role
   description: 删除权限
@@ -12204,17 +11452,7 @@
   kind: 2
   path: ''
   schema: role
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12264,7 +11502,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf0285631e
+  action: update
   api: /api/role/update
   class: role
   description: 更新权限
@@ -12272,17 +11511,7 @@
   kind: 2
   path: ''
   schema: role
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12332,7 +11561,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf0285631f
+  action: add
   api: /api/route/add
   class: route
   description: Add
@@ -12340,17 +11570,7 @@
   kind: 2
   path: ''
   schema: route
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12415,7 +11635,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856320
+  action: get
   api: /api/route/get
   class: route
   description: Get
@@ -12423,17 +11644,7 @@
   kind: 2
   path: ''
   schema: route
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12498,7 +11709,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856321
+  action: list
   api: /api/route/list
   class: route
   description: List
@@ -12511,17 +11723,7 @@
   kind: 2
   path: ''
   schema: route
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12590,7 +11792,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856322
+  action: remove
   api: /api/route/remove
   class: route
   description: Remove
@@ -12598,17 +11801,7 @@
   kind: 2
   path: ''
   schema: route
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12673,7 +11866,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856323
+  action: update
   api: /api/route/update
   class: route
   description: Update
@@ -12681,17 +11875,7 @@
   kind: 2
   path: ''
   schema: route
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12756,7 +11940,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856324
+  action: add
   api: /api/setting/add
   class: setting
   description: Add
@@ -12764,17 +11949,7 @@
   kind: 2
   path: ''
   schema: setting
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12839,7 +12014,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856325
+  action: get
   api: /api/setting/get
   class: setting
   description: Get
@@ -12852,17 +12028,7 @@
   kind: 2
   path: ''
   schema: setting
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -12927,7 +12093,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856326
+  action: list
   api: /api/setting/list
   class: setting
   description: List
@@ -12935,17 +12102,7 @@
   kind: 2
   path: ''
   schema: setting
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13010,7 +12167,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856327
+  action: remove
   api: /api/setting/remove
   class: setting
   description: Remove
@@ -13018,17 +12176,7 @@
   kind: 2
   path: ''
   schema: setting
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13093,7 +12241,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856328
+  action: update
   api: /api/setting/update
   class: setting
   description: Update
@@ -13106,17 +12255,7 @@
   kind: 2
   path: ''
   schema: setting
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13181,7 +12320,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856329
+  action: add
   api: /api/structure/add
   class: structure
   description: Add
@@ -13189,17 +12329,7 @@
   kind: 2
   path: ''
   schema: structure
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13279,7 +12409,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf0285632a
+  action: count
   api: /api/structure/count
   class: structure
   description: Count
@@ -13292,17 +12423,7 @@
   kind: 2
   path: ''
   schema: structure
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13382,7 +12503,8 @@
   sorts: []
   type: 7
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf0285632b
+  action: get
   api: /api/structure/get
   class: structure
   description: Get
@@ -13395,17 +12517,7 @@
   kind: 2
   path: ''
   schema: structure
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13485,7 +12597,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf0285632c
+  action: list
   api: /api/structure/list
   class: structure
   description: List
@@ -13508,17 +12621,7 @@
   kind: 2
   path: ''
   schema: structure
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13602,7 +12705,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf0285632d
+  action: remove
   api: /api/structure/remove
   class: structure
   description: Remove
@@ -13619,17 +12723,7 @@
   kind: 2
   path: ''
   schema: structure
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13709,7 +12803,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf0285632e
+  action: update
   api: /api/structure/update
   class: structure
   description: Update
@@ -13717,17 +12812,7 @@
   kind: 2
   path: ''
   schema: structure
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13807,7 +12892,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf0285632f
+  action: update
   api: /api/system/update
   class: system
   description: 更新配置信息
@@ -13815,22 +12901,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 1
   version: 0.5.8
-- action: version
+- _id: 594e9ab48835ecdf02856330
+  action: version
   api: /api/system/version
   class: system
   description: 版本检查
@@ -13838,22 +12915,13 @@
   kind: 3
   path: ''
   schema: ''
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects: []
   sorts: []
   type: 4
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856331
+  action: add
   api: /api/tag/add
   class: tag
   description: Add
@@ -13861,17 +12929,7 @@
   kind: 2
   path: ''
   schema: tag
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13921,7 +12979,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf02856332
+  action: count
   api: /api/tag/count
   class: tag
   description: count
@@ -13929,17 +12988,7 @@
   kind: 2
   path: ''
   schema: tag
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -13989,7 +13038,8 @@
   sorts: []
   type: 7
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856333
+  action: get
   api: /api/tag/get
   class: tag
   description: Get
@@ -14007,17 +13057,7 @@
   kind: 2
   path: ''
   schema: tag
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14067,7 +13107,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856334
+  action: list
   api: /api/tag/list
   class: tag
   description: List
@@ -14085,17 +13126,7 @@
   kind: 2
   path: ''
   schema: tag
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14145,7 +13176,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856335
+  action: remove
   api: /api/tag/remove
   class: tag
   description: Remove
@@ -14153,17 +13185,7 @@
   kind: 2
   path: ''
   schema: tag
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14213,7 +13235,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856336
+  action: update
   api: /api/tag/update
   class: tag
   description: Update
@@ -14221,17 +13244,7 @@
   kind: 2
   path: ''
   schema: tag
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14281,7 +13294,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856337
+  action: add
   api: /api/tenant/add
   class: tenant
   description: add
@@ -14289,17 +13303,7 @@
   kind: 2
   path: ''
   schema: tenant
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14354,7 +13358,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856338
+  action: get
   api: /api/tenant/get
   class: tenant
   description: get
@@ -14362,17 +13367,7 @@
   kind: 2
   path: ''
   schema: tenant
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14427,7 +13422,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856339
+  action: list
   api: /api/tenant/list
   class: tenant
   description: 一览
@@ -14445,17 +13441,7 @@
   kind: 2
   path: ''
   schema: tenant
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14510,7 +13496,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf0285633a
+  action: remove
   api: /api/tenant/remove
   class: tenant
   description: remove
@@ -14518,17 +13505,7 @@
   kind: 2
   path: ''
   schema: tenant
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14583,7 +13560,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf0285633b
+  action: update
   api: /api/tenant/update
   class: tenant
   description: update
@@ -14591,17 +13569,7 @@
   kind: 2
   path: ''
   schema: tenant
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -14656,7 +13624,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 596ee30181ada5eed7085447
+  action: add
   api: /api/test/add
   class: test
   description: Add
@@ -14665,6 +13634,7 @@
   kind: 0
   path: ''
   schema: test
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -14723,7 +13693,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 59701ff681ada5eed708544a
+  action: count
   api: /api/test/count
   class: test
   description: ''
@@ -14732,6 +13703,7 @@
   kind: 0
   path: ''
   schema: test
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -14806,7 +13778,8 @@
   sorts: []
   type: 7
   version: 0.5.8
-- action: get
+- _id: 596ee30181ada5eed7085445
+  action: get
   api: /api/test/get
   class: test
   description: Get
@@ -14823,10 +13796,15 @@
       key: birthday
       operator: $exists
       parameter: birthday
+    - group: f1e0
+      key: developer
+      operator: $eq
+      parameter: developer
   free: false
   kind: 0
   path: ''
   schema: test
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -14885,7 +13863,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 596ee30181ada5eed7085446
+  action: list
   api: /api/test/list
   class: test
   description: List
@@ -14894,20 +13873,7 @@
   kind: 0
   path: ''
   schema: test
-  script: |
-    SELECT
-      `test`.`_id`
-     ,`test`.`valid`
-     ,`test`.`createAt`
-     ,`test`.`createBy`
-     ,`test`.`updateAt`
-     ,`test`.`updateBy`
-     ,`test`.`name`
-     ,`test`.`age`
-     ,`test`.`birthday`
-     ,`test`.`developer`
-    FROM `light`.`test`
-    WHERE `test`.`name` = <%= condition.name %>
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -14966,7 +13932,8 @@
   sorts: []
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 596ee30181ada5eed7085449
+  action: remove
   api: /api/test/remove
   class: test
   description: Remove
@@ -14975,6 +13942,7 @@
   kind: 0
   path: ''
   schema: test
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -15033,7 +14001,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 596ee30181ada5eed7085448
+  action: update
   api: /api/test/update
   class: test
   description: Update
@@ -15046,6 +14015,7 @@
   kind: 0
   path: ''
   schema: test
+  script: ''
   selects:
     - alias: ''
       conditions: {}
@@ -15104,7 +14074,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf0285633c
+  action: add
   api: /api/user/add
   class: user
   description: Add
@@ -15112,17 +14083,7 @@
   kind: 2
   path: ''
   schema: user
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -15217,7 +14178,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: count
+- _id: 594e9ab48835ecdf0285633d
+  action: count
   api: /api/user/count
   class: user
   description: count
@@ -15225,17 +14187,7 @@
   kind: 2
   path: ''
   schema: user
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -15335,7 +14287,8 @@
       order: asc
   type: 7
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf0285633e
+  action: get
   api: /api/user/get
   class: user
   description: Get
@@ -15353,17 +14306,7 @@
   kind: 2
   path: ''
   schema: user
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -15460,7 +14403,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf0285633f
+  action: list
   api: /api/user/list
   class: user
   description: List
@@ -15498,17 +14442,7 @@
   kind: 2
   path: ''
   schema: user
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -15608,7 +14542,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856340
+  action: remove
   api: /api/user/remove
   class: user
   description: Remove
@@ -15621,17 +14556,7 @@
   kind: 2
   path: ''
   schema: user
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -15726,7 +14651,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: restPass
+- _id: 594e9ab48835ecdf02856341
+  action: restPass
   api: /api/user/restPass
   class: user
   description: ''
@@ -15734,17 +14660,7 @@
   kind: 2
   path: ''
   schema: user
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -15839,7 +14755,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856342
+  action: update
   api: /api/user/update
   class: user
   description: Update
@@ -15847,17 +14764,7 @@
   kind: 2
   path: ''
   schema: user
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -15952,7 +14859,8 @@
   sorts: []
   type: 2
   version: 0.5.8
-- action: add
+- _id: 594e9ab48835ecdf02856343
+  action: add
   api: /api/validator/add
   class: validator
   description: Add
@@ -15960,17 +14868,7 @@
   kind: 2
   path: ''
   schema: validator
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -16080,7 +14978,8 @@
   sorts: []
   type: 1
   version: 0.5.8
-- action: get
+- _id: 594e9ab48835ecdf02856344
+  action: get
   api: /api/validator/get
   class: validator
   description: Get
@@ -16088,17 +14987,7 @@
   kind: 2
   path: ''
   schema: validator
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -16208,7 +15097,8 @@
   sorts: []
   type: 6
   version: 0.5.8
-- action: list
+- _id: 594e9ab48835ecdf02856345
+  action: list
   api: /api/validator/list
   class: validator
   description: List
@@ -16221,17 +15111,7 @@
   kind: 2
   path: ''
   schema: validator
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -16349,7 +15229,8 @@
       order: asc
   type: 4
   version: 0.5.8
-- action: remove
+- _id: 594e9ab48835ecdf02856346
+  action: remove
   api: /api/validator/remove
   class: validator
   description: Remove
@@ -16357,17 +15238,7 @@
   kind: 2
   path: ''
   schema: validator
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []
@@ -16477,7 +15348,8 @@
   sorts: []
   type: 3
   version: 0.5.8
-- action: update
+- _id: 594e9ab48835ecdf02856347
+  action: update
   api: /api/validator/update
   class: validator
   description: Update
@@ -16485,17 +15357,7 @@
   kind: 2
   path: ''
   schema: validator
-  script: |
-    SELECT
-      `ddd`.`_id
-     ,`ddd`.`valid
-     ,`ddd`.`createAt
-     ,`ddd`.`createBy
-     ,`ddd`.`updateAt
-     ,`ddd`.`updateBy
-     ,`ddd`.`c
-    FROM `light`.`ddd`
-    WHERE `ddd`.`_id` = <%= _id %>
+  script: ''
   selects:
     - alias: ''
       fields: []

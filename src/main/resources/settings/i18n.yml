@@ -1,368 +1,421 @@
-- key: Account
+- _id: 59016e0d7be7054531712b62
+  key: Account
   lang:
     en: Account
     ja: アカウント
     zh: 账户
   type: body
   version: 0.5.8
-- key: Login
+- _id: 59016e7d7be7054531712b65
+  key: Login
   lang:
     en: Login
     ja: ログイン
     zh: 登陆
   type: body
   version: 0.5.8
-- key: Password
+- _id: 59016e267be7054531712b63
+  key: Password
   lang:
     en: Password
     ja: パスワード
     zh: 密码
   type: body
   version: 0.5.8
-- key: Register
+- _id: 593a34e773fe7f7b8502fb39
+  key: Register
   lang:
     en: Register
     ja: サインアップ
     zh: 注册
   type: body
   version: 0.5.8
-- key: Verification code
+- _id: 59016e587be7054531712b64
+  key: Verification code
   lang:
     en: Verification code
     ja: 検証コード
     zh: 验证码
   type: body
   version: 0.5.8
-- key: form.bind
+- _id: 59031a379a8939b944273b85
+  key: form.bind
   lang:
     en: Binding
     ja: バインディング
     zh: 绑定表
   type: body
   version: 0.5.8
-- key: form.column
+- _id: 590319ce9a8939b944273b84
+  key: form.column
   lang:
     en: Columns
     ja: 列数
     zh: 列数
   type: body
   version: 0.5.8
-- key: form.defaults
+- _id: 590348839a8939b944273b88
+  key: form.defaults
   lang:
     en: Default
     ja: ディフォルト
     zh: 缺省值
   type: body
   version: 0.5.8
-- key: form.description
+- _id: 590319219a8939b944273b81
+  key: form.description
   lang:
     en: Description
     ja: コメント
     zh: 描述
   type: body
   version: 0.5.8
-- key: form.guid
+- _id: 590349f89a8939b944273b8e
+  key: form.guid
   lang:
     en: ID
     ja: 識別子
     zh: 唯一标识
   type: body
   version: 0.5.8
-- key: form.icon
+- _id: 590348f29a8939b944273b8a
+  key: form.icon
   lang:
     en: Icon
     ja: アイコン
     zh: 图标
   type: body
   version: 0.5.8
-- key: form.iconAppend
+- _id: 590349b39a8939b944273b8d
+  key: form.iconAppend
   lang:
     en: Append
     ja: 後頭
     zh: 后置
   type: body
   version: 0.5.8
-- key: form.iconPrepend
+- _id: 590349709a8939b944273b8c
+  key: form.iconPrepend
   lang:
     en: Prepend
     ja: 先頭
     zh: 前置
   type: body
   version: 0.5.8
-- key: form.iconShow
+- _id: 590349469a8939b944273b8b
+  key: form.iconShow
   lang:
     en: Show
     ja: 位置
     zh: 位置
   type: body
   version: 0.5.8
-- key: form.name
+- _id: 590319469a8939b944273b82
+  key: form.name
   lang:
     en: Name
     ja: 名称
     zh: 名称
   type: body
   version: 0.5.8
-- key: form.optionStyle
+- _id: 5903fbfb9a8939b944273b8f
+  key: form.optionStyle
   lang:
     en: Style
     ja: 表示スタイル
     zh: 显示风格
   type: body
   version: 0.5.8
-- key: form.optionStyleGrid
+- _id: 5903fd139a8939b944273b92
+  key: form.optionStyleGrid
   lang:
     en: Grid
     ja: グリッド
     zh: 表格
   type: body
   version: 0.5.8
-- key: form.optionStyleLine
+- _id: 5903fcc79a8939b944273b90
+  key: form.optionStyleLine
   lang:
     en: Line
     ja: ライン
     zh: 行
   type: body
   version: 0.5.8
-- key: form.optionStyleList
+- _id: 5903fcf59a8939b944273b91
+  key: form.optionStyleList
   lang:
     en: List
     ja: リスト
     zh: 列
   type: body
   version: 0.5.8
-- key: form.options
+- _id: 5903fd4c9a8939b944273b93
+  key: form.options
   lang:
     en: Options
     ja: 項目
     zh: 选项
   type: body
   version: 0.5.8
-- key: form.placeholder
+- _id: 5903485a9a8939b944273b87
+  key: form.placeholder
   lang:
     en: Placeholder
     ja: プレースホルダ
     zh: 提示文
   type: body
   version: 0.5.8
-- key: form.public
+- _id: 590318dd9a8939b944273b80
+  key: form.public
   lang:
     en: Publish
     ja: 公開
     zh: 公开
   type: body
   version: 0.5.8
-- key: form.readonly
+- _id: 590348c99a8939b944273b89
+  key: form.readonly
   lang:
     en: Readonly
     ja: 読み取り専用
     zh: 只读
   type: body
   version: 0.5.8
-- key: form.tag
+- _id: 590319939a8939b944273b83
+  key: form.tag
   lang:
     en: Tag
     ja: タグ
     zh: 标签
   type: body
   version: 0.5.8
-- key: form.title
+- _id: 5903477b9a8939b944273b86
+  key: form.title
   lang:
     en: Title
     ja: タイトル
     zh: 标题
   type: body
   version: 0.5.8
-- key: cancel
+- _id: 5902a5c9e24533432aa68b6d
+  key: cancel
   lang:
     en: Cancel
     ja: キャンセル
     zh: 取消
   type: common
   version: 0.5.8
-- key: ok
+- _id: 5902a59ce24533432aa68b6c
+  key: ok
   lang:
     en: OK
     ja: 確定
     zh: 确定
   type: common
   version: 0.5.8
-- key: api test
+- _id: 59018bff1ea9d3ac492c8df8
+  key: api test
   lang:
     en: API Test
     ja: API テスト
     zh: API 测试
   type: menu
   version: 0.5.8
-- key: application
+- _id: 59089bf55aa419fce58013ba
+  key: application
   lang:
     en: Application
     ja: アプリケーション
     zh: 应用程序
   type: menu
   version: 0.5.8
-- key: code
+- _id: 593a342d73fe7f7b8502fb38
+  key: code
   lang:
     en: Code
     ja: コード
     zh: 代码
   type: menu
   version: 0.5.8
-- key: config
+- _id: 59018b041ea9d3ac492c8df4
+  key: config
   lang:
     en: App Config
     ja: アプリ設定
     zh: 应用设置
   type: menu
   version: 0.5.8
-- key: data
+- _id: 59018c271ea9d3ac492c8df9
+  key: data
   lang:
     en: Data
     ja: データ管理
     zh: 数据管理
   type: menu
   version: 0.5.8
-- key: data api
+- _id: 59018a6e1ea9d3ac492c8df1
+  key: data api
   lang:
     en: Data API
     ja: データ API
     zh: 数据 API
   type: menu
   version: 0.5.8
-- key: etl
+- _id: 59040fa79a8939b944273b95
+  key: etl
   lang:
     en: ETL
     ja: ETL
     zh: ETL
   type: menu
   version: 0.5.8
-- key: file
+- _id: 593a7a58132a4c67cf62b086
+  key: file
   lang:
     en: File
     ja: ファイル
     zh: 文件
   type: menu
   version: 0.5.8
-- key: form
+- _id: 5902b1149a8939b944273b7f
+  key: form
   lang:
     en: Form
     ja: フォーム
     zh: 表单
   type: menu
   version: 0.5.8
-- key: i18n
+- _id: 59018be11ea9d3ac492c8df7
+  key: i18n
   lang:
     en: Multi Language
     ja: マルチ言語
     zh: 多国语言
   type: menu
   version: 0.5.8
-- key: interface
+- _id: 590188da93f2d478328aa57d
+  key: interface
   lang:
     en: Interface
     ja: インターフェース
     zh: 接口定义
   type: menu
   version: 0.5.8
-- key: job
+- _id: 59577206ee078005f237ed09
+  key: job
   lang:
     en: Job
     ja: ジョブ
     zh: 定时任务
   type: menu
   version: 0.5.8
-- key: logic api
+- _id: 59018aa11ea9d3ac492c8df2
+  key: logic api
   lang:
     en: Logic API
     ja: ロジック API
     zh: 逻辑 API
   type: menu
   version: 0.5.8
-- key: markdown
+- _id: 5923091c7fc9ae533611f30b
+  key: markdown
   lang:
     en: Document
     ja: ドキュメント
     zh: 文档
   type: menu
   version: 0.5.8
-- key: menu
+- _id: 59018c4f1ea9d3ac492c8dfa
+  key: menu
   lang:
     en: Menu
     ja: メニュー
     zh: 菜单
   type: menu
   version: 0.5.8
-- key: middleware
+- _id: 5940c85bf00f6953afe3194b
+  key: middleware
   lang:
     en: Middleware
     ja: ミドルウェア
     zh: 中间件
   type: menu
   version: 0.5.8
-- key: mongo
+- _id: 59018a2a1ea9d3ac492c8df0
+  key: mongo
   lang:
     en: MongoDB
     ja: MongoDB
     zh: MongoDB
   type: menu
   version: 0.5.8
-- key: mysql
+- _id: 596c7538f790f14ec97fe1fd
+  key: mysql
   lang:
     en: MySQL
     ja: MySQL
     zh: MySQL
   type: menu
   version: 0.5.8
-- key: registry
+- _id: 59089bb35aa419fce58013b9
+  key: registry
   lang:
     en: Registry
     ja: レジストリー
     zh: 镜像库
   type: menu
   version: 0.5.8
-- key: route
+- _id: 59018bac1ea9d3ac492c8df6
+  key: route
   lang:
     en: HTML Route
     ja: HTMLルーター
     zh: 页面路径
   type: menu
   version: 0.5.8
-- key: runtime
+- _id: 5940c884f00f6953afe3194c
+  key: runtime
   lang:
     en: Runtime
     ja: ランタイム
     zh: 运行时
   type: menu
   version: 0.5.8
-- key: struct
+- _id: 590188b493f2d478328aa57c
+  key: struct
   lang:
     en: Table
     ja: テーブル定義
     zh: 数据定义
   type: menu
   version: 0.5.8
-- key: system runtime
+- _id: 5940c8eef00f6953afe3194e
+  key: system runtime
   lang:
     en: System Runtime
     ja: システムランタイム
     zh: 系统运行时
   type: menu
   version: 0.5.8
-- key: tools
+- _id: 59018acf1ea9d3ac492c8df3
+  key: tools
   lang:
     en: Tools
     ja: 開発ツール
     zh: 开发工具
   type: menu
   version: 0.5.8
-- key: user runtime
+- _id: 5940c8cbf00f6953afe3194d
+  key: user runtime
   lang:
     en: Custom Runtime
     ja: カスタマイズランタイム
     zh: 自定义运行时
   type: menu
   version: 0.5.8
-- key: validator
+- _id: 59018b3d1ea9d3ac492c8df5
+  key: validator
   lang:
     en: Validator
     ja: バリデーター

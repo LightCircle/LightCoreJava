@@ -1,4 +1,5 @@
-- name: aaabbb
+- _id: 595786f73f94a70f1b11d959
+  name: aaabbb
   step:
     - index: 0
       type: action

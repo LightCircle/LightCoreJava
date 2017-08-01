@@ -1,4 +1,5 @@
-- description: cookie secret
+- _id: 55530a8a522b337520746ef4
+  description: cookie secret
   displayType: 0
   key: cookieSecret
   options: []
@@ -6,7 +7,8 @@
   value: light
   valueType: string
   version: 0.5.8
-- description: sha256加密用key字符串
+- _id: 55530a8a522b337520746ef8
+  description: sha256加密用key字符串
   displayType: 0
   key: hmackey
   options: []
@@ -14,7 +16,8 @@
   value: light
   valueType: string
   version: 0.5.8
-- description: 主页
+- _id: 5554b1a37e719466a6419d2c
+  description: 主页
   displayType: 0
   key: home
   options: []
@@ -22,7 +25,8 @@
   value: /login.html
   valueType: string
   version: 0.5.8
-- description: express的session key
+- _id: 55530a8a522b337520746ef6
+  description: express的session key
   displayType: 0
   key: sessionKey
   options: []
@@ -30,7 +34,8 @@
   value: light.sid
   valueType: string
   version: 0.5.8
-- description: express的session secret
+- _id: 55530a8a522b337520746ef5
+  description: express的session secret
   displayType: 0
   key: sessionSecret
   options: []
@@ -38,7 +43,8 @@
   value: light
   valueType: string
   version: 0.5.8
-- description: Session超时时间，小时（24 * 7 一周）
+- _id: 55530a8a522b337520746efa
+  description: Session超时时间，小时（24 * 7 一周）
   displayType: 0
   key: sessionTimeout
   options: []
@@ -46,7 +52,8 @@
   value: '168'
   valueType: number
   version: 0.5.8
-- description: Session超时时间，小时（24 * 30 一个月）移动端
+- _id: 55530a8a522b337520746efb
+  description: Session超时时间，小时（24 * 30 一个月）移动端
   displayType: 0
   key: sessionTimeoutMobile
   options: []
@@ -54,15 +61,17 @@
   value: '720'
   valueType: number
   version: 0.5.8
-- description: 让浏览器缓存失效的静态资源后缀
+- _id: 55530a8a522b337520746efc
+  description: 让浏览器缓存失效的静态资源后缀
   displayType: 0
   key: stamp
   options: []
   type: app
-  value: 453fc7f4
+  value: 453fc7f5
   valueType: string
   version: 0.5.8
-- description: 静态文件的存放位置
+- _id: 55530a8a522b337520746ef3
+  description: 静态文件的存放位置
   displayType: 0
   key: static
   options: []
@@ -70,7 +79,8 @@
   value: /static
   valueType: string
   version: 0.5.8
-- description: 请求超时(秒)
+- _id: 556473511d8a66e61e348d27
+  description: 请求超时(秒)
   displayType: 0
   key: timeout
   options: []
@@ -78,7 +88,8 @@
   value: '30'
   valueType: number
   version: 0.5.8
-- description: 保存临时文件用路径（如上传文件等）
+- _id: 55530a8a522b337520746ef7
+  description: 保存临时文件用路径（如上传文件等）
   displayType: 0
   key: tmp
   options: []
@@ -86,7 +97,8 @@
   value: /tmp
   valueType: string
   version: 0.5.8
-- description: token有效期限
+- _id: 561e76c85d52306d58477e6f
+  description: token有效期限
   displayType: 0
   key: tokenExpires
   options: []
@@ -94,7 +106,8 @@
   value: '86400'
   valueType: number
   version: 0.5.8
-- description: JWT token用key
+- _id: 561e71284936762157a98036
+  description: JWT token用key
   displayType: 0
   key: tokenSecret
   options: []
@@ -102,7 +115,8 @@
   value: 1b3bd5b82c8ded62d85da744b2beefa8
   valueType: string
   version: 0.5.8
-- description: 应用版本
+- _id: 557f890acce00e65dddddc06
+  description: 应用版本
   displayType: 0
   key: version
   options: []
@@ -110,7 +124,8 @@
   value: 0.5.8
   valueType: string
   version: 0.5.8
-- description: ejs的模板存放位置，应用程序需要根据实际路径进行设定
+- _id: 55530a8a522b337520746ef1
+  description: ejs的模板存放位置，应用程序需要根据实际路径进行设定
   displayType: 0
   key: views
   options: []
@@ -118,7 +133,8 @@
   value: views
   valueType: string
   version: 0.5.8
-- description: ''
+- _id: 55ab6d0b0b669c0500bb2c85
+  description: ''
   displayType: 4
   key: admin.pass
   options: []
@@ -126,7 +142,8 @@
   value: 2e35501c2b7e
   valueType: string
   version: 0.5.8
-- description: ''
+- _id: 55ab6cad0b669c0500bb2c84
+  description: ''
   displayType: 0
   key: admin.user
   options: []
@@ -134,7 +151,8 @@
   value: light
   valueType: string
   version: 0.5.8
-- description: ''
+- _id: 55ab6d4a68f1cd05000aabca
+  description: ''
   displayType: 4
   key: root.pass
   options: []
@@ -142,7 +160,8 @@
   value: e37cc2ba9de7
   valueType: string
   version: 0.5.8
-- description: ''
+- _id: 55ab6d5b0b669c0500bb2c86
+  description: ''
   displayType: 0
   key: root.user
   options: []
@@ -150,7 +169,8 @@
   value: root
   valueType: string
   version: 0.5.8
-- description: docker 镜像编译服务器地址
+- _id: 57e6683289935b05008e5ee5
+  description: docker 镜像编译服务器地址
   displayType: 0
   key: builder
   options: []
@@ -158,7 +178,8 @@
   value: 'tcp://172.16.10.186:3375'
   valueType: string
   version: 0.5.8
-- description: docker 镜像编译服务器地址（开发环境用）
+- _id: 57e66c7852cdd90500d6e2b2
+  description: docker 镜像编译服务器地址（开发环境用）
   displayType: 0
   key: builderdev
   options: []
@@ -166,7 +187,8 @@
   value: 'tcp://120.27.14.148:3375'
   valueType: string
   version: 0.5.8
-- description: 日志服务器
+- _id: 586894e6417c420005f538e3
+  description: 日志服务器
   displayType: 0
   key: log
   options: []
@@ -174,7 +196,8 @@
   value: '172.16.10.186:24224'
   valueType: string
   version: 0.5.8
-- description: Docker Swarm Manager服务器
+- _id: 5948c17efc0ea5156250c41a
+  description: Docker Swarm Manager服务器
   displayType: 0
   key: manager
   options: []
@@ -182,7 +205,8 @@
   value: 'tcp://172.16.10.182:3375'
   valueType: string
   version: 0.5.8
-- description: Docker Swarm Manager服务器（开发环境用）
+- _id: 5948c1c3fc0ea5156250c41b
+  description: Docker Swarm Manager服务器（开发环境用）
   displayType: 0
   key: managerdev
   options: []
@@ -190,7 +214,8 @@
   value: 'tcp://118.190.148.246:3375'
   valueType: string
   version: 0.5.8
-- description: 是否开启代理
+- _id: 57e668fd723aea050095fd6e
+  description: 是否开启代理
   displayType: 1
   key: proxy.enable
   options: []
@@ -198,7 +223,8 @@
   value: 'true'
   valueType: boolean
   version: 0.5.8
-- description: 编译镜像时使用的代理服务器地址
+- _id: 57e668dfc93cfd05004e44c7
+  description: 编译镜像时使用的代理服务器地址
   displayType: 0
   key: proxy.http
   options: []
@@ -206,7 +232,8 @@
   value: 'http://172.16.10.186:3128'
   valueType: string
   version: 0.5.8
-- description: 编译镜像时使用的代理服务器地址
+- _id: 57e66936723aea050095fd6f
+  description: 编译镜像时使用的代理服务器地址
   displayType: 0
   key: proxy.https
   options: []
@@ -214,7 +241,8 @@
   value: 'http://172.16.10.186:13128'
   valueType: string
   version: 0.5.8
-- description: 无需认证即可访问的资源列表
+- _id: 5553104345f3277824903e7d
+  description: 无需认证即可访问的资源列表
   displayType: 3
   key: auth
   options: []
@@ -238,7 +266,8 @@
     - ^/api/system/version.*
   valueType: array
   version: 0.5.8
-- description: 不校验csrf
+- _id: 5553104345f3277824903e7f
+  description: 不校验csrf
   displayType: 3
   key: csrf
   options: []
@@ -253,7 +282,8 @@
     - ^/api/container/update.*
   valueType: array
   version: 0.5.8
-- description: 调用策略检查对象外的API
+- _id: 567fa58e4082aa9326e623f8
+  description: 调用策略检查对象外的API
   displayType: 3
   key: policy
   options: []
@@ -264,7 +294,8 @@
     - ^/a
   valueType: array
   version: 0.5.8
-- description: 不受超时限定的资源列表
+- _id: 5553104345f3277824903e7e
+  description: 不受超时限定的资源列表
   displayType: 3
   key: timeout
   options: []
@@ -280,7 +311,8 @@
     - ^/api/container/* 600
   valueType: array
   version: 0.5.8
-- description: RabbitMQ地址
+- _id: 55bb393fefd3440500c444f6
+  description: RabbitMQ地址
   displayType: 0
   key: host
   options: []
@@ -288,7 +320,8 @@
   value: rabbit
   valueType: string
   version: 0.5.8
-- description: RabbitMQ 账户
+- _id: 55bb39a2c1bfd30500760149
+  description: RabbitMQ 账户
   displayType: 0
   key: login
   options: []
@@ -296,7 +329,8 @@
   value: root
   valueType: string
   version: 0.5.8
-- description: RabbitMQ 密码
+- _id: 55bb39bfefd3440500c444f7
+  description: RabbitMQ 密码
   displayType: 4
   key: password
   options: []
@@ -304,7 +338,8 @@
   value: alphabets
   valueType: string
   version: 0.5.8
-- description: RabbitMQ 端口
+- _id: 55bb397fc1bfd30500760142
+  description: RabbitMQ 端口
   displayType: 0
   key: port
   options: []
@@ -312,7 +347,8 @@
   value: '5672'
   valueType: number
   version: 0.5.8
-- description: 微信开放平台应用ID
+- _id: 56ea6cec3e2a7e0600f27dca
+  description: 微信开放平台应用ID
   displayType: 0
   key: open.appID
   options: []
@@ -320,7 +356,8 @@
   value: wx7d0e730b3c85d354
   valueType: string
   version: 0.5.8
-- description: ''
+- _id: 56ea6cb5ecc8ed0500fc9c98
+  description: ''
   displayType: 0
   key: open.appSecret
   options: []
@@ -328,7 +365,8 @@
   value: 9f3e234fb1aa42ad34eee75a6c02f4c5
   valueType: string
   version: 0.5.8
-- description: 小程序 AppID
+- _id: 587c9325e970ce000554ca6c
+  description: 小程序 AppID
   displayType: 0
   key: xcx.AppID
   options: []
@@ -336,7 +374,8 @@
   value: wx0506a7d7562c486f
   valueType: string
   version: 0.5.8
-- description: 小程序 AppSecret
+- _id: 587c97dae970ce000554ca6d
+  description: 小程序 AppSecret
   displayType: 0
   key: xcx.AppSecret
   options: []

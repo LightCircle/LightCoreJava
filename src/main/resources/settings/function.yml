@@ -1,4 +1,5 @@
-- description: 数据定义
+- _id: 594e9ab38835ecdf0285626b
+  description: 数据定义
   icon: database
   kind: developer
   menu: struct
@@ -8,7 +9,8 @@
   type: '1'
   url: ''
   version: 0.5.8
-- description: MongoDB
+- _id: 594e9ab38835ecdf0285626c
+  description: MongoDB
   icon: ''
   kind: developer
   menu: mongo
@@ -18,7 +20,8 @@
   type: '2'
   url: mongo.html
   version: 0.5.8
-- description: MySQL
+- _id: 5955d2f3e82cb418ce71822a
+  description: MySQL
   icon: angle-right
   kind: developer
   menu: mysql
@@ -28,7 +31,8 @@
   type: '2'
   url: mysql.html
   version: 0.5.8
-- description: 接口定义
+- _id: 594e9ab38835ecdf0285626d
+  description: 接口定义
   icon: puzzle-piece
   kind: developer
   menu: interface
@@ -38,7 +42,8 @@
   type: '1'
   url: ''
   version: 0.5.8
-- description: 数据 API
+- _id: 594e9ab38835ecdf0285626e
+  description: 数据 API
   icon: ''
   kind: developer
   menu: data api
@@ -48,7 +53,8 @@
   type: '2'
   url: api.html
   version: 0.5.8
-- description: 逻辑 API
+- _id: 594e9ab38835ecdf0285626f
+  description: 逻辑 API
   icon: ''
   kind: developer
   menu: logic api
@@ -58,7 +64,8 @@
   type: '2'
   url: logic.html
   version: 0.5.8
-- description: 第三方API
+- _id: 59546efb93283a99b28243c5
+  description: 第三方API
   icon: angle-right
   kind: developer
   menu: thirdparty api
@@ -68,7 +75,8 @@
   type: '2'
   url: thirdparty.html
   version: 0.5.8
-- description: 开发工具
+- _id: 594e9ab38835ecdf02856270
+  description: 开发工具
   icon: wrench
   kind: developer
   menu: tools
@@ -78,7 +86,8 @@
   type: '1'
   url: ''
   version: 0.5.8
-- description: 应用设置
+- _id: 594e9ab38835ecdf02856271
+  description: 应用设置
   icon: ''
   kind: developer
   menu: config
@@ -88,7 +97,8 @@
   type: '2'
   url: configuration.html
   version: 0.5.8
-- description: 校验规则
+- _id: 594e9ab38835ecdf02856272
+  description: 校验规则
   icon: ''
   kind: developer
   menu: validator
@@ -98,7 +108,8 @@
   type: '2'
   url: validator.html
   version: 0.5.8
-- description: 页面路由
+- _id: 594e9ab38835ecdf02856273
+  description: 页面路由
   icon: ''
   kind: developer
   menu: route
@@ -108,7 +119,8 @@
   type: '2'
   url: route.html
   version: 0.5.8
-- description: 多国语言
+- _id: 594e9ab38835ecdf02856274
+  description: 多国语言
   icon: ''
   kind: developer
   menu: i18n
@@ -118,7 +130,8 @@
   type: '2'
   url: i18n.html
   version: 0.5.8
-- description: API 测试
+- _id: 594e9ab38835ecdf02856275
+  description: API 测试
   icon: ''
   kind: developer
   menu: api test
@@ -128,7 +141,8 @@
   type: '2'
   url: apitest.html
   version: 0.5.8
-- description: 定时任务
+- _id: 59521ddb34b731d8beeb52dc
+  description: 定时任务
   icon: angle-right
   kind: developer
   menu: job
@@ -138,7 +152,8 @@
   type: '2'
   url: job.html
   version: 0.5.8
-- description: 数据管理
+- _id: 594e9ab38835ecdf02856276
+  description: 数据管理
   icon: th
   kind: developer
   menu: data
@@ -148,7 +163,8 @@
   type: '1'
   url: ''
   version: 0.5.8
-- description: 菜单设置
+- _id: 594e9ab38835ecdf02856277
+  description: 菜单设置
   icon: ''
   kind: developer
   menu: menu
@@ -158,7 +174,8 @@
   type: '2'
   url: menu.html
   version: 0.5.8
-- description: 表单
+- _id: 594e9ab38835ecdf02856278
+  description: 表单
   icon: ''
   kind: developer
   menu: form
@@ -168,7 +185,8 @@
   type: '2'
   url: form.html
   version: 0.5.8
-- description: ETL
+- _id: 594e9ab38835ecdf02856279
+  description: ETL
   icon: ''
   kind: developer
   menu: etl
@@ -178,7 +196,8 @@
   type: '2'
   url: etl.html
   version: 0.5.8
-- description: 文档
+- _id: 594e9ab38835ecdf0285627a
+  description: 文档
   icon: angle-right
   kind: developer
   menu: markdown
@@ -188,7 +207,8 @@
   type: '2'
   url: markdown.html
   version: 0.5.8
-- description: 代码编辑
+- _id: 594e9ab38835ecdf0285627b
+  description: 代码编辑
   icon: angle-right
   kind: developer
   menu: code
@@ -198,7 +218,8 @@
   type: '2'
   url: code.html
   version: 0.5.8
-- description: 文件管理
+- _id: 594e9ab38835ecdf0285627c
+  description: 文件管理
   icon: angle-right
   kind: developer
   menu: file
@@ -208,7 +229,8 @@
   type: '2'
   url: file.html
   version: 0.5.8
-- description: 租户管理
+- _id: 5955fece358e653d7008a14a
+  description: 租户管理
   icon: angle-right
   kind: developer
   menu: tenant
@@ -218,7 +240,8 @@
   type: '2'
   url: tenant.html
   version: 0.5.8
-- description: 应用程序
+- _id: 58e38906355c42820a800e6b
+  description: 应用程序
   icon: widgets
   kind: operation
   menu: application
@@ -228,7 +251,8 @@
   type: '1'
   url: /application.html
   version: 0.5.8
-- description: 运行时
+- _id: 58eb8b1d270f4d7256d6ffa1
+  description: 运行时
   icon: truck
   kind: operation
   menu: runtime
@@ -238,7 +262,8 @@
   type: '1'
   url: ''
   version: 0.5.8
-- description: User Runtime
+- _id: 58eb8bc8270f4d7256d70004
+  description: User Runtime
   icon: ''
   kind: operation
   menu: user runtime
@@ -248,7 +273,8 @@
   type: '2'
   url: /runtime/user.html
   version: 0.5.8
-- description: System Runtime
+- _id: 58eb8bec270f4d7256d7000d
+  description: System Runtime
   icon: ''
   kind: operation
   menu: system runtime
@@ -258,7 +284,8 @@
   type: '2'
   url: /runtime/system.html
   version: 0.5.8
-- description: 中间件
+- _id: 58eb948c270f4d7256d70762
+  description: 中间件
   icon: boat
   kind: operation
   menu: middleware
@@ -268,7 +295,8 @@
   type: '1'
   url: /middleware.html
   version: 0.5.8
-- description: 容器仓库
+- _id: 58eb94d3270f4d7256d70773
+  description: 容器仓库
   icon: cloud
   kind: operation
   menu: registry
