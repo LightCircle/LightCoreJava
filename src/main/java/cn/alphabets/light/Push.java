@@ -62,8 +62,8 @@ class Push {
         String workdir = String.format("/data/%s", Environment.instance().getAppName());
 
         if (list.contains("-build")) {
-            push.pullSource(workdir);
-            push.buildJava(workdir);
+//            push.pullSource(workdir);
+//            push.buildJava(workdir);
             push.exec(workdir);
         }
 
@@ -91,7 +91,7 @@ class Push {
 
         List<RequestFile> file = new ArrayList<>();
         file.add(new RequestFile(jarFile, "application/zip", JAR_NAME, true));
-        Params params = new Params(new org.bson.Document(), file);
+        Params params = new Params(new Document(), file).data(new Document("kind", "file"));
 
         // Upload the jar file
         Context handler = new Context(params, Environment.instance().getAppName(), SYSTEM_DB_PREFIX, DEFAULT_JOB_USER_ID);
