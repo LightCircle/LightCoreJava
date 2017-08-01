@@ -21,10 +21,8 @@ import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -169,7 +167,7 @@ class Push {
 
                 // get source data
                 if (code.getType().equals("code")) {
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(fullName));
+                    Writer bw = new OutputStreamWriter(new FileOutputStream(fullName), StandardCharsets.UTF_8);
                     bw.write(code.getSource());
                     bw.flush();
                     return;
