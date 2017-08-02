@@ -62,8 +62,8 @@ class Push {
         String workdir = String.format("/data/%s", Environment.instance().getAppName());
 
         if (list.contains("-build")) {
-//            push.pullSource(workdir);
-//            push.buildJava(workdir);
+            push.pullSource(workdir);
+            push.buildJava(workdir);
             push.exec(workdir);
         }
 
