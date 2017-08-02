@@ -43,9 +43,9 @@ class OptionsBuilder {
         this.schema = schema;
     }
 
-    private Map<String, Document> build(Context handler, Object result) {
+    private Document build(Context handler, Object result) {
 
-        Map<String, Document> option = new HashMap<>();
+        Document option = new Document();
         if (!(result instanceof Singular || result instanceof Plural)) {
             return option;
         }
@@ -116,9 +116,10 @@ class OptionsBuilder {
         select.add(optionKey);
 
         // 检索
-        Model model = new Model(handler.getDomain(), handler.getCode(), this.schema, Entity.getEntityType(this.schema));
+        Class<ModCommon> clazz = Entity.getEntityType(this.schema);
+        Model model = new Model(handler.getDomain(), handler.getCode(), this.schema, clazz);
         model.list(condition, select).forEach(item -> {
-            option.put(item.get(optionKey).toString(), item);
+            option.put(item.get(optionKey).toString(), ModCommon.fromDocument(item, clazz));
         });
 
         return option;
@@ -153,9 +154,9 @@ class OptionsBuilder {
         }
 
         // 逐一检索option值，结果保存到列表中
-        private Map<String, Document> build(Context handler, Object result) {
-            Map<String, Document> option = new HashMap<>();
-            List<Map<String, Document>> results = builders.stream()
+        private Document build(Context handler, Object result) {
+            Document option = new Document();
+            List<Document> results = builders.stream()
                     .map(builder -> builder.build(handler, result))
                     .collect(Collectors.toList());
             results.forEach(option::putAll);
@@ -203,11 +204,11 @@ class OptionsBuilder {
         });
 
         // 应该使用document
-        Map<String, Map<String, Document>> options = new HashMap<>();
+        Document options = new Document();
 
         builders.stream()
                 .collect(Collectors.groupingBy(OptionsBuilder::getSchema))
-                .forEach((s, builder) -> options.put(s, new OptionsBuilderGroup(builder).build(handler, data)));
+                .forEach((s, builder) -> options.append(s, new OptionsBuilderGroup(builder).build(handler, data)));
 
         // 单个文档的时候
         if (data instanceof Singular) {

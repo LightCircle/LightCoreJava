@@ -1,6 +1,7 @@
 package cn.alphabets.light.model;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.bson.Document;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class Plural<T extends ModCommon> {
 
     public Long totalItems;
     public List<T> items;
-    public Map<String, Map<String, ModCommon>> options;
+    public Document options;
 
     public Plural(List<T> items) {
         this((long) items.size(), items, null);
@@ -25,7 +26,7 @@ public class Plural<T extends ModCommon> {
         this(totalItems, items, null);
     }
 
-    public Plural(Long totalItems, List<T> items, Map<String, Map<String, ModCommon>> options) {
+    public Plural(Long totalItems, List<T> items, Document options) {
         this.totalItems = totalItems;
         this.items = items;
         this.options = options;
