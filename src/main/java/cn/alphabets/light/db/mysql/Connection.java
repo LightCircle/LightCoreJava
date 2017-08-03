@@ -54,9 +54,9 @@ public class Connection {
         instance.setUsername(env.getMySQLUser());
         instance.setPassword(env.getMySQLPass());
 
-        instance.setInitialSize(5);
-        instance.setMaxIdle(10);
-        instance.setMaxTotal(100);
+        instance.setInitialSize(50);
+        instance.setMaxIdle(50);
+        instance.setMaxTotal(200);
     }
 
 }
