@@ -144,8 +144,12 @@ public class MySQLSessionStoreImpl implements SessionStore {
     public void close() {
     }
 
+    private static Model modelInstance;
     private Model model() {
-        return new Model(this.domain, Constant.SYSTEM_DB_PREFIX);
+        if (modelInstance == null) {
+            modelInstance = new Model(this.domain, Constant.SYSTEM_DB_PREFIX);
+        }
+        return modelInstance;
     }
 }
 
