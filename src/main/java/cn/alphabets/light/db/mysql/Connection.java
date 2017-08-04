@@ -31,21 +31,13 @@ public class Connection {
             createDataSource(env);
         }
 
-        java.sql.Connection connection = instance.getConnection();
-
-        // renew connection
-        if (connection.isClosed()) {
-            createDataSource(env);
-            connection = instance.getConnection();
-        }
-
-        return connection;
+        return instance.getConnection();
     }
 
     private static void createDataSource(Environment env) {
         instance = new BasicDataSource();
         instance.setDriverClassName("com.mysql.jdbc.Driver");
-        instance.setUrl(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=UTF-8&useSSL=true",
+        instance.setUrl(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=UTF-8&useSSL=true&autoReconnect=true",
                 env.getMySQLHost(),
                 env.getMySQLPort(),
                 env.getAppName()
@@ -57,6 +49,11 @@ public class Connection {
         instance.setInitialSize(50);
         instance.setMaxIdle(50);
         instance.setMaxTotal(200);
+
+        instance.setValidationQuery("SELECT 1");
+        instance.setTestOnBorrow(true);
+        instance.setTestOnReturn(true);
+        instance.setTestWhileIdle(true);
     }
 
 }
