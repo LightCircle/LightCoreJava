@@ -190,6 +190,18 @@ public class Environment {
         return "true".equals(local.toLowerCase());
     }
 
+    public boolean isDev() {
+        if (this.args.local) {
+            return this.app.isDev();
+        }
+
+        String dev = System.getenv(Constant.ENV_LIGHT_APP_DEV);
+        if (dev == null) {
+            return false;
+        }
+        return "true".equals(dev.toLowerCase());
+    }
+
     public String getMySQLHost() {
         if (this.args.local) {
             return this.mysql.getHost();

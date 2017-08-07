@@ -199,7 +199,7 @@ public class MongoRider extends Rider {
         final Document sort = params.getSort();
 
         // get from board
-        if (sort == null) {
+        if (sort == null || sort.size() <= 0) {
             Document confirmed = new Document();
             board.getSorts().forEach(s -> {
                 confirmed.put(s.getKey(), "desc".equals(s.getOrder()) ? -1 : 1);
