@@ -155,6 +155,7 @@ public class Model {
                 if (ps != null) {
                     ps.close();
                 }
+                this.db.close();
             } catch (SQLException e) {
                 if (exception != null) {
                     exception.addSuppressed(e);
