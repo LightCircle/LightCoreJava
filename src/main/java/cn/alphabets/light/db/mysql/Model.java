@@ -28,7 +28,6 @@ public class Model {
     private static final Logger logger = LoggerFactory.getLogger(Model.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-    private Connection db;
     private String domain;
     private String code;
     private byte[] binary;
@@ -37,14 +36,8 @@ public class Model {
     }
 
     public Model(String domain, String code) {
-        try {
-            // TODO: 暂不支持domain和code
-            this.domain = domain;
-            this.code = code;
-            this.db = cn.alphabets.light.db.mysql.Connection.instance(Environment.instance());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        this.domain = domain;
+        this.code = code;
     }
 
     public List<Document> list(String query, Document params) {
@@ -53,6 +46,7 @@ public class Model {
 
         String sql = this.getSql(query, new Document("condition", this.parseByValueType(params)));
 
+        Connection db = null;
         PreparedStatement ps = null;
         SQLException exception = null;
         ResultSet rs = null;
@@ -60,7 +54,8 @@ public class Model {
         logger.debug(sql);
 
         try {
-            ps = this.db.prepareStatement(sql);
+            db = cn.alphabets.light.db.mysql.Connection.instance(Environment.instance());
+            ps = db.prepareStatement(sql);
             rs = ps.executeQuery();
             List<Document> result = getEntitiesFromResultSet(rs);
 
@@ -77,7 +72,9 @@ public class Model {
                 if (ps != null) {
                     ps.close();
                 }
-                this.db.close();
+                if (db != null) {
+                    db.close();
+                }
             } catch (SQLException e) {
                 if (exception != null) {
                     exception.addSuppressed(e);
@@ -133,13 +130,15 @@ public class Model {
         }
 
         String sql = this.getSql(query, params);
+        Connection db = null;
         PreparedStatement ps = null;
         SQLException exception = null;
 
         logger.debug(sql);
 
         try {
-            ps = this.db.prepareStatement(sql);
+            db = cn.alphabets.light.db.mysql.Connection.instance(Environment.instance());
+            ps = db.prepareStatement(sql);
             if (this.binary != null) {
                 ps.setBlob(1, new ByteArrayInputStream(this.binary));
             }
@@ -155,7 +154,9 @@ public class Model {
                 if (ps != null) {
                     ps.close();
                 }
-                this.db.close();
+                if (db != null) {
+                    db.close();
+                }
             } catch (SQLException e) {
                 if (exception != null) {
                     exception.addSuppressed(e);
