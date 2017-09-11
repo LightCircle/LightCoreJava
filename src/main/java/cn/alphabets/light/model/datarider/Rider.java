@@ -117,8 +117,7 @@ public abstract class Rider {
     }
 
     /**
-     * find board by mod class & board method (eg : get,remove etc.)
-     *
+     * find board by mod class and board method (eg : get,remove etc.)
      * @param clazz  Mod class
      * @param method board method
      * @return board

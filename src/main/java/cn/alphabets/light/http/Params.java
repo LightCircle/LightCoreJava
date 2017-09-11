@@ -107,12 +107,14 @@ public class Params {
      * 这个构造函数主要用于DataRider中，通过Board定义正规化参数值时使用
      * 目的主要是，正规化过程中不修改用于指定的handler.params内的参数
      *
+     * @param params    params
      * @param condition condition
      * @param data      data
      * @param select    select
      * @param sort      sort
      * @param table     table
      * @param clazz     clazz
+     * @return new params
      */
     public static Params clone(
             Params params, Document condition, Object data, Document select, Document sort, String table, Class clazz){

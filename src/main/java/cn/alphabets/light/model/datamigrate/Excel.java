@@ -41,8 +41,8 @@ public class Excel {
      * 加载Excel
      * @param excel Excel文件
      * @param mappings 列与字段的对应关系
-     * @return
-     * @throws IOException
+     * @return Excel content
+     * @throws IOException exception
      */
     public List<Document> parse(InputStream excel, List<ModEtl.Mappings> mappings) throws IOException {
 
@@ -96,7 +96,7 @@ public class Excel {
      * 生成Excel
      * @param excel Excel文件
      * @param data 保存到Excel里的数据
-     * @throws IOException
+     * @throws IOException exception
      */
     public void dump(OutputStream excel, List<List<String>> data) throws IOException {
 
