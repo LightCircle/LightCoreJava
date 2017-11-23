@@ -150,7 +150,7 @@ public class Common {
         // 替换原来的值
         boolean isListValue = MPath.detectValue(key(mapping), data) instanceof List;
         MPath.setValueByJsonPath(data, Arrays.asList(key(mapping).split(Pattern.quote("."))),
-                isListValue ? newValue : newValue.get(0));
+                isListValue ? newValue : (newValue.size() > 0 ? newValue.get(0) : null));
 
         if (original.size() > 0) {
             data.put("_original", original);
