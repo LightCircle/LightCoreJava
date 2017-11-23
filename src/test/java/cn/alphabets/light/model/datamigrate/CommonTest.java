@@ -4,7 +4,6 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.entity.ModEtl;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
-import cn.alphabets.light.mock.MockRoutingContext;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +15,7 @@ import java.util.Map;
 
 /**
  * Created by lilin on 2017/11/23.
+ *
  */
 public class CommonTest {
 
