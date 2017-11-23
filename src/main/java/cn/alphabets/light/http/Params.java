@@ -78,24 +78,35 @@ public class Params {
             this.data = json.get(PARAM_DATA);
 
             // skip
-            String skip = json.getString(Constant.PARAM_SKIP);
-            if (StringUtils.isNotEmpty(skip)) {
-                try {
-                    this.skip = Integer.parseInt(skip);
-                } catch (NumberFormatException e) {
-                    logger.warn("error get [skip] ,use default 0", e);
-                    this.skip = 0;
+            Object skip = json.get(Constant.PARAM_SKIP);
+            if (skip instanceof Integer) {
+                this.skip = (int) skip;
+            }
+            if (skip instanceof String) {
+                if (StringUtils.isNotEmpty((String) skip)) {
+                    try {
+                        this.skip = Integer.parseInt((String) skip);
+                    } catch (NumberFormatException e) {
+                        logger.warn("error get [skip] ,use default 0", e);
+                        this.skip = 0;
+                    }
                 }
             }
 
+
             // limit
-            String limit = json.getString(Constant.PARAM_LIMIT);
-            if (StringUtils.isNotEmpty(limit)) {
-                try {
-                    this.limit = Integer.parseInt(limit);
-                } catch (NumberFormatException e) {
-                    logger.warn("error get [limit] ,use default 0", e);
-                    this.limit = 0;
+            Object limit = json.get(Constant.PARAM_LIMIT);
+            if (limit instanceof Integer) {
+                this.limit = (int) limit;
+            }
+            if (skip instanceof String) {
+                if (StringUtils.isNotEmpty((String) limit)) {
+                    try {
+                        this.limit = Integer.parseInt((String) limit);
+                    } catch (NumberFormatException e) {
+                        logger.warn("error get [limit] ,use default 0", e);
+                        this.limit = 0;
+                    }
                 }
             }
         } catch (Exception e) {

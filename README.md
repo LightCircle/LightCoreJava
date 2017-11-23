@@ -57,7 +57,9 @@ res().putHeader(CONTENT_TYPE, "application/json").end(json);
 - 编译，上传
   # mvn deploy -Dgpg.passphrase=password
 
-- 登陆到sonatype，依次Close -> Release
+- 登陆到sonatype，
+  右边菜单为 Build Promotion - Staging Repositories - 检索light
+  依次Close -> Release
   https://oss.sonatype.org/
   需要一个小时，才能反映到Repository
   
