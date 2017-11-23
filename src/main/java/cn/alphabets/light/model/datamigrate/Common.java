@@ -12,10 +12,7 @@ import org.bson.types.ObjectId;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -160,7 +157,7 @@ public class Common {
         }
     }
 
-    private static Document getCondition(Context handler, ModEtl.Mappings mapping) {
+    static Document getCondition(Context handler, ModEtl.Mappings mapping) {
 
         Document condition = new Document("valid", 1);
 
@@ -174,9 +171,18 @@ public class Common {
                 String key = (String.valueOf(v)).substring(1);
                 Object real = MPath.detectValue(key, handler.params.getData());
 
+                if (real == null) {
+                    condition.put(k, null);
+                    return;
+                }
+
                 if (real instanceof List) {
                     if ("_id".equals(k)) {
-                        real = ((List<String>) real).stream().map(ObjectId::new).collect(Collectors.toList());
+                        real = ((List<String>) real)
+                                .stream()
+                                .filter(Objects::nonNull)
+                                .map(ObjectId::new)
+                                .collect(Collectors.toList());
                     }
                     condition.put(k, new Document("$in", real));
                 } else {
