@@ -4,15 +4,18 @@ import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.Helper;
 import cn.alphabets.light.cache.CacheManager;
-import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.ModEtl;
 import cn.alphabets.light.entity.ModFile;
 import cn.alphabets.light.entity.ModStructure;
 import cn.alphabets.light.exception.BadRequestException;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.http.Params;
 import cn.alphabets.light.http.RequestFile;
+import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.File;
+import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
+import cn.alphabets.light.model.datarider.Rider;
 import cn.alphabets.light.validator.MPath;
 import cn.alphabets.light.validator.Rule;
 import io.vertx.core.logging.Logger;
@@ -43,7 +46,6 @@ public class EtlExporter {
     private ModEtl define;
     private String clazz;
     private List<ModEtl.Mappings> mappings;
-    private Model source;
 
 
     public EtlExporter(Context handler, ModEtl define) {
@@ -55,8 +57,6 @@ public class EtlExporter {
         if (this.clazz != null) {
             this.clazz = Environment.instance().getPackages() + ".controller." + WordUtils.capitalize(this.clazz);
         }
-
-        this.source = new Model(handler.domain(), handler.code(), define.getSchema());
     }
 
     public Document exec() throws IOException, BadRequestException {
@@ -86,7 +86,15 @@ public class EtlExporter {
         }
 
         condition.putAll(this.handler.params.getCondition());
-        this.data = this.source.list(condition);
+
+        Plural<ModCommon> plural = (Plural<ModCommon>) Rider.call(
+                handler,
+                Entity.getEntityType(struct.getSchema()),
+                Constant.API_TYPE_NAME_LIST,
+                new Params().condition(condition)
+        );
+
+        this.data = plural.items.stream().map(Entity::toDocument).collect(Collectors.toList());
     }
 
     private void transform() {
