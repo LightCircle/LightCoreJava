@@ -162,6 +162,11 @@ public class Params {
         return this;
     }
 
+    public Params free(Document free) {
+        this.condition = new Document(PARAM_FREE, free);
+        return this;
+    }
+
     public Params data(Document data) {
         this.data = data;
         return this;

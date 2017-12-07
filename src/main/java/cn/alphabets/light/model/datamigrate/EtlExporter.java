@@ -46,10 +46,15 @@ public class EtlExporter {
     private ModEtl define;
     private String clazz;
     private List<ModEtl.Mappings> mappings;
-
+    private Params params;
 
     public EtlExporter(Context handler, ModEtl define) {
+        this(handler, define, null);
+    }
 
+    public EtlExporter(Context handler, ModEtl define, Params params) {
+
+        this.params = params;
         this.handler = handler;
         this.define = define;
         this.mappings = define.getMappings();
@@ -73,25 +78,28 @@ public class EtlExporter {
 
     private void extract() {
 
-        Document condition = new Document("valid", 1);
-
         ModStructure struct = CacheManager.INSTANCE.getStructures()
                 .stream()
                 .filter(s -> s.getSchema().equals(define.getSchema()))
                 .findFirst()
                 .orElse(null);
 
-        if (struct.getParent() != null && struct.getParent().length() > 0) {
-            condition.put("type", define.getSchema());
-        }
+        if (this.params == null) {
+            Document condition = new Document("valid", 1);
 
-        condition.putAll(this.handler.params.getCondition());
+            if (struct.getParent() != null && struct.getParent().length() > 0) {
+                condition.put("type", define.getSchema());
+            }
+
+            condition.putAll(this.handler.params.getCondition());
+            this.params = new Params().condition(condition);
+        }
 
         Plural<ModCommon> plural = (Plural<ModCommon>) Rider.call(
                 handler,
                 Entity.getEntityType(struct.getSchema()),
                 Constant.API_TYPE_NAME_LIST,
-                new Params().condition(condition)
+                this.params
         );
 
         this.data = plural.items.stream().map(Entity::toDocument).collect(Collectors.toList());
