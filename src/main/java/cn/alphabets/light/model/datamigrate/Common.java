@@ -171,13 +171,14 @@ public class Common {
                 String key = (String.valueOf(v)).substring(1);
                 Object real = MPath.detectValue(key, handler.params.getData());
 
-                if (real == null) {
+                if (real == null || "".equals(real)) {
                     condition.put(k, null);
                     return;
                 }
 
                 if (real instanceof List) {
                     if ("_id".equals(k)) {
+                        // TODO: 需要在filter中添加判断，每一个obj不等于""
                         real = ((List<String>) real)
                                 .stream()
                                 .filter(Objects::nonNull)

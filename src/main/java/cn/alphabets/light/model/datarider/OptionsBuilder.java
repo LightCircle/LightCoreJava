@@ -91,7 +91,7 @@ class OptionsBuilder {
                     ((Plural) result).items.forEach(item -> {
                         Object value = ((ModCommon) item).getFieldValue(key);
                         if (value instanceof List) {
-                            values.addAll((List) value);
+                            values.addAll((List) converter.convert(valueType, value));
                         } else {
                             values.add(converter.convert(valueType, value));
                         }
