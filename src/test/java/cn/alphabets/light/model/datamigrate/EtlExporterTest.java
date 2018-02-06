@@ -37,7 +37,7 @@ public class EtlExporterTest {
     public void testExec() throws IOException, BadRequestException {
 
         // 检索定义
-        Params params = new Params().condition(new Document("name", "i18n"));
+        Params params = new Params().condition(new Document("name", "i18n-imp"));
         Singular<ModEtl> define = Rider.get(handler, ModEtl.class, params);
 
         // 导出

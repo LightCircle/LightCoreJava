@@ -2,6 +2,7 @@ package cn.alphabets.light.model;
 
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
+import cn.alphabets.light.validator.MPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -199,32 +200,32 @@ public class Entity implements Serializable {
      * <p>
      * support sub class field like "xx.xxx"
      *
-     * TODO: 与MPath类的方法合并
-     *
      * @param fieldName field name
      * @return field value
      */
     @JsonIgnore
     public Object getFieldValue(String fieldName) {
 
-        try {
-            String fields[] = fieldName.split("\\.");
-
-            Object step = this;
-
-            for (String f : Arrays.asList(fields)) {
-                if (step == null) return step;
-                PropertyDescriptor pd =
-                        new PropertyDescriptor(Generator.reserved.contains(f) ? f + "_" : f,
-                                step.getClass());
-                step = pd.getReadMethod().invoke(step);
-            }
-
-            return step;
-        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            logger.error("Error get field value : " + fieldName, e);
-        }
-        return null;
+        // 改用MPath类的方法，支持LIST
+        return MPath.detectValue(fieldName, this.toDocument());
+//        try {
+//            String fields[] = fieldName.split("\\.");
+//
+//            Object step = this;
+//
+//            for (String f : Arrays.asList(fields)) {
+//                if (step == null) return step;
+//                PropertyDescriptor pd =
+//                        new PropertyDescriptor(Generator.reserved.contains(f) ? f + "_" : f,
+//                                step.getClass());
+//                step = pd.getReadMethod().invoke(step);
+//            }
+//
+//            return step;
+//        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+//            logger.error("Error get field value : " + fieldName, e);
+//        }
+//        return null;
     }
 
     /**

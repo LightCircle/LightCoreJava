@@ -181,6 +181,37 @@ public class ModForm extends ModCommon {
 
     private Object validator;
 
+    private String selectApi;
+
+    private String selectApiUk;
+
+    private String selectApiName;
+
+    private Boolean selectMultiple;
+
+    private String fileLimit;
+
+    private String fileAccept;
+
+    private Boolean allowTime;
+
+    private String fileApi;
+
+    private String fileUploadApi;
+
+    private String fileTokenApi;
+
+    @JsonDeserialize(
+        using = LongDeserializer.class
+    )
+    private Long scope;
+
+    private Boolean fileMultiple;
+
+    private Boolean lock;
+
+    private Boolean isGroup;
+
     public String getType() {
       return this.type;
     }
@@ -347,6 +378,118 @@ public class ModForm extends ModCommon {
 
     public void setValidator(Object validator) {
       this.validator = validator;
+    }
+
+    public String getSelectApi() {
+      return this.selectApi;
+    }
+
+    public void setSelectApi(String selectApi) {
+      this.selectApi = selectApi;
+    }
+
+    public String getSelectApiUk() {
+      return this.selectApiUk;
+    }
+
+    public void setSelectApiUk(String selectApiUk) {
+      this.selectApiUk = selectApiUk;
+    }
+
+    public String getSelectApiName() {
+      return this.selectApiName;
+    }
+
+    public void setSelectApiName(String selectApiName) {
+      this.selectApiName = selectApiName;
+    }
+
+    public Boolean getSelectMultiple() {
+      return this.selectMultiple;
+    }
+
+    public void setSelectMultiple(Boolean selectMultiple) {
+      this.selectMultiple = selectMultiple;
+    }
+
+    public String getFileLimit() {
+      return this.fileLimit;
+    }
+
+    public void setFileLimit(String fileLimit) {
+      this.fileLimit = fileLimit;
+    }
+
+    public String getFileAccept() {
+      return this.fileAccept;
+    }
+
+    public void setFileAccept(String fileAccept) {
+      this.fileAccept = fileAccept;
+    }
+
+    public Boolean getAllowTime() {
+      return this.allowTime;
+    }
+
+    public void setAllowTime(Boolean allowTime) {
+      this.allowTime = allowTime;
+    }
+
+    public String getFileApi() {
+      return this.fileApi;
+    }
+
+    public void setFileApi(String fileApi) {
+      this.fileApi = fileApi;
+    }
+
+    public String getFileUploadApi() {
+      return this.fileUploadApi;
+    }
+
+    public void setFileUploadApi(String fileUploadApi) {
+      this.fileUploadApi = fileUploadApi;
+    }
+
+    public String getFileTokenApi() {
+      return this.fileTokenApi;
+    }
+
+    public void setFileTokenApi(String fileTokenApi) {
+      this.fileTokenApi = fileTokenApi;
+    }
+
+    public Long getScope() {
+      return this.scope;
+    }
+
+    public void setScope(Long scope) {
+      this.scope = scope;
+    }
+
+    public Boolean getFileMultiple() {
+      return this.fileMultiple;
+    }
+
+    public void setFileMultiple(Boolean fileMultiple) {
+      this.fileMultiple = fileMultiple;
+    }
+
+    public Boolean getLock() {
+      return this.lock;
+    }
+
+    public void setLock(Boolean lock) {
+      this.lock = lock;
+    }
+
+    public Boolean getIsGroup() {
+      return this.isGroup;
+    }
+
+    public void setIsGroup(Boolean isGroup) {
+      this.isGroup = isGroup;
     }
   }
 }

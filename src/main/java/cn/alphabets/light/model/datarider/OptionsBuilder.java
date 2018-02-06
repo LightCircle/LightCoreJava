@@ -90,7 +90,11 @@ class OptionsBuilder {
                     List<Object> values = new ArrayList<>();
                     ((Plural) result).items.forEach(item -> {
                         Object value = ((ModCommon) item).getFieldValue(key);
-                        values.add(converter.convert(valueType, value));
+                        if (value instanceof List) {
+                            values.addAll((List) value);
+                        } else {
+                            values.add(converter.convert(valueType, value));
+                        }
                     });
 
                     condition.put(k, new Document("$in", values));

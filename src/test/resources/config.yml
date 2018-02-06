@@ -7,14 +7,14 @@ app:
   packages: cn.alphabets.light
 
 mongodb:
-  host: db
+  host: mongo.alphabets.cn
   port: 57017
   user: light
   pass: 2e35501c2b7e
   auth: SCRAM-SHA-1
 
 mysql:
-  host: 120.27.9.255
+  host: mysql.alphabets.cn
   port: 5306
   user: light
   pass: 2e35501c2b7e
