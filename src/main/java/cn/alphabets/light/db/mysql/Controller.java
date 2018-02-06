@@ -151,6 +151,7 @@ public class Controller {
     }
 
     public Long count() {
+        // TODO: 没有指定valid时，需要添加valid=1的条件
         return this.model.count(params.getScript(), params.getCondition());
     }
 

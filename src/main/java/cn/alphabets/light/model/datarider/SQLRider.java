@@ -97,7 +97,7 @@ public class SQLRider extends Rider {
 
         String schema = StringUtils.isEmpty(parent) ? board.getSchema() : parent;
 
-        // SELECT
+        // SELECT TODO: 支持参数中的select
         List<String> selects = new ArrayList<>();
         board.getSelects().forEach(item -> {
             if (item.getSelect()) {
@@ -105,7 +105,7 @@ public class SQLRider extends Rider {
             }
         });
 
-        // SORT
+        // SORT TODO: 支持参数中的sort
         List<String> sorts = new ArrayList<>();
         board.getSorts().stream()
                 .sorted(Comparator.comparingInt(item -> Integer.parseInt(item.getOrder())))
@@ -301,6 +301,7 @@ public class SQLRider extends Rider {
         column.add("`updateAt` = <%= data.updateAt %>");
         column.add("`updateBy` = <%= data.updateBy %>");
 
+        // TODO: 应该像INSERT一样使用schema的字段生成更新项，否则data里如果存在不相关的数据时会构建出错误的SQL
         params.getData().keySet()
                 .stream().filter(item -> params.getData().get(item) != null)
                 .forEach(item -> column.add(String.format("`%s` = <%%= data.%s %%>", item, item)));
