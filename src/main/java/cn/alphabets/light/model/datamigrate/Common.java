@@ -127,7 +127,7 @@ public class Common {
         model.list(condition, select).forEach(item -> {
 
             // 保存新获取的值到列表里
-            Object value = item.get(mapping.getFields().get(0));
+            Object value = MPath.detectValue((String) mapping.getFields().get(0), item);
             if (value instanceof ObjectId) {
                 value = ((ObjectId) value).toHexString();
             }
@@ -143,7 +143,7 @@ public class Common {
 
             // 保存原值
             if (originalKey != null) {
-                original.put(String.valueOf(value), item.get(originalKey));
+                original.put(String.valueOf(value), MPath.detectValue(originalKey, item));
             }
         });
 
