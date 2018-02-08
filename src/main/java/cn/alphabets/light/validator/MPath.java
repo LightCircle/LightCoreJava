@@ -4,6 +4,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.bson.Document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,10 @@ public class MPath {
         }
 
         return null;
+    }
+
+    public static void setValue(Document source, String path, Object val) {
+        MPath.setValueByJsonPath(source, Arrays.asList(path.split("\\.")), val);
     }
 
     /**
@@ -123,7 +128,7 @@ public class MPath {
         return null;
     }
 
-    private  static Object detectValueFromList(String path, List<Object> data) {
+    private static Object detectValueFromList(String path, List<Object> data) {
         String[] keys = path.split("\\.");
         if (keys.length < 1) {
             return null;

@@ -115,7 +115,12 @@ public class EtlImporter {
             Common.invokeBefore(this.handler, this.clazz, data);
 
             // 添加的临时表
-            data.forEach(item -> this.primitive.add(item));
+            data.forEach((Document item) ->
+                    this.primitive.add(item.keySet().stream().collect(
+                            Document::new,
+                            (doc, key) -> MPath.setValue(doc, key, item.get(key)),
+                            Document::putAll))
+            );
             this.total = data.size();
         }
 
@@ -150,14 +155,15 @@ public class EtlImporter {
 
         this.mappings.forEach(mapping -> {
 
-            Object value = MPath.detectValue(Common.key(mapping), document);
+            String key = Common.key(mapping);
+            Object value = MPath.detectValue(key, document);
             if (value == null) {
                 return;
             }
 
             // sanitize处理
             value = Rule.format(value, mapping.getSanitize());
-            document.put(Common.key(mapping), value);
+            MPath.setValue(document, key, value);
 
             // 数据保存到handler里，供后续功能参照使用
             handler.params.data(document);
