@@ -39,10 +39,10 @@ public class LongDeserializer extends JsonDeserializer<Long> {
             return node.asLong();
         }
         if (node instanceof TextNode) {
-            return Long.valueOf(node.asText());
+            return node.asLong();
         }
         if (node instanceof ObjectNode) {
-            return Long.valueOf(node.get("$numberLong").asText());
+            return node.get("$numberLong").asLong();
         }
         throw new JsonParseException(p, "can not deserialize node to Long : " + node);
     }

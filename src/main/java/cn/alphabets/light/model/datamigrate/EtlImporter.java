@@ -5,6 +5,8 @@ import cn.alphabets.light.Helper;
 import cn.alphabets.light.db.mongo.Model;
 import cn.alphabets.light.entity.ModEtl;
 import cn.alphabets.light.http.Context;
+import cn.alphabets.light.model.Entity;
+import cn.alphabets.light.model.datarider.Rider;
 import cn.alphabets.light.validator.MPath;
 import cn.alphabets.light.validator.Rule;
 import io.vertx.core.logging.Logger;
@@ -42,7 +44,6 @@ public class EtlImporter {
     private List<ModEtl.Mappings> mappings;
     private Model primitive;
     private Model processed;
-    private Model target;
 
     public EtlImporter(Context handler, ModEtl define) {
 
@@ -68,9 +69,6 @@ public class EtlImporter {
             processed = PREFIX + Helper.randomGUID4();
         }
         this.processed = new Model(handler.domain(), handler.code(), processed);
-
-        // 最终表
-        this.target = new Model(handler.domain(), handler.code(), define.getSchema());
     }
 
     public Document exec() throws IOException {
@@ -211,21 +209,26 @@ public class EtlImporter {
             logger.debug("Try to call the user's after method");
             Common.invokeAfter(handler, this.clazz, document);
 
+            document.remove("_id");
+            handler.params.data(document);
+
             if (this.define.getAllowUpdate()) {
                 // 更新
 
                 Document condition = new Document("valid", 1);
                 this.define.getUniqueKey().forEach(uk -> condition.put((String) uk, document.get(uk)));
 
-                if (this.target.count(condition) > 0) {
-                    this.target.update(condition, document);
+                handler.params.free(condition);
+                if (Rider.get(handler, Entity.getEntityType(this.define.getSchema())).item != null) {
+
+                    Rider.update(handler, Entity.getEntityType(this.define.getSchema()));
                 } else {
-                    this.target.add(document);
+                    Rider.add(handler, Entity.getEntityType(this.define.getSchema()));
                 }
             } else {
 
                 // 添加
-                this.target.add(document);
+                Rider.add(handler, Entity.getEntityType(this.define.getSchema()));
             }
 
             // 计数
