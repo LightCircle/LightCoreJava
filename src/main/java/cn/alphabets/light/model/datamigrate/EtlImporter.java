@@ -114,7 +114,7 @@ public class EtlImporter {
 
             // 添加的临时表
             data.forEach((Document item) ->
-                    this.primitive.add(item.keySet().stream().collect(
+                    this.primitive.add((Document) item.keySet().stream().collect(
                             Document::new,
                             (doc, key) -> MPath.setValue(doc, key, item.get(key)),
                             Document::putAll))
