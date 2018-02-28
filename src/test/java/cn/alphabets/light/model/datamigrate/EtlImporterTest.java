@@ -3,6 +3,7 @@ package cn.alphabets.light.model.datamigrate;
 import cn.alphabets.light.Constant;
 import cn.alphabets.light.Environment;
 import cn.alphabets.light.cache.CacheManager;
+import cn.alphabets.light.config.ConfigManager;
 import cn.alphabets.light.entity.ModEtl;
 import cn.alphabets.light.http.Context;
 import cn.alphabets.light.http.Params;
@@ -30,6 +31,7 @@ public class EtlImporterTest {
     public void setUp() {
         Environment.instance().args.local = true;
         CacheManager.INSTANCE.setUp(Constant.SYSTEM_DB);
+        ConfigManager.INSTANCE.setUp();
         handler = new Context(new MockRoutingContext(), Constant.SYSTEM_DB, Constant.SYSTEM_DB_PREFIX);
     }
 
