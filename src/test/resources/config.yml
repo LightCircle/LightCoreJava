@@ -8,13 +8,13 @@ app:
 
 mongodb:
   host: mongo.alphabets.cn
-  port: 57017
-  user: light
-  pass: 2e35501c2b7e
+  port: 12345
+  user: user
+  pass: pass
   auth: SCRAM-SHA-1
 
 #mysql:
 #  host: mysql.alphabets.cn
-#  port: 5306
-#  user: light
-#  pass: 2e35501c2b7e
+#  port: 12345
+#  user: user
+#  pass: pass
