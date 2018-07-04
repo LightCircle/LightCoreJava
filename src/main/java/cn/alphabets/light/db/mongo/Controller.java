@@ -10,6 +10,7 @@ import cn.alphabets.light.model.Entity;
 import cn.alphabets.light.model.ModCommon;
 import cn.alphabets.light.model.Plural;
 import cn.alphabets.light.model.Singular;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.vertx.core.logging.LoggerFactory;
 import org.bson.Document;
@@ -18,6 +19,7 @@ import org.bson.types.ObjectId;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -152,6 +154,20 @@ public class Controller {
                 document,
                 params.getClazz(),
                 this.handler.tz()).toDocument(true);
+
+        // Entity 转换成 Document时 null 值丢失，做一次浅拷贝解决不能更新 null 的问题
+        for (Field field : params.getClazz().getDeclaredFields()) {
+            String key = field.getName();
+            JsonProperty property = field.getDeclaredAnnotation(com.fasterxml.jackson.annotation.JsonProperty.class);
+            if (property != null) {
+                key = property.value();
+            }
+
+            boolean hasAttr = document.keySet().contains(key);
+            if (hasAttr && document.get(key) == null) {
+                confirmed.put(key, null);
+            }
+        }
 
         Document condition = params.getCondition();
         if (condition == null || condition.size() == 0) {

@@ -69,10 +69,10 @@ public class Common {
         }
 
         try {
-            Method method = Class.forName(clazz).getMethod("parse", Context.class, Document.class);
+            Method method = Class.forName(clazz).getMethod("valid", Context.class, Document.class);
             return (List<Document>) method.invoke(method.getDeclaringClass().newInstance(), handler, data);
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
-            logger.debug("Did not find parse method. skip. " + clazz);
+            logger.debug("Did not find valid method. skip. " + clazz);
         }
 
         return null;
